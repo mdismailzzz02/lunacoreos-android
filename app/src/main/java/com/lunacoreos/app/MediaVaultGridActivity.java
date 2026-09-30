@@ -74,16 +74,41 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private void loadFiles() {
         new Thread(() -> {
             try {
+                org.json.JSONArray subcollections = client.getVaultSubCollections(collectionId);
                 org.json.JSONArray files = client.getVaultFiles(collectionId);
+                
                 java.util.List<org.json.JSONObject> list = new java.util.ArrayList<>();
-                for (int i = 0; i < files.length(); i++) {
-                    list.add(files.getJSONObject(i));
+                
+                // Add folders first
+                for (int i = 0; i < subcollections.length(); i++) {
+                    org.json.JSONObject folder = subcollections.getJSONObject(i);
+                    folder.put("item_type", "folder");
+                    list.add(folder);
                 }
+                
+                // Add files
+                for (int i = 0; i < files.length(); i++) {
+                    org.json.JSONObject file = files.getJSONObject(i);
+                    file.put("item_type", "file");
+                    list.add(file);
+                }
+                
                 runOnUiThread(() -> {
                     mediaList = list;
                     if (adapter == null) {
                         rvMedia = findViewById(R.id.rvMedia);
-                        rvMedia.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this, 3));
+                        androidx.recyclerview.widget.GridLayoutManager layoutManager = new androidx.recyclerview.widget.GridLayoutManager(this, 3);
+                        layoutManager.setSpanSizeLookup(new androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup() {
+                            @Override
+                            public int getSpanSize(int position) {
+                                if ("folder".equals(mediaList.get(position).optString("item_type"))) {
+                                    return 3;
+                                }
+                                return 1;
+                            }
+                        });
+                        rvMedia.setLayoutManager(layoutManager);
+                        
                         adapter = new MediaAdapter();
                         rvMedia.setAdapter(adapter);
                     } else {
@@ -96,40 +121,100 @@ public class MediaVaultGridActivity extends AppCompatActivity {
         }).start();
     }
 
-    private class MediaAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<MediaAdapter.ViewHolder> {
+    private String formatBytes(long bytes) {
+        if (bytes <= 0) return "0 B";
+        String[] units = {"B", "KB", "MB", "GB"};
+        int i = (int) Math.floor(Math.log(bytes) / Math.log(1024));
+        if (i >= units.length) i = units.length - 1;
+        return String.format("%.1f %s", bytes / Math.pow(1024, i), units[i]);
+    }
+
+    private class MediaAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder> {
+        private static final int TYPE_FOLDER = 0;
+        private static final int TYPE_FILE = 1;
+
+        @Override
+        public int getItemViewType(int position) {
+            return "folder".equals(mediaList.get(position).optString("item_type")) ? TYPE_FOLDER : TYPE_FILE;
+        }
+
         @androidx.annotation.NonNull
         @Override
-        public ViewHolder onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
-            android.view.View view = android.view.LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_media, parent, false);
-            return new ViewHolder(view);
+        public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
+            if (viewType == TYPE_FOLDER) {
+                android.view.View view = android.view.LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_collection, parent, false);
+                return new FolderViewHolder(view);
+            } else {
+                android.view.View view = android.view.LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_media, parent, false);
+                return new FileViewHolder(view);
+            }
         }
 
         @Override
-        public void onBindViewHolder(@androidx.annotation.NonNull ViewHolder holder, int position) {
-            org.json.JSONObject fileObj = mediaList.get(position);
-            String mime = fileObj.optString("mime_type", "");
-            holder.ivPlayIcon.setVisibility(mime.startsWith("video/") ? android.view.View.VISIBLE : android.view.View.GONE);
+        public void onBindViewHolder(@androidx.annotation.NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder holder, int position) {
+            org.json.JSONObject item = mediaList.get(position);
             
-            String r2Key = fileObj.optString("r2_key", "");
-            String publicUrl = client.getR2PublicUrl(r2Key);
-            
-            if (publicUrl != null) {
-                com.bumptech.glide.Glide.with(holder.itemView.getContext())
-                        .load(publicUrl)
-                        .centerCrop()
-                        .into(holder.ivThumbnail);
+            if (getItemViewType(position) == TYPE_FOLDER) {
+                FolderViewHolder fh = (FolderViewHolder) holder;
+                fh.tvName.setText(item.optString("name", "Unnamed Folder"));
+                String type = item.optString("type", "folder");
+                int fileCount = item.optInt("file_count", 0);
+                long sizeBytes = item.optLong("size_bytes", 0);
+                String info = type.substring(0, 1).toUpperCase() + type.substring(1)
+                        + " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
+                        + " · " + formatBytes(sizeBytes);
+                fh.tvType.setText(info);
+                
+                boolean isSecret = item.optBoolean("is_secret", false);
+                fh.ivSecretLock.setVisibility(isSecret ? android.view.View.VISIBLE : android.view.View.GONE);
+
+                fh.ivIcon.setImageResource(android.R.drawable.ic_menu_gallery);
+                
+                fh.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(MediaVaultGridActivity.this, MediaVaultGridActivity.class);
+                    intent.putExtra("COLLECTION_ID", item.optString("id"));
+                    intent.putExtra("COLLECTION_PREFIX", item.optString("key_prefix"));
+                    intent.putExtra("COLLECTION_NAME", item.optString("name"));
+                    startActivity(intent);
+                });
+            } else {
+                FileViewHolder fh = (FileViewHolder) holder;
+                String mime = item.optString("mime_type", "");
+                fh.ivPlayIcon.setVisibility(mime.startsWith("video/") ? android.view.View.VISIBLE : android.view.View.GONE);
+                
+                String r2Key = item.optString("r2_key", "");
+                String publicUrl = client.getR2PublicUrl(r2Key);
+                
+                if (publicUrl != null) {
+                    com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                            .load(publicUrl)
+                            .centerCrop()
+                            .into(fh.ivThumbnail);
+                }
             }
         }
 
         @Override
         public int getItemCount() { return mediaList.size(); }
 
-        class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+        class FileViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
             android.widget.ImageView ivThumbnail, ivPlayIcon;
-            ViewHolder(android.view.View itemView) {
+            FileViewHolder(android.view.View itemView) {
                 super(itemView);
                 ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
                 ivPlayIcon = itemView.findViewById(R.id.ivPlayIcon);
+            }
+        }
+        
+        class FolderViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+            android.widget.TextView tvName, tvType;
+            android.widget.ImageView ivIcon, ivSecretLock;
+            FolderViewHolder(android.view.View itemView) {
+                super(itemView);
+                tvName = itemView.findViewById(R.id.tvName);
+                tvType = itemView.findViewById(R.id.tvType);
+                ivIcon = itemView.findViewById(R.id.ivIcon);
+                ivSecretLock = itemView.findViewById(R.id.ivSecretLock);
             }
         }
     }

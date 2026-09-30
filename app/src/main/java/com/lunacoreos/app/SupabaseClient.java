@@ -475,6 +475,27 @@ public class SupabaseClient {
         }
     }
 
+    public JSONArray getVaultSubCollections(String parentId) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections?parent_id=eq." + parentId + "&order=created_at.desc");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            throw new Exception("Failed to fetch sub-collections: " + conn.getResponseCode());
+        }
+    }
+
     public String getR2PresignedPutUrl(String r2Key, String mimeType) throws Exception {
         URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=put&key=" + java.net.URLEncoder.encode(r2Key, "UTF-8") + "&content_type=" + java.net.URLEncoder.encode(mimeType, "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
