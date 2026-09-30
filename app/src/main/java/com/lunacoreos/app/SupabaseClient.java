@@ -218,6 +218,7 @@ public class SupabaseClient {
             throw new Exception("Failed to set app password: " + postConn.getResponseCode());
         }
     }
+    public void refreshToken(String refreshToken) throws Exception {
         URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");

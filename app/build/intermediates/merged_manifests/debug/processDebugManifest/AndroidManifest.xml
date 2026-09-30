@@ -51,6 +51,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
+            android:name="com.lunacoreos.app.AppPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name="com.lunacoreos.app.PasswordEditorActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
