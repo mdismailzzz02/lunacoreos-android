@@ -581,7 +581,7 @@ public class SupabaseClient {
     }
 
     public JSONArray getVaultFiles(String collectionId) throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=created_at.desc");
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", apiKey);
@@ -597,7 +597,14 @@ public class SupabaseClient {
             is.close();
             return new JSONArray(result);
         } else {
-            throw new Exception("Failed to fetch vault files: " + conn.getResponseCode());
+            InputStream es = conn.getErrorStream();
+            String err = "";
+            if (es != null) {
+                java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A");
+                err = s.hasNext() ? s.next() : "";
+                es.close();
+            }
+            throw new Exception("Code " + conn.getResponseCode() + ": " + err);
         }
     }
 
