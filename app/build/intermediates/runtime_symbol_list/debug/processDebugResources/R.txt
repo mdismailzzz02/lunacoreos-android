@@ -3610,6 +3610,7 @@ int id stretch 0x7f0901e1
 int id submenuarrow 0x7f0901e2
 int id submit_area 0x7f0901e3
 int id supportScrollUp 0x7f0901e4
+int id swipeLayout 0x7f09024d
 int id swipeRefresh 0x7f0901e5
 int id swipeRefreshLayout 0x7f0901e6
 int id tabMode 0x7f0901e7

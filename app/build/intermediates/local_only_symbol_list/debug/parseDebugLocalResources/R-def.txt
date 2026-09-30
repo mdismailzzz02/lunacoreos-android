@@ -87,6 +87,7 @@ id rvPasswords
 id rvTags
 id spinnerCategory
 id spinnerType
+id swipeLayout
 id swipeRefresh
 id swipeRefreshLayout
 id tvCategory

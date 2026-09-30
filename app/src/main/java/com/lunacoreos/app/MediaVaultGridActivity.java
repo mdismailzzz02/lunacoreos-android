@@ -70,6 +70,11 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private androidx.recyclerview.widget.RecyclerView rvMedia;
     private MediaAdapter adapter;
     private java.util.List<org.json.JSONObject> mediaList = new java.util.ArrayList<>();
+    
+    private boolean isLoading = false;
+    private boolean hasMore = true;
+    private int currentOffset = 0;
+    private final int PAGE_LIMIT = 50;
 
     private void loadFiles() {
         new Thread(() -> {
@@ -105,43 +110,70 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         
                         adapter = new MediaAdapter();
                         rvMedia.setAdapter(adapter);
+                        
+                        rvMedia.addOnScrollListener(new androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                            @Override
+                            public void onScrolled(@androidx.annotation.NonNull androidx.recyclerview.widget.RecyclerView recyclerView, int dx, int dy) {
+                                super.onScrolled(recyclerView, dx, dy);
+                                if (dy > 0) {
+                                    int visibleItemCount = layoutManager.getChildCount();
+                                    int totalItemCount = layoutManager.getItemCount();
+                                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
+                                    
+                                    if (!isLoading && hasMore) {
+                                        if ((visibleItemCount + pastVisibleItems) >= totalItemCount - 10) {
+                                            fetchNextPage();
+                                        }
+                                    }
+                                }
+                            }
+                        });
                     } else {
                         adapter.notifyDataSetChanged();
                     }
                 });
 
-                // Fetch files gradually
-                int offset = 0;
-                int limit = 100;
-                while (true) {
-                    try {
-                        org.json.JSONArray files = client.getVaultFiles(collectionId, limit, offset);
-                        if (files.length() == 0) break;
-                        
-                        java.util.List<org.json.JSONObject> newFiles = new java.util.ArrayList<>();
-                        for (int i = 0; i < files.length(); i++) {
-                            org.json.JSONObject file = files.getJSONObject(i);
-                            file.put("item_type", "file");
-                            newFiles.add(file);
-                        }
-                        
-                        runOnUiThread(() -> {
-                            int startPosition = mediaList.size();
-                            mediaList.addAll(newFiles);
-                            if (adapter != null) {
-                                adapter.notifyItemRangeInserted(startPosition, newFiles.size());
-                            }
-                        });
-                        
-                        offset += limit;
-                        if (files.length() < limit) break;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        break;
-                    }
-                }
+                fetchNextPage();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void fetchNextPage() {
+        if (isLoading || !hasMore) return;
+        isLoading = true;
+        new Thread(() -> {
+            try {
+                org.json.JSONArray files = client.getVaultFiles(collectionId, PAGE_LIMIT, currentOffset);
+                if (files.length() == 0) {
+                    hasMore = false;
+                    isLoading = false;
+                    return;
+                }
+                
+                java.util.List<org.json.JSONObject> newFiles = new java.util.ArrayList<>();
+                for (int i = 0; i < files.length(); i++) {
+                    org.json.JSONObject file = files.getJSONObject(i);
+                    file.put("item_type", "file");
+                    newFiles.add(file);
+                }
+                
+                runOnUiThread(() -> {
+                    int startPosition = mediaList.size();
+                    mediaList.addAll(newFiles);
+                    if (adapter != null) {
+                        adapter.notifyItemRangeInserted(startPosition, newFiles.size());
+                    }
+                    currentOffset += PAGE_LIMIT;
+                    isLoading = false;
+                    if (files.length() < PAGE_LIMIT) {
+                        hasMore = false;
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                isLoading = false;
             }
         }).start();
     }

@@ -3611,6 +3611,7 @@ id stretch
 id submenuarrow
 id submit_area
 id supportScrollUp
+id swipeLayout
 id swipeRefresh
 id swipeRefreshLayout
 id tabMode
