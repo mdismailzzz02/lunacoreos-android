@@ -1,11 +1,12 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-68:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-68:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-68:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-68:12
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
+MERGED from [com.github.chrisbanes:PhotoView:2.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\686bb89513258cd63f6fc490afb9c185\transformed\PhotoView-2.3.0\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4b11cfcd2bf6860cbff11fa96738cef9\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.appcompat:appcompat:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\95ed4eb50903d0505f50cc9711d127d5\transformed\appcompat-1.7.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\022a7fa9ea333d1633e8ef3f84f11a20\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:17:1-24:12
@@ -64,8 +65,8 @@ ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifes
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:4:22-64
 application
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-66:19
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-66:19
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-67:19
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-67:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -118,76 +119,82 @@ category#android.intent.category.LAUNCHER
 ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:21:17-77
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:21:27-74
-activity#com.lunacoreos.app.MainActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:25:9-28:52
-	android:screenOrientation
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:28:13-49
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:27:13-37
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:26:13-41
-activity#com.lunacoreos.app.writing.WritingEditorActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:30:9-33:58
-	android:windowSoftInputMode
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:33:13-55
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:32:13-37
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:31:13-58
-activity#com.lunacoreos.app.VaultLockActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:35:9-38:52
-	android:screenOrientation
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:38:13-49
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:37:13-37
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:36:13-46
-activity#com.lunacoreos.app.AppPasswordActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:40:9-43:52
-	android:screenOrientation
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:43:13-49
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:42:13-37
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:41:13-48
-activity#com.lunacoreos.app.PasswordEditorActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:45:9-48:58
-	android:windowSoftInputMode
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:48:13-55
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:47:13-37
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:46:13-51
-activity#com.lunacoreos.app.ShareActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:50:9-59:20
-	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:13-36
+activity#com.lunacoreos.app.MediaViewerActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:25:9-108
 	android:theme
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:53:13-64
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:25:55-105
 	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:51:13-42
-intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:54:13-58:29
-action#android.intent.action.SEND
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:55:17-69
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:55:25-66
-category#android.intent.category.DEFAULT
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:56:17-76
-	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:56:27-73
-data
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:17-55
-	android:mimeType
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:23-52
-activity#com.lunacoreos.app.MediaVaultGridActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:61:9-64:52
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:25:19-54
+activity#com.lunacoreos.app.MainActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:26:9-29:52
 	android:screenOrientation
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-49
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:29:13-49
 	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-37
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:28:13-37
 	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:13-51
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:27:13-41
+activity#com.lunacoreos.app.writing.WritingEditorActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:31:9-34:58
+	android:windowSoftInputMode
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:34:13-55
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:33:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:32:13-58
+activity#com.lunacoreos.app.VaultLockActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:36:9-39:52
+	android:screenOrientation
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:39:13-49
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:38:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:37:13-46
+activity#com.lunacoreos.app.AppPasswordActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:41:9-44:52
+	android:screenOrientation
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:44:13-49
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:43:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:42:13-48
+activity#com.lunacoreos.app.PasswordEditorActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:46:9-49:58
+	android:windowSoftInputMode
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:49:13-55
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:48:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:47:13-51
+activity#com.lunacoreos.app.ShareActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:51:9-60:20
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:53:13-36
+	android:theme
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:54:13-64
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:13-42
+intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:55:13-59:29
+action#android.intent.action.SEND
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:56:17-69
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:56:25-66
+category#android.intent.category.DEFAULT
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:17-76
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:27-73
+data
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:17-55
+	android:mimeType
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:23-52
+activity#com.lunacoreos.app.MediaVaultGridActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:9-65:52
+	android:screenOrientation
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:65:13-49
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-51
 uses-sdk
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml
@@ -196,6 +203,8 @@ MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradl
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.chrisbanes:PhotoView:2.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\686bb89513258cd63f6fc490afb9c185\transformed\PhotoView-2.3.0\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.chrisbanes:PhotoView:2.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\686bb89513258cd63f6fc490afb9c185\transformed\PhotoView-2.3.0\AndroidManifest.xml:7:5-9:41
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4b11cfcd2bf6860cbff11fa96738cef9\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4b11cfcd2bf6860cbff11fa96738cef9\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:5:5-44
 MERGED from [androidx.appcompat:appcompat:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\95ed4eb50903d0505f50cc9711d127d5\transformed\appcompat-1.7.1\AndroidManifest.xml:5:5-44

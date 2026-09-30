@@ -32,6 +32,7 @@ drawable tag_background
 drawable toolbar_btn_active
 id bottomNav
 id btnBack
+id btnClose
 id btnCreateCollection
 id btnDelete
 id btnGeneratePassword
@@ -78,6 +79,7 @@ id nav_passwords
 id nav_settings
 id nav_vault
 id nav_writing
+id photoView
 id recyclerView
 id rvCollections
 id rvMedia
@@ -114,6 +116,7 @@ id tvWordCount
 layout activity_login
 layout activity_main
 layout activity_media_vault_grid
+layout activity_media_viewer
 layout activity_password_editor
 layout activity_vault_lock
 layout activity_writing_editor

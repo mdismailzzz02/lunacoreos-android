@@ -204,8 +204,24 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             
                     fh.itemView.setOnClickListener(v -> {
                         if (!mime.startsWith("video/")) {
+                            java.util.List<String> urls = new java.util.ArrayList<>();
+                            int selectedIndex = 0;
+                            for (int i = 0; i < mediaList.size(); i++) {
+                                org.json.JSONObject obj = mediaList.get(i);
+                                if ("file".equals(obj.optString("item_type")) && !obj.optString("mime_type", "").startsWith("video/")) {
+                                    String u = client.getR2PublicUrl(obj.optString("r2_key", ""));
+                                    if (u != null) {
+                                        urls.add(u);
+                                        if (u.equals(publicUrl)) {
+                                            selectedIndex = urls.size() - 1;
+                                        }
+                                    }
+                                }
+                            }
+                            MediaViewerActivity.currentViewerUrls = urls;
+                            MediaViewerActivity.currentViewerIndex = selectedIndex;
+                            
                             Intent intent = new Intent(MediaVaultGridActivity.this, MediaViewerActivity.class);
-                            intent.putExtra("IMAGE_URL", publicUrl);
                             startActivity(intent);
                         } else {
                             // Can add video player logic here later

@@ -3223,6 +3223,7 @@ int id bounceBoth 0x7f090060
 int id bounceEnd 0x7f090061
 int id bounceStart 0x7f090062
 int id btnBack 0x7f090063
+int id btnClose 0x7f09024a
 int id btnCreateCollection 0x7f090064
 int id btnDelete 0x7f090065
 int id btnGeneratePassword 0x7f090066
@@ -3522,6 +3523,7 @@ int id path 0x7f09018b
 int id pathRelative 0x7f09018c
 int id peekHeight 0x7f09018d
 int id percent 0x7f09018e
+int id photoView 0x7f09024b
 int id pin 0x7f09018f
 int id pooling_container_listener_holder_tag 0x7f090190
 int id position 0x7f090191
@@ -3826,6 +3828,7 @@ int layout abc_tooltip 0x7f0c001b
 int layout activity_login 0x7f0c001c
 int layout activity_main 0x7f0c001d
 int layout activity_media_vault_grid 0x7f0c001e
+int layout activity_media_viewer 0x7f0c007f
 int layout activity_password_editor 0x7f0c001f
 int layout activity_vault_lock 0x7f0c0020
 int layout activity_writing_editor 0x7f0c0021

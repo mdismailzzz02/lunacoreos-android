@@ -39,6 +39,9 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.lunacoreos.app.MediaViewerActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity
             android:name="com.lunacoreos.app.MainActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
