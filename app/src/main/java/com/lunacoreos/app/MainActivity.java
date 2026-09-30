@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new WritingListFragment();
             } else if (item.getItemId() == R.id.nav_passwords) {
                 selectedFragment = new PasswordsFragment();
+            } else if (item.getItemId() == R.id.nav_linkbox) {
+                selectedFragment = new LinkboxFragment();
             }
             
             if (selectedFragment != null) {

@@ -9,9 +9,9 @@
         android:icon="@android:drawable/ic_menu_today"
         android:title="Dashboard" />
     <item
-        android:id="@+id/nav_journal"
-        android:icon="@android:drawable/ic_menu_agenda"
-        android:title="Journal" />
+        android:id="@+id/nav_linkbox"
+        android:icon="@android:drawable/ic_menu_set_as"
+        android:title="Linkbox" />
     <item
         android:id="@+id/nav_passwords"
         android:icon="@android:drawable/ic_lock_lock"
