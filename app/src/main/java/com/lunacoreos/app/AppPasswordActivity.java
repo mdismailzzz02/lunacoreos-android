@@ -100,14 +100,18 @@ public class AppPasswordActivity extends AppCompatActivity {
                     String hash = sha256(salt + pwd);
                     client.setAppPasswordV2(lockId, lockTitle, salt, hash);
                     runOnUiThread(() -> {
-                        setResult(Activity.RESULT_OK);
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra("VAULT_MODE", getIntent().getStringExtra("VAULT_MODE"));
+                        setResult(Activity.RESULT_OK, resultIntent);
                         finish();
                     });
                 } else {
                     String hash = sha256(storedRecord.getString("salt") + pwd);
                     if (hash.equals(storedRecord.getString("hash"))) {
                         runOnUiThread(() -> {
-                            setResult(Activity.RESULT_OK);
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("VAULT_MODE", getIntent().getStringExtra("VAULT_MODE"));
+                            setResult(Activity.RESULT_OK, resultIntent);
                             finish();
                         });
                     } else {

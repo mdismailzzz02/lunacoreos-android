@@ -34,6 +34,7 @@ public class MediaVaultFragment extends Fragment {
     private String vaultMode = "normal";
     private int titleClickCount = 0;
     private long lastTitleClickTime = 0;
+    private static boolean isVaultUnlocked = false;
 
     private final ActivityResultLauncher<Intent> vaultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -55,9 +56,14 @@ public class MediaVaultFragment extends Fragment {
                         String mode = data.getStringExtra("VAULT_MODE");
                         if (mode != null) {
                             vaultMode = mode;
+                            isVaultUnlocked = true;
                             loadCollections();
                             return;
                         }
+                    } else if ("normal".equals(vaultMode)) {
+                        isVaultUnlocked = true;
+                        loadCollections();
+                        return;
                     }
                 }
                 Toast.makeText(getContext(), "Access Denied", Toast.LENGTH_SHORT).show();
@@ -114,7 +120,7 @@ public class MediaVaultFragment extends Fragment {
         });
 
         swipeRefresh.setOnRefreshListener(() -> {
-            if (CryptoService.hasSessionKey()) {
+            if (isVaultUnlocked) {
                 loadCollections();
             } else {
                 swipeRefresh.setRefreshing(false);
@@ -166,10 +172,12 @@ public class MediaVaultFragment extends Fragment {
             dialog.show();
         });
 
-        if (!CryptoService.hasSessionKey()) {
-            Intent lockIntent = new Intent(getContext(), VaultLockActivity.class);
+        if (!isVaultUnlocked) {
+            Intent lockIntent = new Intent(getContext(), AppPasswordActivity.class);
+            lockIntent.putExtra("LOCK_ID", "vault");
             lockIntent.putExtra("LOCK_TITLE", "Unlock Media Vault");
-            vaultLauncher.launch(lockIntent);
+            lockIntent.putExtra("VAULT_MODE", "normal");
+            appPasswordLauncher.launch(lockIntent);
         } else {
             loadCollections();
         }
@@ -178,7 +186,7 @@ public class MediaVaultFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (CryptoService.hasSessionKey() && collectionList.isEmpty()) {
+        if (isVaultUnlocked && collectionList.isEmpty()) {
             loadCollections();
         }
     }
