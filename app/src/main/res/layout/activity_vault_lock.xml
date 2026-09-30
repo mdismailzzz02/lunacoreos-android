@@ -6,24 +6,24 @@
     android:gravity="center"
     android:fitsSystemWindows="true"
     android:background="@color/bg_dark"
-    android:padding="32dp">
+    android:padding="48dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🔒"
-        android:textSize="64sp"
-        android:layout_marginBottom="16dp" />
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@android:drawable/ic_lock_idle_lock"
+        app:tint="@color/accent_primary"
+        android:layout_marginBottom="24dp" />
 
     <TextView
         android:id="@+id/tvVaultTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unlock Vault"
-        android:textSize="24sp"
+        android:text="Unlock Passwords"
+        android:textSize="28sp"
         android:textColor="@color/text_primary"
         android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="12dp" />
 
     <TextView
         android:id="@+id/tvVaultDesc"
@@ -50,12 +50,14 @@
     <Button
         android:id="@+id/btnUnlock"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@drawable/btn_primary"
+        android:layout_height="56dp"
+        android:backgroundTint="@color/accent_primary"
         android:text="Unlock"
         android:textColor="@color/text_primary"
+        android:textSize="16sp"
         android:textStyle="bold"
-        android:textAllCaps="false" />
+        android:textAllCaps="false"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/tvError"
