@@ -78,9 +78,14 @@ public class LoginActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 SupabaseClient client = new SupabaseClient(url, key);
-                String token = client.login(email, password);
+                JSONObject loginJson = client.login(email, password);
+                String token = loginJson.getString("access_token");
+                String refreshToken = loginJson.optString("refresh_token", "");
                 
-                prefs.edit().putString("authToken", token).apply();
+                prefs.edit()
+                     .putString("authToken", token)
+                     .putString("refreshToken", refreshToken)
+                     .apply();
                 
                 mainHandler.post(() -> {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));

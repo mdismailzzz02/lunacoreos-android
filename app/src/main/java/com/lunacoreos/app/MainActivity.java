@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new PasswordsFragment();
             } else if (item.getItemId() == R.id.nav_linkbox) {
                 selectedFragment = new LinkboxFragment();
+            } else if (item.getItemId() == R.id.nav_settings) {
+                selectedFragment = new SettingsFragment();
             }
             
             if (selectedFragment != null) {

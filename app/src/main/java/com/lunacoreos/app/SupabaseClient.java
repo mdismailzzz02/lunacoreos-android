@@ -30,7 +30,7 @@ public class SupabaseClient {
         this.authToken = token;
     }
 
-    public String login(String email, String password) throws Exception {
+    public JSONObject login(String email, String password) throws Exception {
         URL url = new URL(baseUrl + "/auth/v1/token?grant_type=password");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -53,13 +53,44 @@ public class SupabaseClient {
             is.close();
             JSONObject json = new JSONObject(result);
             this.authToken = json.getString("access_token");
-            return this.authToken;
+            return json;
         } else {
             InputStream es = conn.getErrorStream();
             Scanner s = new Scanner(es).useDelimiter("\\A");
             String err = s.hasNext() ? s.next() : "";
             if (es != null) es.close();
             throw new Exception("Login failed: " + err);
+        }
+    }
+
+    public void refreshToken(String refreshToken) throws Exception {
+        URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject payload = new JSONObject();
+        payload.put("refresh_token", refreshToken);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(payload.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONObject json = new JSONObject(result);
+            this.authToken = json.getString("access_token");
+        } else {
+            InputStream es = conn.getErrorStream();
+            Scanner s = new Scanner(es).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            if (es != null) es.close();
+            throw new Exception("Refresh failed: " + err);
         }
     }
 
