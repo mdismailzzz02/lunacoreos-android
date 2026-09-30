@@ -196,12 +196,31 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 String r2Key = item.optString("r2_key", "");
                 String publicUrl = client.getR2PublicUrl(r2Key);
                 
-                if (publicUrl != null) {
+                String thumb = item.optString("thumbnail_key", "");
+                boolean thumbLoaded = false;
+                
+                if (thumb != null && thumb.startsWith("data:image/")) {
+                    try {
+                        String base64Image = thumb.split(",")[1];
+                        byte[] imageBytes = android.util.Base64.decode(base64Image, android.util.Base64.DEFAULT);
+                        com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                .load(imageBytes)
+                                .centerCrop()
+                                .into(fh.ivThumbnail);
+                        thumbLoaded = true;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                
+                if (!thumbLoaded && publicUrl != null) {
                     com.bumptech.glide.Glide.with(fh.itemView.getContext())
                             .load(publicUrl)
                             .centerCrop()
                             .into(fh.ivThumbnail);
+                }
                             
+                if (publicUrl != null) {
                     fh.itemView.setOnClickListener(v -> {
                         if (!mime.startsWith("video/")) {
                             java.util.List<String> urls = new java.util.ArrayList<>();
