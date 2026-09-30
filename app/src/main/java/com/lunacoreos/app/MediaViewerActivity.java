@@ -36,6 +36,10 @@ public class MediaViewerActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new PhotoPagerAdapter(currentViewerUrls));
         viewPager.setCurrentItem(currentViewerIndex, false);
+        
+        SwipeToDismissLayout swipeLayout = findViewById(R.id.swipeLayout);
+        View rootFrame = findViewById(android.R.id.content);
+        swipeLayout.setBackgroundView(rootFrame);
     }
 
     private class PhotoPagerAdapter extends RecyclerView.Adapter<PhotoPagerAdapter.PhotoViewHolder> {
