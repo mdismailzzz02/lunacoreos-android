@@ -338,4 +338,82 @@ public class SupabaseClient {
             throw new Exception("Failed to fetch vault collections: " + conn.getResponseCode());
         }
     }
+
+    public String getR2PresignedPutUrl(String r2Key, String mimeType) throws Exception {
+        URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=put&key=" + java.net.URLEncoder.encode(r2Key, "UTF-8") + "&content_type=" + java.net.URLEncoder.encode(mimeType, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("apikey", apiKey);
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONObject obj = new JSONObject(result);
+            return obj.optString("url");
+        } else {
+            throw new Exception("Failed to get presigned URL: " + conn.getResponseCode());
+        }
+    }
+
+    public void saveVaultFile(JSONObject fileData) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_files");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(fileData.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            InputStream es = conn.getErrorStream();
+            java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            if (es != null) es.close();
+            throw new Exception("Failed to save vault file: " + err);
+        }
+    }
+
+    public JSONArray getVaultFiles(String collectionId) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=created_at.desc");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            throw new Exception("Failed to fetch vault files: " + conn.getResponseCode());
+        }
+    }
+
+    public String getR2PublicUrl(String key) {
+        String publicBase = prefs.getString("r2PublicUrl", "");
+        if (publicBase.isEmpty()) return null;
+        if (publicBase.endsWith("/")) publicBase = publicBase.substring(0, publicBase.length() - 1);
+        try {
+            return publicBase + "/" + key.replace(" ", "%20"); // simple encode
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

@@ -46,6 +46,26 @@
             android:name="com.lunacoreos.app.writing.WritingEditorActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.lunacoreos.app.VaultLockActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.lunacoreos.app.PasswordEditorActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.lunacoreos.app.ShareActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LunaCoreOS.Translucent" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="androidx.startup.InitializationProvider"

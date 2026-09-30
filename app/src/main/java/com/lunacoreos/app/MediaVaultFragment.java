@@ -136,8 +136,10 @@ public class MediaVaultFragment extends Fragment {
             else holder.ivIcon.setImageResource(android.R.drawable.ic_menu_manage);
             
             holder.itemView.setOnClickListener(v -> {
-                // TODO: Open Media Grid
-                Toast.makeText(getContext(), "Open " + col.optString("name"), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), MediaVaultGridActivity.class);
+                intent.putExtra("COLLECTION_ID", col.optString("id"));
+                intent.putExtra("COLLECTION_PREFIX", col.optString("key_prefix"));
+                startActivity(intent);
             });
         }
 
