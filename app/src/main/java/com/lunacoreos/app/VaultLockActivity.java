@@ -36,11 +36,16 @@ public class VaultLockActivity extends AppCompatActivity {
         btnUnlock = findViewById(R.id.btnUnlock);
 
         isFirstTime = !CryptoService.hasCanary(this);
+
+        // Allow callers to customize the title
+        String lockTitle = getIntent().getStringExtra("LOCK_TITLE");
         
         if (isFirstTime) {
             tvVaultTitle.setText("Setup Vault");
             tvVaultDesc.setText("Create a Master Password for your Vault.\nDo not lose this, it cannot be recovered!");
             btnUnlock.setText("Create Vault");
+        } else if (lockTitle != null) {
+            tvVaultTitle.setText(lockTitle);
         }
 
         btnUnlock.setOnClickListener(v -> unlockVault());

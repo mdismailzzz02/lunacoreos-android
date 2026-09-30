@@ -25,6 +25,7 @@ drawable btn_danger
 drawable btn_danger_outline
 drawable btn_primary
 drawable card_background
+drawable icon_background
 drawable input_background
 drawable search_background
 drawable tag_background

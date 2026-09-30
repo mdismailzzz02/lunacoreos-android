@@ -77,6 +77,7 @@ animator mtrl_fab_hide_motion_spec
 animator mtrl_fab_show_motion_spec
 animator mtrl_fab_transformation_sheet_collapse_spec
 animator mtrl_fab_transformation_sheet_expand_spec
+array vault_collection_types
 attr SharedValue
 attr SharedValueId
 attr actionBarDivider
@@ -3042,6 +3043,7 @@ drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24
+drawable icon_background
 drawable indeterminate_static
 drawable input_background
 drawable m3_avd_hide_password
@@ -3222,6 +3224,7 @@ id bounceBoth
 id bounceEnd
 id bounceStart
 id btnBack
+id btnCreateCollection
 id btnDelete
 id btnGeneratePassword
 id btnLogin
@@ -3236,6 +3239,7 @@ id cache_measures
 id callMeasure
 id cancel_button
 id carryVelocity
+id cbIsSecret
 id center
 id centerCrop
 id centerInside
@@ -3313,6 +3317,7 @@ id endToStart
 id enterAlways
 id enterAlwaysCollapsed
 id escape
+id etCollectionName
 id etContent
 id etDescription
 id etEmail
@@ -3320,6 +3325,7 @@ id etKey
 id etMasterPassword
 id etNotes
 id etPassword
+id etR2PublicUrl
 id etSearch
 id etSiteName
 id etSupabaseKey
@@ -3331,9 +3337,11 @@ id etUsername
 id exitUntilCollapsed
 id expand_activities_button
 id expanded_menu
+id fabAddCollection
 id fabAddLink
 id fabAddPassword
 id fabNew
+id fabUpload
 id fade
 id fill
 id fill_horizontal
@@ -3354,6 +3362,7 @@ id frost
 id fullscreen_header
 id ghost_view
 id ghost_view_holder
+id glide_custom_view_target_tag
 id gone
 id graph
 id graph_wrap
@@ -3384,6 +3393,10 @@ id italic
 id item_touch_helper_previous_elevation
 id ivDelete
 id ivEdit
+id ivIcon
+id ivPlayIcon
+id ivSecretLock
+id ivThumbnail
 id jumpToEnd
 id jumpToStart
 id labeled
@@ -3456,10 +3469,10 @@ id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id mtrl_view_tag_bottom_padding
 id multiply
-id nav_dashboard
 id nav_linkbox
 id nav_passwords
 id nav_settings
+id nav_vault
 id nav_writing
 id navigation_bar_item_active_indicator_view
 id navigation_bar_item_icon_container
@@ -3529,6 +3542,8 @@ id right_icon
 id right_side
 id rounded
 id row_index_key
+id rvCollections
+id rvMedia
 id rvPasswords
 id rvTags
 id save_non_transition_alpha
@@ -3572,6 +3587,7 @@ id south
 id spacer
 id special_effects_controller_view_tag
 id spinnerCategory
+id spinnerType
 id spline
 id split_action_bar
 id spread
@@ -3652,6 +3668,7 @@ id tvDesc
 id tvDialogTitle
 id tvEmpty
 id tvError
+id tvName
 id tvPasswordHidden
 id tvPreview
 id tvSaveStatus
@@ -3663,6 +3680,7 @@ id tvTag
 id tvTagCount
 id tvTagName
 id tvTitle
+id tvType
 id tvUrl
 id tvUsername
 id tvVaultDesc
@@ -3808,6 +3826,7 @@ layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_login
 layout activity_main
+layout activity_media_vault_grid
 layout activity_password_editor
 layout activity_vault_lock
 layout activity_writing_editor
@@ -3828,8 +3847,10 @@ layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
 layout dialog_add_link
+layout dialog_add_vault_collection
 layout dialog_config
 layout fragment_linkbox
+layout fragment_media_vault
 layout fragment_passwords
 layout fragment_settings
 layout fragment_writing_list
@@ -3838,6 +3859,8 @@ layout ime_secondary_split_test_activity
 layout item_link
 layout item_password
 layout item_tag
+layout item_vault_collection
+layout item_vault_media
 layout item_writing_draft
 layout m3_alert_dialog
 layout m3_alert_dialog_actions

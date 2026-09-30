@@ -111,7 +111,9 @@ public class MediaVaultFragment extends Fragment {
         });
 
         if (!CryptoService.hasSessionKey()) {
-            vaultLauncher.launch(new Intent(getContext(), VaultLockActivity.class));
+            Intent lockIntent = new Intent(getContext(), VaultLockActivity.class);
+            lockIntent.putExtra("LOCK_TITLE", "Unlock Media Vault");
+            vaultLauncher.launch(lockIntent);
         } else {
             loadCollections();
         }

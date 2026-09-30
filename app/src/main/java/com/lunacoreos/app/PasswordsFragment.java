@@ -90,7 +90,9 @@ public class PasswordsFragment extends Fragment {
         FloatingActionButton fab = view.findViewById(R.id.fabAddPassword);
         fab.setOnClickListener(v -> {
             if (!CryptoService.hasSessionKey()) {
-                vaultLauncher.launch(new Intent(getContext(), VaultLockActivity.class));
+                Intent lockIntent = new Intent(getContext(), VaultLockActivity.class);
+                lockIntent.putExtra("LOCK_TITLE", "Unlock Passwords");
+                vaultLauncher.launch(lockIntent);
             } else {
                 startActivity(new Intent(getContext(), PasswordEditorActivity.class));
             }
@@ -98,7 +100,9 @@ public class PasswordsFragment extends Fragment {
 
         // Always check lock on resume/create
         if (!CryptoService.hasSessionKey()) {
-            vaultLauncher.launch(new Intent(getContext(), VaultLockActivity.class));
+            Intent lockIntent = new Intent(getContext(), VaultLockActivity.class);
+            lockIntent.putExtra("LOCK_TITLE", "Unlock Passwords");
+            vaultLauncher.launch(lockIntent);
         } else {
             loadPasswords();
         }
