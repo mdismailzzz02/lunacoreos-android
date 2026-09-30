@@ -39,5 +39,9 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_writing);
         }
+
+        new Thread(() -> {
+            new SupabaseClient(this).refreshSession();
+        }).start();
     }
 }

@@ -55,6 +55,7 @@ public class ShareActivity extends Activity {
                 payload.put("description", sharedText.equals(url) ? "" : sharedText);
                 
                 SupabaseClient client = new SupabaseClient(this);
+                client.refreshSession();
                 client.saveLinkboxEntry(payload);
                 
                 runOnUiThread(() -> {
