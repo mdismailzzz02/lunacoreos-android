@@ -608,34 +608,6 @@ public class SupabaseClient {
         }
     }
 
-    public JSONArray getVaultFilesRecursive(String keyPrefix) throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_files?r2_key=ilike." + java.net.URLEncoder.encode(keyPrefix + "*", "UTF-8") + "&order=uploaded_at.desc");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("apikey", apiKey);
-        if (authToken != null) {
-            conn.setRequestProperty("Authorization", "Bearer " + authToken);
-        }
-        conn.setRequestProperty("Content-Type", "application/json");
-
-        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            InputStream is = conn.getInputStream();
-            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-            String result = s.hasNext() ? s.next() : "";
-            is.close();
-            return new JSONArray(result);
-        } else {
-            InputStream es = conn.getErrorStream();
-            String err = "";
-            if (es != null) {
-                java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A");
-                err = s.hasNext() ? s.next() : "";
-                es.close();
-            }
-            throw new Exception("Code " + conn.getResponseCode() + ": " + err);
-        }
-    }
-
     public String getR2PublicUrl(String key) {
         String publicBase = prefs.getString("r2PublicUrl", "");
         if (publicBase.isEmpty()) return null;
