@@ -154,7 +154,7 @@ public class PasswordsFragment extends Fragment {
         }
         
         if (tvTitle != null) {
-            tvTitle.setText("Passwords (" + filteredPasswordList.size() + ")");
+            tvTitle.setText("Password (" + filteredPasswordList.size() + ")");
         }
         
         adapter.notifyDataSetChanged();
