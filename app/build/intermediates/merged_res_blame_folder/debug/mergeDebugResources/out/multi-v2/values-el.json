@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lunacoreos.app-mergeDebugResources-33:/values-el/values-el.xml",
+            "outputFile": "com.lunacoreos.app-mergeDebugResources-35:/values-el/values-el.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ismail\\.gradle\\caches\\8.14.3\\transforms\\f2d0a6b3611526053f9b1d9ae1a159e7\\transformed\\core-1.17.0\\res\\values-el\\values-el.xml",

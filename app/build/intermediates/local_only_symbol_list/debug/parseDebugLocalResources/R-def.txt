@@ -1,5 +1,6 @@
 R_DEF: Internal format may change without notice
 local
+array vault_collection_types
 color accent_cyan
 color accent_green
 color accent_primary
@@ -30,6 +31,7 @@ drawable tag_background
 drawable toolbar_btn_active
 id bottomNav
 id btnBack
+id btnCreateCollection
 id btnDelete
 id btnGeneratePassword
 id btnLogin
@@ -39,7 +41,9 @@ id btnSave
 id btnSaveClose
 id btnSaveCredentials
 id btnUnlock
+id cbIsSecret
 id container
+id etCollectionName
 id etContent
 id etDescription
 id etEmail
@@ -47,6 +51,7 @@ id etKey
 id etMasterPassword
 id etNotes
 id etPassword
+id etR2PublicUrl
 id etSearch
 id etSiteName
 id etSupabaseKey
@@ -55,21 +60,30 @@ id etTags
 id etTitle
 id etUrl
 id etUsername
+id fabAddCollection
 id fabAddLink
 id fabAddPassword
 id fabNew
+id fabUpload
 id fragmentContainer
 id ivDelete
 id ivEdit
-id nav_dashboard
+id ivIcon
+id ivPlayIcon
+id ivSecretLock
+id ivThumbnail
 id nav_linkbox
 id nav_passwords
 id nav_settings
+id nav_vault
 id nav_writing
 id recyclerView
+id rvCollections
+id rvMedia
 id rvPasswords
 id rvTags
 id spinnerCategory
+id spinnerType
 id swipeRefresh
 id swipeRefreshLayout
 id tvCategory
@@ -78,6 +92,7 @@ id tvDesc
 id tvDialogTitle
 id tvEmpty
 id tvError
+id tvName
 id tvPasswordHidden
 id tvPreview
 id tvSaveStatus
@@ -89,6 +104,7 @@ id tvTag
 id tvTagCount
 id tvTagName
 id tvTitle
+id tvType
 id tvUrl
 id tvUsername
 id tvVaultDesc
@@ -96,18 +112,23 @@ id tvVaultTitle
 id tvWordCount
 layout activity_login
 layout activity_main
+layout activity_media_vault_grid
 layout activity_password_editor
 layout activity_vault_lock
 layout activity_writing_editor
 layout dialog_add_link
+layout dialog_add_vault_collection
 layout dialog_config
 layout fragment_linkbox
+layout fragment_media_vault
 layout fragment_passwords
 layout fragment_settings
 layout fragment_writing_list
 layout item_link
 layout item_password
 layout item_tag
+layout item_vault_collection
+layout item_vault_media
 layout item_writing_draft
 menu bottom_nav_menu
 mipmap ic_launcher

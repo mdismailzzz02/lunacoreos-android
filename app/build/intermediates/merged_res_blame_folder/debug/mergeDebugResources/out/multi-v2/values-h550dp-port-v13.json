@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.lunacoreos.app-mergeDebugResources-33:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
+            "outputFile": "com.lunacoreos.app-mergeDebugResources-35:/values-h550dp-port-v13/values-h550dp-port-v13.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ismail\\.gradle\\caches\\8.14.3\\transforms\\2337ff1699ed8438700de3f7352ce6a8\\transformed\\material-1.12.0\\res\\values-h550dp-port-v13\\values-h550dp-port-v13.xml",

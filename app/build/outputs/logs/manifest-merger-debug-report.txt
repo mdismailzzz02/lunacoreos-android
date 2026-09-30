@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-58:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-58:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-58:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-58:12
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-63:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-63:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-63:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-63:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4b11cfcd2bf6860cbff11fa96738cef9\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:2:1-7:12
@@ -11,6 +11,7 @@ MERGED from [androidx.appcompat:appcompat:1.7.1] C:\Users\ismail\.gradle\caches\
 MERGED from [androidx.swiperefreshlayout:swiperefreshlayout:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\022a7fa9ea333d1633e8ef3f84f11a20\transformed\swiperefreshlayout-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a14581ebe04be0779e8c46c137e7f939\transformed\viewpager2-1.1.0-beta02\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.recyclerview:recyclerview:1.3.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\5d2fa00beb5b1780ba45188a7ebabef7\transformed\recyclerview-1.3.2\AndroidManifest.xml:17:1-22:12
+MERGED from [com.github.bumptech.glide:glide:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\63cf4e5b03e40973a1871c9373ae0736\transformed\glide-4.16.0\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\7a22681fddee7c6e2522b920fd9fa301\transformed\fragment-1.5.4\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.activity:activity:1.8.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2248feeeaf62a9128f91b965852636fa\transformed\activity-1.8.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.emoji2:emoji2-views-helper:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\317f1f436ffb6a86a517f665c4d977ef\transformed\emoji2-views-helper-1.3.0\AndroidManifest.xml:2:1-7:12
@@ -35,6 +36,7 @@ MERGED from [androidx.core:core-ktx:1.17.0] C:\Users\ismail\.gradle\caches\8.14.
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\43f22d627d7da782ba4fb7ece8fb3c26\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.customview:customview:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\75f7592d63225a8263eacdaa1a2b75ad\transformed\customview-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.core:core:1.17.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f2d0a6b3611526053f9b1d9ae1a159e7\transformed\core-1.17.0\AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\38ee0d090c8c9f6b86ee67251d3aa816\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4e48b2c2342a33cead4efbd171bf4000\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.cardview:cardview:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\685077734e408c2b4d019f76f3a89a00\transformed\cardview-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -42,9 +44,10 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\ismail\.gradle\c
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b3f2d3359115a9373f707a1ddffbaa85\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\3630acf0c5c944ffea4305a2cf0458b2\transformed\tracing-1.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ad46f983408df4fae07ca67716816b24\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\67497a103e03168976452a4e4ade375e\transformed\gifdecoder-4.16.0\AndroidManifest.xml:2:1-9:12
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\ismail\.gradle\caches\8.14.3\transforms\c980f8cdc7a3692329b3b66df745a880\transformed\exifinterface-1.3.6\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\215edaf955debf5dca151b10db1b5c7e\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f343b8857c06f6e6eb018179fa2f8f27\transformed\documentfile-1.0.0\AndroidManifest.xml:17:1-22:12
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b10de32c56678a8887250487e00de92c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.print:print:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ec5685517a600ee2f3b987f4fc10a0f2\transformed\print-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\5a2a180003afa76a3ab6d98badb8349a\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.core:core-viewtree:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\aef288ad49b39bbafc18bc7e9c1615b3\transformed\core-viewtree-1.0.0\AndroidManifest.xml:2:1-7:12
@@ -61,8 +64,8 @@ ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifes
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:4:22-64
 application
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-56:19
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-56:19
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-61:19
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-61:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -169,6 +172,14 @@ data
 ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:17-55
 	android:mimeType
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:23-52
+activity#com.lunacoreos.app.MediaVaultGridActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:56:9-59:52
+	android:screenOrientation
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:59:13-49
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:13-51
 uses-sdk
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml
@@ -187,6 +198,8 @@ MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] C:\Users\ismail\.gradl
 MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a14581ebe04be0779e8c46c137e7f939\transformed\viewpager2-1.1.0-beta02\AndroidManifest.xml:5:5-44
 MERGED from [androidx.recyclerview:recyclerview:1.3.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\5d2fa00beb5b1780ba45188a7ebabef7\transformed\recyclerview-1.3.2\AndroidManifest.xml:20:5-44
 MERGED from [androidx.recyclerview:recyclerview:1.3.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\5d2fa00beb5b1780ba45188a7ebabef7\transformed\recyclerview-1.3.2\AndroidManifest.xml:20:5-44
+MERGED from [com.github.bumptech.glide:glide:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\63cf4e5b03e40973a1871c9373ae0736\transformed\glide-4.16.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.bumptech.glide:glide:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\63cf4e5b03e40973a1871c9373ae0736\transformed\glide-4.16.0\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\7a22681fddee7c6e2522b920fd9fa301\transformed\fragment-1.5.4\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.fragment:fragment:1.5.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\7a22681fddee7c6e2522b920fd9fa301\transformed\fragment-1.5.4\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.activity:activity:1.8.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2248feeeaf62a9128f91b965852636fa\transformed\activity-1.8.0\AndroidManifest.xml:20:5-44
@@ -235,6 +248,8 @@ MERGED from [androidx.customview:customview:1.1.0] C:\Users\ismail\.gradle\cache
 MERGED from [androidx.customview:customview:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\75f7592d63225a8263eacdaa1a2b75ad\transformed\customview-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.core:core:1.17.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f2d0a6b3611526053f9b1d9ae1a159e7\transformed\core-1.17.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.core:core:1.17.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f2d0a6b3611526053f9b1d9ae1a159e7\transformed\core-1.17.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\38ee0d090c8c9f6b86ee67251d3aa816\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.1.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\38ee0d090c8c9f6b86ee67251d3aa816\transformed\localbroadcastmanager-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4e48b2c2342a33cead4efbd171bf4000\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\4e48b2c2342a33cead4efbd171bf4000\transformed\cursoradapter-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:21:5-44
@@ -249,12 +264,14 @@ MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\ismail\.gradle\caches\8.14
 MERGED from [androidx.tracing:tracing:1.2.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\3630acf0c5c944ffea4305a2cf0458b2\transformed\tracing-1.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ad46f983408df4fae07ca67716816b24\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ad46f983408df4fae07ca67716816b24\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\67497a103e03168976452a4e4ade375e\transformed\gifdecoder-4.16.0\AndroidManifest.xml:5:5-7:41
+MERGED from [com.github.bumptech.glide:gifdecoder:4.16.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\67497a103e03168976452a4e4ade375e\transformed\gifdecoder-4.16.0\AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\ismail\.gradle\caches\8.14.3\transforms\c980f8cdc7a3692329b3b66df745a880\transformed\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.exifinterface:exifinterface:1.3.6] C:\Users\ismail\.gradle\caches\8.14.3\transforms\c980f8cdc7a3692329b3b66df745a880\transformed\exifinterface-1.3.6\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\215edaf955debf5dca151b10db1b5c7e\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\215edaf955debf5dca151b10db1b5c7e\transformed\core-runtime-2.2.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f343b8857c06f6e6eb018179fa2f8f27\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.documentfile:documentfile:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f343b8857c06f6e6eb018179fa2f8f27\transformed\documentfile-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b10de32c56678a8887250487e00de92c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b10de32c56678a8887250487e00de92c\transformed\localbroadcastmanager-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ec5685517a600ee2f3b987f4fc10a0f2\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.print:print:1.0.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\ec5685517a600ee2f3b987f4fc10a0f2\transformed\print-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.4.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\5a2a180003afa76a3ab6d98badb8349a\transformed\annotation-experimental-1.4.1\AndroidManifest.xml:5:5-44
