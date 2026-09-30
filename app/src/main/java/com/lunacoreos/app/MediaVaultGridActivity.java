@@ -91,7 +91,12 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 }
                 
                 try {
-                    org.json.JSONArray files = client.getVaultFiles(collectionId);
+                    org.json.JSONArray files;
+                    if (collectionPrefix != null && !collectionPrefix.isEmpty()) {
+                        files = client.getVaultFilesRecursive(collectionPrefix);
+                    } else {
+                        files = client.getVaultFiles(collectionId);
+                    }
                     // Add files
                     for (int i = 0; i < files.length(); i++) {
                         org.json.JSONObject file = files.getJSONObject(i);
