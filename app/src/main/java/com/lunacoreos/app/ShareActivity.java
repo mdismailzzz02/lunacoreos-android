@@ -8,6 +8,11 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import java.util.UUID;
 
+import android.app.AlertDialog;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+
 public class ShareActivity extends Activity {
 
     @Override
@@ -22,7 +27,7 @@ public class ShareActivity extends Activity {
             if ("text/plain".equals(type)) {
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (sharedText != null) {
-                    saveToLinkbox(sharedText);
+                    showAddLinkDialog(sharedText);
                 } else {
                     finish();
                 }
@@ -34,26 +39,55 @@ public class ShareActivity extends Activity {
         }
     }
 
-    private void saveToLinkbox(String sharedText) {
-        Toast.makeText(this, "Saving to LunaCore...", Toast.LENGTH_SHORT).show();
+    private void showAddLinkDialog(String sharedText) {
+        String extractedUrl = sharedText;
+        String[] words = sharedText.split("\\s+");
+        for (String word : words) {
+            if (word.startsWith("http://") || word.startsWith("https://")) {
+                extractedUrl = word;
+                break;
+            }
+        }
         
+        String extractedDesc = sharedText.equals(extractedUrl) ? "" : sharedText;
+
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_link, null);
+        EditText etUrl = dialogView.findViewById(R.id.etUrl);
+        EditText etTitle = dialogView.findViewById(R.id.etTitle);
+        EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        EditText etTags = dialogView.findViewById(R.id.etTags);
+
+        etUrl.setText(extractedUrl);
+        etDescription.setText(extractedDesc);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Save to LunaCore")
+                .setView(dialogView)
+                .setCancelable(false)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String finalUrl = etUrl.getText().toString().trim();
+                    if (finalUrl.isEmpty()) {
+                        Toast.makeText(this, "URL cannot be empty", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
+                    saveLink(finalUrl, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> finish())
+                .show();
+    }
+
+    private void saveLink(String url, String title, String description, String tags) {
+        Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
-                // Extract basic URL from shared text (sometimes apps send extra text alongside URL)
-                String url = sharedText;
-                String[] words = sharedText.split("\\s+");
-                for (String word : words) {
-                    if (word.startsWith("http://") || word.startsWith("https://")) {
-                        url = word;
-                        break;
-                    }
-                }
-
                 JSONObject payload = new JSONObject();
                 payload.put("id", UUID.randomUUID().toString());
                 payload.put("url", url);
-                payload.put("description", sharedText.equals(url) ? "" : sharedText);
-                
+                if (!title.isEmpty()) payload.put("title", title);
+                if (!description.isEmpty()) payload.put("description", description);
+                if (!tags.isEmpty()) payload.put("tags", tags);
+
                 SupabaseClient client = new SupabaseClient(this);
                 client.refreshSession();
                 client.saveLinkboxEntry(payload);
