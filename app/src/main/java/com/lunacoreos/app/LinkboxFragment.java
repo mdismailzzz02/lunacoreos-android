@@ -219,7 +219,7 @@ public class LinkboxFragment extends Fragment {
 
                 requireActivity().runOnUiThread(() -> {
                     tagAdapter.notifyDataSetChanged();
-                    filterLinks("");
+                    filterLinks(etSearch != null ? etSearch.getText().toString() : "");
                     swipeRefreshLayout.setRefreshing(false);
                 });
             } catch (Exception e) {
