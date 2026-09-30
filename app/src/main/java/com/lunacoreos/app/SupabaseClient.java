@@ -190,4 +190,64 @@ public class SupabaseClient {
             throw new Exception("Failed to delete password: " + conn.getResponseCode());
         }
     }
+
+    public JSONArray getLinkboxEntries() throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/linkbox?order=created_at.desc");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            throw new Exception("Failed to fetch linkbox: " + conn.getResponseCode());
+        }
+    }
+
+    public void saveLinkboxEntry(JSONObject entry) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/linkbox?on_conflict=id");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(entry.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            InputStream es = conn.getErrorStream();
+            Scanner s = new Scanner(es).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            if (es != null) es.close();
+            throw new Exception("Failed to save linkbox: " + err);
+        }
+    }
+
+    public void deleteLinkboxEntry(String id) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/linkbox?id=eq." + id);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to delete linkbox: " + conn.getResponseCode());
+        }
+    }
 }
