@@ -41,6 +41,7 @@ public class AppPasswordActivity extends AppCompatActivity {
         client = new SupabaseClient(this);
 
         etPassword = findViewById(R.id.etMasterPassword);
+        etPassword.setHint("Vault Password");
         tvError = findViewById(R.id.tvError);
         tvTitle = findViewById(R.id.tvVaultTitle);
         tvDesc = findViewById(R.id.tvVaultDesc);
