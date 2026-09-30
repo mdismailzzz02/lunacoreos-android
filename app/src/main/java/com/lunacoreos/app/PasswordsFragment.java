@@ -8,9 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,8 +37,11 @@ import java.util.List;
 public class PasswordsFragment extends Fragment {
 
     private RecyclerView rvPasswords;
+    private SwipeRefreshLayout swipeRefresh;
+    private EditText etSearch;
     private PasswordAdapter adapter;
-    private List<JSONObject> passwordList = new ArrayList<>();
+    private List<JSONObject> allPasswordList = new ArrayList<>();
+    private List<JSONObject> filteredPasswordList = new ArrayList<>();
 
     private final ActivityResultLauncher<Intent> vaultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -55,10 +62,28 @@ public class PasswordsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
+        etSearch = view.findViewById(R.id.etSearch);
         rvPasswords = view.findViewById(R.id.rvPasswords);
         rvPasswords.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new PasswordAdapter();
         rvPasswords.setAdapter(adapter);
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (CryptoService.hasSessionKey()) {
+                loadPasswords();
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                filterPasswords(s.toString());
+            }
+        });
 
         FloatingActionButton fab = view.findViewById(R.id.fabAddPassword);
         fab.setOnClickListener(v -> {
@@ -97,16 +122,35 @@ public class PasswordsFragment extends Fragment {
                 }
 
                 requireActivity().runOnUiThread(() -> {
-                    passwordList = list;
-                    adapter.notifyDataSetChanged();
+                    allPasswordList = list;
+                    filterPasswords(etSearch.getText().toString());
+                    swipeRefresh.setRefreshing(false);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
-                requireActivity().runOnUiThread(() -> 
-                    Toast.makeText(getContext(), "Failed to load passwords: " + e.getMessage(), Toast.LENGTH_LONG).show()
-                );
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Failed to load passwords: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    swipeRefresh.setRefreshing(false);
+                });
             }
         }).start();
+    }
+
+    private void filterPasswords(String query) {
+        filteredPasswordList.clear();
+        if (query.isEmpty()) {
+            filteredPasswordList.addAll(allPasswordList);
+        } else {
+            String q = query.toLowerCase();
+            for (JSONObject pwd : allPasswordList) {
+                String site = pwd.optString("site_name").toLowerCase();
+                String user = pwd.optString("username").toLowerCase();
+                if (site.contains(q) || user.contains(q)) {
+                    filteredPasswordList.add(pwd);
+                }
+            }
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private class PasswordAdapter extends RecyclerView.Adapter<PasswordAdapter.ViewHolder> {
@@ -119,7 +163,7 @@ public class PasswordsFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            JSONObject pwd = passwordList.get(position);
+            JSONObject pwd = filteredPasswordList.get(position);
             holder.tvSiteName.setText(pwd.optString("site_name"));
             holder.tvCategory.setText(pwd.optString("category", "General"));
             holder.tvUsername.setText(pwd.optString("username"));
@@ -161,7 +205,7 @@ public class PasswordsFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return passwordList.size();
+            return filteredPasswordList.size();
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
