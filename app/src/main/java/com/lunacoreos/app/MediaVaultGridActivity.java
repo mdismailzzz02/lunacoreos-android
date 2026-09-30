@@ -74,23 +74,32 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private void loadFiles() {
         new Thread(() -> {
             try {
-                org.json.JSONArray subcollections = client.getVaultSubCollections(collectionId);
-                org.json.JSONArray files = client.getVaultFiles(collectionId);
-                
                 java.util.List<org.json.JSONObject> list = new java.util.ArrayList<>();
                 
-                // Add folders first
-                for (int i = 0; i < subcollections.length(); i++) {
-                    org.json.JSONObject folder = subcollections.getJSONObject(i);
-                    folder.put("item_type", "folder");
-                    list.add(folder);
+                try {
+                    org.json.JSONArray subcollections = client.getVaultSubCollections(collectionId);
+                    // Add folders first
+                    for (int i = 0; i < subcollections.length(); i++) {
+                        org.json.JSONObject folder = subcollections.getJSONObject(i);
+                        folder.put("item_type", "folder");
+                        list.add(folder);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Failed to load folders", Toast.LENGTH_SHORT).show());
                 }
                 
-                // Add files
-                for (int i = 0; i < files.length(); i++) {
-                    org.json.JSONObject file = files.getJSONObject(i);
-                    file.put("item_type", "file");
-                    list.add(file);
+                try {
+                    org.json.JSONArray files = client.getVaultFiles(collectionId);
+                    // Add files
+                    for (int i = 0; i < files.length(); i++) {
+                        org.json.JSONObject file = files.getJSONObject(i);
+                        file.put("item_type", "file");
+                        list.add(file);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Failed to load files", Toast.LENGTH_SHORT).show());
                 }
                 
                 runOnUiThread(() -> {
