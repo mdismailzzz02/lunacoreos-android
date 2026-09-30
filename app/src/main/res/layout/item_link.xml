@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_marginBottom="12dp"
-    android:background="@drawable/item_background"
+    android:background="@drawable/card_background"
     android:elevation="2dp">
 
     <TextView
