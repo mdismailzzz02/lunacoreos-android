@@ -3693,6 +3693,7 @@ int id unlabeled 0x7f090234
 int id up 0x7f090235
 int id useLogo 0x7f090236
 int id vertical_only 0x7f090237
+int id viewPager 0x7f09024c
 int id view_offset_helper 0x7f090238
 int id view_transition 0x7f090239
 int id view_tree_disjoint_parent 0x7f09023a
@@ -3863,6 +3864,7 @@ int layout item_password 0x7f0c003d
 int layout item_tag 0x7f0c003e
 int layout item_vault_collection 0x7f0c003f
 int layout item_vault_media 0x7f0c0040
+int layout item_viewer_photo 0x7f0c0080
 int layout item_writing_draft 0x7f0c0041
 int layout m3_alert_dialog 0x7f0c0042
 int layout m3_alert_dialog_actions 0x7f0c0043

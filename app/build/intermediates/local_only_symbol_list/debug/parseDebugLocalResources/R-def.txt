@@ -113,6 +113,7 @@ id tvUsername
 id tvVaultDesc
 id tvVaultTitle
 id tvWordCount
+id viewPager
 layout activity_login
 layout activity_main
 layout activity_media_vault_grid
@@ -133,6 +134,7 @@ layout item_password
 layout item_tag
 layout item_vault_collection
 layout item_vault_media
+layout item_viewer_photo
 layout item_writing_draft
 menu bottom_nav_menu
 mipmap ic_launcher

@@ -3694,6 +3694,7 @@ id unlabeled
 id up
 id useLogo
 id vertical_only
+id viewPager
 id view_offset_helper
 id view_transition
 id view_tree_disjoint_parent
@@ -3864,6 +3865,7 @@ layout item_password
 layout item_tag
 layout item_vault_collection
 layout item_vault_media
+layout item_viewer_photo
 layout item_writing_draft
 layout m3_alert_dialog
 layout m3_alert_dialog_actions
