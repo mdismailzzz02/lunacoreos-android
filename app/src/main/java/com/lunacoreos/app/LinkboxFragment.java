@@ -35,6 +35,15 @@ public class LinkboxFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private SupabaseClient supabaseClient;
     private TextView tvTitle;
+    private TagAdapter tagAdapter;
+    private List<TagItem> tagList = new ArrayList<>();
+    private EditText etSearch;
+
+    class TagItem {
+        String name;
+        int count;
+        TagItem(String name, int count) { this.name = name; this.count = count; }
+    }
 
     @Nullable
     @Override
@@ -53,17 +62,35 @@ public class LinkboxFragment extends Fragment {
         adapter = new LinkAdapter();
         recyclerView.setAdapter(adapter);
 
-        EditText etSearch = view.findViewById(R.id.etSearch);
+        etSearch = view.findViewById(R.id.etSearch);
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    view.findViewById(R.id.rvTags).setVisibility(View.GONE);
+                } else if (etSearch.hasFocus()) {
+                    view.findViewById(R.id.rvTags).setVisibility(View.VISIBLE);
+                }
                 filterLinks(s.toString());
             }
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
+        etSearch.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && etSearch.getText().length() == 0) {
+                view.findViewById(R.id.rvTags).setVisibility(View.VISIBLE);
+            } else if (!hasFocus) {
+                view.findViewById(R.id.rvTags).setVisibility(View.GONE);
+            }
+        });
+
+        RecyclerView rvTags = view.findViewById(R.id.rvTags);
+        rvTags.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(getContext(), 2));
+        tagAdapter = new TagAdapter();
+        rvTags.setAdapter(tagAdapter);
 
         view.findViewById(R.id.fabAddLink).setOnClickListener(v -> showAddLinkDialog());
 
@@ -141,10 +168,30 @@ public class LinkboxFragment extends Fragment {
             try {
                 JSONArray arr = supabaseClient.getLinkboxEntries();
                 linkList.clear();
+                java.util.Map<String, Integer> tagCounts = new java.util.HashMap<>();
                 for (int i = 0; i < arr.length(); i++) {
-                    linkList.add(arr.getJSONObject(i));
+                    JSONObject obj = arr.getJSONObject(i);
+                    linkList.add(obj);
+                    
+                    String tags = obj.optString("tags", "");
+                    if (!tags.isEmpty()) {
+                        for (String tag : tags.split(",")) {
+                            String t = tag.trim();
+                            if (!t.isEmpty()) {
+                                tagCounts.put(t, tagCounts.getOrDefault(t, 0) + 1);
+                            }
+                        }
+                    }
                 }
+                
+                tagList.clear();
+                for (java.util.Map.Entry<String, Integer> entry : tagCounts.entrySet()) {
+                    tagList.add(new TagItem(entry.getKey(), entry.getValue()));
+                }
+                tagList.sort((a, b) -> b.count - a.count); // sort by count descending
+
                 requireActivity().runOnUiThread(() -> {
+                    tagAdapter.notifyDataSetChanged();
                     filterLinks("");
                     swipeRefreshLayout.setRefreshing(false);
                 });
@@ -164,7 +211,9 @@ public class LinkboxFragment extends Fragment {
         for (JSONObject link : linkList) {
             String url = link.optString("url", "").toLowerCase();
             String desc = link.optString("description", "").toLowerCase();
-            if (url.contains(lowerQuery) || desc.contains(lowerQuery)) {
+            String title = link.optString("title", "").toLowerCase();
+            String tags = link.optString("tags", "").toLowerCase();
+            if (url.contains(lowerQuery) || desc.contains(lowerQuery) || title.contains(lowerQuery) || tags.contains(lowerQuery)) {
                 filteredList.add(link);
             }
         }
@@ -174,6 +223,43 @@ public class LinkboxFragment extends Fragment {
         }
         
         adapter.notifyDataSetChanged();
+    }
+
+    private class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            TagItem item = tagList.get(position);
+            holder.tvTagName.setText(item.name);
+            holder.tvTagCount.setText(String.valueOf(item.count));
+            
+            holder.itemView.setOnClickListener(v -> {
+                etSearch.setText(item.name);
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return tagList.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView tvTagName, tvTagCount;
+            ViewHolder(View itemView) {
+                super(itemView);
+                tvTagName = itemView.findViewById(R.id.tvTagName);
+                tvTagCount = itemView.findViewById(R.id.tvTagCount);
+            }
+        }
     }
 
     private class LinkAdapter extends RecyclerView.Adapter<LinkAdapter.ViewHolder> {
