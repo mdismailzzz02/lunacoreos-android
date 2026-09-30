@@ -38,6 +38,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".AppPasswordActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".PasswordEditorActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />

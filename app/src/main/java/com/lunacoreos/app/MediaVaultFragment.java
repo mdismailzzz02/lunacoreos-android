@@ -31,6 +31,9 @@ public class MediaVaultFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private CollectionAdapter adapter;
     private List<JSONObject> collectionList = new ArrayList<>();
+    private String vaultMode = "normal";
+    private int titleClickCount = 0;
+    private long lastTitleClickTime = 0;
 
     private final ActivityResultLauncher<Intent> vaultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -38,9 +41,26 @@ public class MediaVaultFragment extends Fragment {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     loadCollections();
                 } else {
-                    // Lock failed or cancelled
                     Toast.makeText(getContext(), "Vault locked.", Toast.LENGTH_SHORT).show();
                 }
+            }
+    );
+
+    private final ActivityResultLauncher<Intent> appPasswordLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data != null) {
+                        String mode = data.getStringExtra("VAULT_MODE");
+                        if (mode != null) {
+                            vaultMode = mode;
+                            loadCollections();
+                            return;
+                        }
+                    }
+                }
+                Toast.makeText(getContext(), "Access Denied", Toast.LENGTH_SHORT).show();
             }
     );
 
@@ -57,6 +77,41 @@ public class MediaVaultFragment extends Fragment {
         rvCollections.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CollectionAdapter();
         rvCollections.setAdapter(adapter);
+
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setOnClickListener(v -> {
+            long now = System.currentTimeMillis();
+            if (now - lastTitleClickTime > 500) titleClickCount = 0;
+            lastTitleClickTime = now;
+            titleClickCount++;
+            if (titleClickCount == 3) {
+                titleClickCount = 0;
+                if (!"normal".equals(vaultMode)) {
+                    vaultMode = "normal";
+                    loadCollections();
+                } else {
+                    Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                    intent.putExtra("LOCK_ID", "vault_hidden");
+                    intent.putExtra("LOCK_TITLE", "Hidden Vault");
+                    intent.putExtra("VAULT_MODE", "hidden");
+                    appPasswordLauncher.launch(intent);
+                }
+            }
+        });
+
+        tvTitle.setOnLongClickListener(v -> {
+            if (!"normal".equals(vaultMode)) {
+                vaultMode = "normal";
+                loadCollections();
+            } else {
+                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                intent.putExtra("LOCK_ID", "vault_secret");
+                intent.putExtra("LOCK_TITLE", "Secret Vault");
+                intent.putExtra("VAULT_MODE", "secret");
+                appPasswordLauncher.launch(intent);
+            }
+            return true;
+        });
 
         swipeRefresh.setOnRefreshListener(() -> {
             if (CryptoService.hasSessionKey()) {
@@ -88,7 +143,8 @@ public class MediaVaultFragment extends Fragment {
                         JSONObject col = new JSONObject();
                         col.put("name", name);
                         col.put("type", type);
-                        col.put("is_secret", isSecret);
+                        col.put("is_secret", "secret".equals(vaultMode) || isSecret);
+                        col.put("is_hidden", "hidden".equals(vaultMode));
                         col.put("key_prefix", "col_" + System.currentTimeMillis() + "/");
                         
                         SupabaseClient client = new SupabaseClient(getContext());
@@ -132,7 +188,7 @@ public class MediaVaultFragment extends Fragment {
         new Thread(() -> {
             try {
                 SupabaseClient client = new SupabaseClient(getContext());
-                JSONArray arr = client.getVaultCollections();
+                JSONArray arr = client.getVaultCollections(vaultMode);
                 
                 List<JSONObject> list = new ArrayList<>();
                 for (int i = 0; i < arr.length(); i++) {
@@ -143,6 +199,18 @@ public class MediaVaultFragment extends Fragment {
                     collectionList = list;
                     adapter.notifyDataSetChanged();
                     swipeRefresh.setRefreshing(false);
+                    
+                    TextView tvTitle = getView().findViewById(R.id.tvTitle);
+                    if ("hidden".equals(vaultMode)) {
+                        tvTitle.setText("Hidden Vault");
+                        tvTitle.setTextColor(0xFFA78BFA);
+                    } else if ("secret".equals(vaultMode)) {
+                        tvTitle.setText("Secret Vault");
+                        tvTitle.setTextColor(0xFFEC4899);
+                    } else {
+                        tvTitle.setText("Media Vault");
+                        tvTitle.setTextColor(getResources().getColor(R.color.text_primary));
+                    }
                 });
             } catch (Exception e) {
                 e.printStackTrace();

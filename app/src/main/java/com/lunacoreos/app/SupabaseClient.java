@@ -119,7 +119,105 @@ public class SupabaseClient {
         throw new Exception("No credentials to refresh session");
     }
 
-    public void refreshToken(String refreshToken) throws Exception {
+
+
+    public String getUserId() {
+        if (authToken == null) return null;
+        try {
+            String[] parts = authToken.split("\\.");
+            if (parts.length > 1) {
+                String payload = new String(android.util.Base64.decode(parts[1], android.util.Base64.URL_SAFE), "UTF-8");
+                return new JSONObject(payload).getString("sub");
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    public JSONObject getAppPasswordV2(String id) throws Exception {
+        String userId = getUserId();
+        if (userId == null) return null;
+        
+        // 1. Try namespaced ID
+        String finalId = id + "_" + userId;
+        URL url = new URL(baseUrl + "/rest/v1/app_passwords_v2?id=eq." + java.net.URLEncoder.encode(finalId, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        
+        if (conn.getResponseCode() == 200) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONArray arr = new JSONArray(result);
+            if (arr.length() > 0) return arr.getJSONObject(0);
+        }
+
+        // 2. Try legacy ID
+        url = new URL(baseUrl + "/rest/v1/app_passwords_v2?id=eq." + java.net.URLEncoder.encode(id, "UTF-8"));
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        
+        if (conn.getResponseCode() == 200) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONArray arr = new JSONArray(result);
+            if (arr.length() > 0) return arr.getJSONObject(0);
+        }
+        return null;
+    }
+
+    public void setAppPasswordV2(String id, String label, String salt, String hash) throws Exception {
+        String userId = getUserId();
+        if (userId == null) throw new Exception("Not authenticated");
+        
+        // Check if legacy ID exists
+        String finalId = id + "_" + userId;
+        JSONObject legacy = null;
+        
+        URL url = new URL(baseUrl + "/rest/v1/app_passwords_v2?id=eq." + java.net.URLEncoder.encode(id, "UTF-8") + "&select=id");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        if (conn.getResponseCode() == 200) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            JSONArray arr = new JSONArray(s.hasNext() ? s.next() : "[]");
+            is.close();
+            if (arr.length() > 0) legacy = arr.getJSONObject(0);
+        }
+        
+        if (legacy != null) finalId = id; // use legacy if it exists
+
+        JSONObject payload = new JSONObject();
+        payload.put("id", finalId);
+        payload.put("label", label);
+        payload.put("salt", salt);
+        payload.put("hash", hash);
+
+        URL postUrl = new URL(baseUrl + "/rest/v1/app_passwords_v2");
+        HttpURLConnection postConn = (HttpURLConnection) postUrl.openConnection();
+        postConn.setRequestMethod("POST");
+        postConn.setRequestProperty("apikey", apiKey);
+        postConn.setRequestProperty("Prefer", "resolution=merge-duplicates"); // upsert
+        if (authToken != null) postConn.setRequestProperty("Authorization", "Bearer " + authToken);
+        postConn.setRequestProperty("Content-Type", "application/json");
+        postConn.setDoOutput(true);
+
+        try (OutputStream os = postConn.getOutputStream()) {
+            os.write(payload.toString().getBytes("UTF-8"));
+        }
+
+        if (postConn.getResponseCode() >= 400) {
+            throw new Exception("Failed to set app password: " + postConn.getResponseCode());
+        }
+    }
         URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
@@ -345,8 +443,18 @@ public class SupabaseClient {
         }
     }
 
-    public JSONArray getVaultCollections() throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_collections?order=created_at.desc");
+    public JSONArray getVaultCollections(String mode) throws Exception {
+        String urlString = baseUrl + "/rest/v1/vault_collections?order=created_at.desc";
+        
+        if ("normal".equals(mode)) {
+            urlString += "&is_hidden=eq.false&or=%28is_secret.eq.false%2Cis_secret.is.null%29";
+        } else if ("hidden".equals(mode)) {
+            urlString += "&or=%28is_secret.eq.false%2Cis_secret.is.null%29";
+        } else if ("secret".equals(mode)) {
+            urlString += "&is_hidden=eq.false";
+        }
+
+        URL url = new URL(urlString);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", apiKey);
