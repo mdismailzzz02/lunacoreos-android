@@ -60,21 +60,30 @@ public class ShareActivity extends Activity {
         etUrl.setText(extractedUrl);
         etDescription.setText(extractedDesc);
 
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Save to LunaCore")
-                .setView(dialogView)
-                .setCancelable(false)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String finalUrl = etUrl.getText().toString().trim();
-                    if (finalUrl.isEmpty()) {
-                        Toast.makeText(this, "URL cannot be empty", Toast.LENGTH_SHORT).show();
-                        finish();
-                        return;
-                    }
-                    saveLink(finalUrl, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> finish())
-                .show();
+        TextView tvDialogTitle = dialogView.findViewById(R.id.tvDialogTitle);
+        if (tvDialogTitle != null) {
+            tvDialogTitle.setText("Save to LunaCore");
+        }
+
+        com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
+        bottomSheetDialog.setContentView(dialogView);
+        bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        bottomSheetDialog.setCancelable(true);
+
+        dialogView.findViewById(R.id.btnSave).setOnClickListener(v -> {
+            String finalUrl = etUrl.getText().toString().trim();
+            if (finalUrl.isEmpty()) {
+                Toast.makeText(this, "URL cannot be empty", Toast.LENGTH_SHORT).show();
+                bottomSheetDialog.dismiss();
+                finish();
+                return;
+            }
+            saveLink(finalUrl, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.setOnDismissListener(dialog -> finish());
+        bottomSheetDialog.show();
     }
 
     private void saveLink(String url, String title, String description, String tags) {

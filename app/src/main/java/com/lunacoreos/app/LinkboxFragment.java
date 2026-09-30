@@ -88,20 +88,28 @@ public class LinkboxFragment extends Fragment {
             etDescription.setText(existingItem.optString("description", ""));
             etTags.setText(existingItem.optString("tags", ""));
         }
+        
+        TextView tvDialogTitle = dialogView.findViewById(R.id.tvDialogTitle);
+        if (tvDialogTitle != null) {
+            tvDialogTitle.setText(existingItem == null ? "Save Link" : "Edit Link");
+        }
 
-        new MaterialAlertDialogBuilder(getContext())
-                .setTitle(existingItem == null ? "Add Link" : "Edit Link")
-                .setView(dialogView)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String url = etUrl.getText().toString().trim();
-                    if (url.isEmpty()) {
-                        Toast.makeText(getContext(), "URL cannot be empty", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim(), existingItem == null ? null : existingItem.optString("id"));
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(getContext());
+        bottomSheetDialog.setContentView(dialogView);
+        // Ensure background is transparent so custom shape shows
+        bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        
+        dialogView.findViewById(R.id.btnSave).setOnClickListener(v -> {
+            String url = etUrl.getText().toString().trim();
+            if (url.isEmpty()) {
+                Toast.makeText(getContext(), "URL cannot be empty", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim(), existingItem == null ? null : existingItem.optString("id"));
+            bottomSheetDialog.dismiss();
+        });
+
+        bottomSheetDialog.show();
     }
 
     private void saveLink(String url, String title, String description, String tags, String existingId) {
