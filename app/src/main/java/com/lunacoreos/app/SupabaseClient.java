@@ -10,11 +10,14 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class SupabaseClient {
+    public static final String ACTION_FORCE_LOGOUT = "com.lunacoreos.app.FORCE_LOGOUT";
+
     private final String baseUrl;
     private final String apiKey;
     private String authToken;
 
     private android.content.SharedPreferences prefs;
+    private android.content.Context context;
 
     public SupabaseClient(String url, String key) {
         this.baseUrl = url;
@@ -22,10 +25,36 @@ public class SupabaseClient {
     }
 
     public SupabaseClient(android.content.Context context) {
+        this.context = context.getApplicationContext();
         this.prefs = context.getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
         this.baseUrl = prefs.getString("supabaseUrl", "");
         this.apiKey = prefs.getString("supabaseKey", "");
         this.authToken = prefs.getString("authToken", null);
+    }
+
+    /**
+     * Called when any API returns 401. Tries refresh once, then force-logouts.
+     * Returns true if refresh succeeded (caller should retry), false if logout was triggered.
+     */
+    private boolean handleUnauthorized() {
+        if (prefs == null) return false;
+        try {
+            refreshSession();
+            return true; // refresh succeeded, caller can retry
+        } catch (Exception e) {
+            // Refresh also failed — force logout
+            prefs.edit()
+                .remove("authToken")
+                .remove("refreshToken")
+                .apply();
+            if (context != null) {
+                android.content.Intent intent = new android.content.Intent(ACTION_FORCE_LOGOUT);
+                androidx.localbroadcastmanager.content.LocalBroadcastManager
+                        .getInstance(context)
+                        .sendBroadcast(intent);
+            }
+            return false;
+        }
     }
 
     public void setAuthToken(String token) {
@@ -65,31 +94,29 @@ public class SupabaseClient {
         }
     }
     
-    public void refreshSession() {
-        if (prefs == null) return;
+    public void refreshSession() throws Exception {
+        if (prefs == null) throw new Exception("No prefs");
         String refreshToken = prefs.getString("refreshToken", "");
         if (!refreshToken.isEmpty()) {
             try {
                 refreshToken(refreshToken);
                 return;
             } catch (Exception e) {
-                e.printStackTrace();
+                // refresh token failed, try credentials below
             }
         }
         
         String savedEmail = prefs.getString("savedEmail", "");
         String savedPassword = prefs.getString("savedPassword", "");
         if (!savedEmail.isEmpty() && !savedPassword.isEmpty()) {
-            try {
-                JSONObject json = login(savedEmail, savedPassword);
-                prefs.edit()
-                     .putString("authToken", json.getString("access_token"))
-                     .putString("refreshToken", json.optString("refresh_token", ""))
-                     .apply();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            JSONObject json = login(savedEmail, savedPassword);
+            prefs.edit()
+                 .putString("authToken", json.getString("access_token"))
+                 .putString("refreshToken", json.optString("refresh_token", ""))
+                 .apply();
+            return;
         }
+        throw new Exception("No credentials to refresh session");
     }
 
     public void refreshToken(String refreshToken) throws Exception {
