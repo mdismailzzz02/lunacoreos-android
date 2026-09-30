@@ -123,4 +123,64 @@ public class SupabaseClient {
             throw new Exception("Failed to delete: " + conn.getResponseCode());
         }
     }
+
+    public JSONArray getPasswords() throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/passwords?order=updated_at.desc");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            throw new Exception("Failed to fetch passwords: " + conn.getResponseCode());
+        }
+    }
+
+    public void savePassword(JSONObject password) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/passwords?on_conflict=id");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(password.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            InputStream es = conn.getErrorStream();
+            Scanner s = new Scanner(es).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            if (es != null) es.close();
+            throw new Exception("Failed to save password: " + err);
+        }
+    }
+
+    public void deletePassword(String id) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/passwords?id=eq." + id);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to delete password: " + conn.getResponseCode());
+        }
+    }
 }

@@ -18,8 +18,9 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
             if (item.getItemId() == R.id.nav_writing) {
                 selectedFragment = new WritingListFragment();
+            } else if (item.getItemId() == R.id.nav_passwords) {
+                selectedFragment = new PasswordsFragment();
             }
-            // Add other fragments here as they are built
             
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
