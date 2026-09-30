@@ -121,6 +121,28 @@ public class LinkboxFragment extends Fragment {
 
         view.findViewById(R.id.fabAddLink).setOnClickListener(v -> showAddLinkDialog());
 
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new androidx.activity.OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (etSearch != null && etSearch.hasFocus()) {
+                    etSearch.clearFocus();
+                } else {
+                    setEnabled(false);
+                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                    setEnabled(true);
+                }
+            }
+        });
+        
+        // Also clear focus if the keyboard is dismissed via back gesture
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(view, (v, insets) -> {
+            boolean isKeyboardVisible = insets.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime());
+            if (!isKeyboardVisible && etSearch != null && etSearch.hasFocus()) {
+                etSearch.clearFocus();
+            }
+            return androidx.core.view.ViewCompat.onApplyWindowInsets(v, insets);
+        });
+
         fetchLinks();
         return view;
     }
