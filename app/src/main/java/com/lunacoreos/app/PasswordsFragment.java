@@ -36,6 +36,7 @@ import java.util.List;
 
 public class PasswordsFragment extends Fragment {
 
+    private TextView tvTitle;
     private RecyclerView rvPasswords;
     private SwipeRefreshLayout swipeRefresh;
     private EditText etSearch;
@@ -62,6 +63,7 @@ public class PasswordsFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        tvTitle = view.findViewById(R.id.tvTitle);
         swipeRefresh = view.findViewById(R.id.swipeRefresh);
         etSearch = view.findViewById(R.id.etSearch);
         rvPasswords = view.findViewById(R.id.rvPasswords);
@@ -150,6 +152,11 @@ public class PasswordsFragment extends Fragment {
                 }
             }
         }
+        
+        if (tvTitle != null) {
+            tvTitle.setText("Passwords (" + filteredPasswordList.size() + ")");
+        }
+        
         adapter.notifyDataSetChanged();
     }
 
@@ -167,6 +174,18 @@ public class PasswordsFragment extends Fragment {
             holder.tvSiteName.setText(pwd.optString("site_name"));
             holder.tvCategory.setText(pwd.optString("category", "General"));
             holder.tvUsername.setText(pwd.optString("username"));
+            
+            String strength = pwd.optString("strength", "weak").toLowerCase();
+            if (strength.equals("weak")) {
+                holder.tvStrength.setText("Weak");
+                holder.tvStrength.setTextColor(getResources().getColor(R.color.danger, null));
+            } else if (strength.equals("fair")) {
+                holder.tvStrength.setText("Fair");
+                holder.tvStrength.setTextColor(getResources().getColor(android.R.color.holo_orange_light, null));
+            } else {
+                holder.tvStrength.setText("Strong");
+                holder.tvStrength.setTextColor(getResources().getColor(R.color.accent_green, null));
+            }
 
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(getContext(), PasswordEditorActivity.class);
@@ -209,13 +228,14 @@ public class PasswordsFragment extends Fragment {
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView tvSiteName, tvCategory, tvUsername, tvPasswordHidden;
+            TextView tvSiteName, tvCategory, tvUsername, tvPasswordHidden, tvStrength;
             ViewHolder(View itemView) {
                 super(itemView);
                 tvSiteName = itemView.findViewById(R.id.tvSiteName);
                 tvCategory = itemView.findViewById(R.id.tvCategory);
                 tvUsername = itemView.findViewById(R.id.tvUsername);
                 tvPasswordHidden = itemView.findViewById(R.id.tvPasswordHidden);
+                tvStrength = itemView.findViewById(R.id.tvStrength);
             }
         }
     }
