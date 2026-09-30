@@ -25,29 +25,22 @@ public class SettingsFragment extends Fragment {
 
         SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", Context.MODE_PRIVATE);
         
-        EditText etEmail = view.findViewById(R.id.etSettingsEmail);
-        EditText etPassword = view.findViewById(R.id.etSettingsPassword);
+        EditText etUrl = view.findViewById(R.id.etSupabaseUrl);
+        EditText etKey = view.findViewById(R.id.etSupabaseKey);
         
-        etEmail.setText(prefs.getString("savedEmail", ""));
-        etPassword.setText(prefs.getString("savedPassword", ""));
+        etUrl.setText(prefs.getString("supabaseUrl", ""));
+        etKey.setText(prefs.getString("supabaseKey", ""));
 
         view.findViewById(R.id.btnSaveCredentials).setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String url = etUrl.getText().toString().trim();
+            String key = etKey.getText().toString().trim();
             
             prefs.edit()
-                .putString("savedEmail", email)
-                .putString("savedPassword", password)
+                .putString("supabaseUrl", url)
+                .putString("supabaseKey", key)
                 .apply();
                 
-            Toast.makeText(getContext(), "Credentials saved for auto-login", Toast.LENGTH_SHORT).show();
-            
-            new Thread(() -> {
-                SupabaseClient client = new SupabaseClient(getContext());
-                try {
-                    client.login(email, password);
-                } catch (Exception ignored) {}
-            }).start();
+            Toast.makeText(getContext(), "Backend settings saved", Toast.LENGTH_SHORT).show();
         });
 
         view.findViewById(R.id.btnLogout).setOnClickListener(v -> {

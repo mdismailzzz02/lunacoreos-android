@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Auto-Login Credentials"
+        android:text="Backend Configuration"
         android:textSize="16sp"
         android:textColor="@color/text_secondary"
         android:textStyle="bold"
@@ -29,33 +29,33 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="If your session expires, LunaCore will automatically use these credentials to log you back in."
+        android:text="Configure your Supabase Project URL and API Key."
         android:textSize="12sp"
         android:textColor="@color/text_muted"
         android:layout_marginBottom="16dp" />
 
     <EditText
-        android:id="@+id/etSettingsEmail"
+        android:id="@+id/etSupabaseUrl"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/input_background"
-        android:hint="Email"
+        android:hint="Supabase URL"
         android:textColorHint="@color/text_hint"
         android:textColor="@color/text_primary"
         android:paddingHorizontal="16dp"
-        android:inputType="textEmailAddress"
+        android:inputType="textUri"
         android:layout_marginBottom="12dp" />
 
     <EditText
-        android:id="@+id/etSettingsPassword"
+        android:id="@+id/etSupabaseKey"
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:background="@drawable/input_background"
-        android:hint="Password"
+        android:hint="Supabase API Key"
         android:textColorHint="@color/text_hint"
         android:textColor="@color/text_primary"
         android:paddingHorizontal="16dp"
-        android:inputType="textPassword"
+        android:inputType="text"
         android:layout_marginBottom="24dp" />
 
     <com.google.android.material.button.MaterialButton
@@ -63,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         app:backgroundTint="@color/accent_primary"
-        android:text="Save Credentials"
+        android:text="Save Backend Settings"
         app:cornerRadius="12dp"
         android:textColor="@color/text_primary"
         android:textStyle="bold"
