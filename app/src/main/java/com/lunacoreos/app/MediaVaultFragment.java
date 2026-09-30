@@ -152,6 +152,14 @@ public class MediaVaultFragment extends Fragment {
         }).start();
     }
 
+    private String formatBytes(long bytes) {
+        if (bytes <= 0) return "0 B";
+        String[] units = {"B", "KB", "MB", "GB"};
+        int i = (int) Math.floor(Math.log(bytes) / Math.log(1024));
+        if (i >= units.length) i = units.length - 1;
+        return String.format("%.1f %s", bytes / Math.pow(1024, i), units[i]);
+    }
+
     private class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
         @NonNull
         @Override
@@ -165,7 +173,12 @@ public class MediaVaultFragment extends Fragment {
             JSONObject col = collectionList.get(position);
             holder.tvName.setText(col.optString("name", "Unnamed"));
             String type = col.optString("type", "gallery");
-            holder.tvType.setText(type.substring(0, 1).toUpperCase() + type.substring(1));
+            int fileCount = col.optInt("file_count", 0);
+            long sizeBytes = col.optLong("size_bytes", 0);
+            String info = type.substring(0, 1).toUpperCase() + type.substring(1)
+                    + " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
+                    + " · " + formatBytes(sizeBytes);
+            holder.tvType.setText(info);
             
             boolean isSecret = col.optBoolean("is_secret", false);
             holder.ivSecretLock.setVisibility(isSecret ? View.VISIBLE : View.GONE);
@@ -178,7 +191,30 @@ public class MediaVaultFragment extends Fragment {
                 Intent intent = new Intent(getContext(), MediaVaultGridActivity.class);
                 intent.putExtra("COLLECTION_ID", col.optString("id"));
                 intent.putExtra("COLLECTION_PREFIX", col.optString("key_prefix"));
+                intent.putExtra("COLLECTION_NAME", col.optString("name"));
                 startActivity(intent);
+            });
+
+            holder.itemView.setOnLongClickListener(v -> {
+                new android.app.AlertDialog.Builder(getContext())
+                    .setTitle("Delete Collection")
+                    .setMessage("Delete \"" + col.optString("name") + "\" and all its files?")
+                    .setPositiveButton("Delete", (d, w) -> {
+                        new Thread(() -> {
+                            try {
+                                SupabaseClient client = new SupabaseClient(getContext());
+                                client.deleteVaultCollection(col.optString("id"));
+                                requireActivity().runOnUiThread(() -> loadCollections());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                requireActivity().runOnUiThread(() ->
+                                    Toast.makeText(getContext(), "Failed to delete", Toast.LENGTH_SHORT).show());
+                            }
+                        }).start();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+                return true;
             });
         }
 

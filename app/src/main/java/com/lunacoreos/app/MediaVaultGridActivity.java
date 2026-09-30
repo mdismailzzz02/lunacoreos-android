@@ -27,9 +27,16 @@ public class MediaVaultGridActivity extends AppCompatActivity {
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    Uri uri = result.getData().getData();
-                    if (uri != null) {
-                        uploadFile(uri);
+                    android.content.ClipData clipData = result.getData().getClipData();
+                    if (clipData != null) {
+                        // Multiple files selected
+                        for (int i = 0; i < clipData.getItemCount(); i++) {
+                            uploadFile(clipData.getItemAt(i).getUri());
+                        }
+                    } else {
+                        // Single file selected
+                        Uri uri = result.getData().getData();
+                        if (uri != null) uploadFile(uri);
                     }
                 }
             }
@@ -42,11 +49,18 @@ public class MediaVaultGridActivity extends AppCompatActivity {
         
         collectionId = getIntent().getStringExtra("COLLECTION_ID");
         collectionPrefix = getIntent().getStringExtra("COLLECTION_PREFIX");
+        String collectionName = getIntent().getStringExtra("COLLECTION_NAME");
         client = new SupabaseClient(this);
+
+        android.widget.TextView tvTitle = findViewById(R.id.tvTitle);
+        if (collectionName != null) tvTitle.setText(collectionName);
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         findViewById(R.id.fabUpload).setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             filePicker.launch(intent);
         });
 
