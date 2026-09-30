@@ -19,6 +19,13 @@ public class SupabaseClient {
         this.apiKey = key;
     }
 
+    public SupabaseClient(android.content.Context context) {
+        android.content.SharedPreferences prefs = context.getSharedPreferences("LunaCoreConfig", android.content.Context.MODE_PRIVATE);
+        this.baseUrl = prefs.getString("supabase_url", "");
+        this.apiKey = prefs.getString("supabase_key", "");
+        this.authToken = prefs.getString("jwt", null);
+    }
+
     public void setAuthToken(String token) {
         this.authToken = token;
     }
