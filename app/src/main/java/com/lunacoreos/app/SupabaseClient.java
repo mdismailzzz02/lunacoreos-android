@@ -360,6 +360,30 @@ public class SupabaseClient {
         }
     }
 
+    public void createVaultCollection(JSONObject collection) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(collection.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            InputStream es = conn.getErrorStream();
+            java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            if (es != null) es.close();
+            throw new Exception("Failed to create vault collection: " + err);
+        }
+    }
+
     public void saveVaultFile(JSONObject fileData) throws Exception {
         URL url = new URL(baseUrl + "/rest/v1/vault_files");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

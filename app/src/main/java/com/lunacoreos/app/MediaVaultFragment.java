@@ -67,8 +67,47 @@ public class MediaVaultFragment extends Fragment {
         });
 
         view.findViewById(R.id.fabAddCollection).setOnClickListener(v -> {
-            // TODO: Open add collection bottom sheet
-            Toast.makeText(getContext(), "Add Collection coming soon", Toast.LENGTH_SHORT).show();
+            com.google.android.material.bottomsheet.BottomSheetDialog dialog = new com.google.android.material.bottomsheet.BottomSheetDialog(getContext());
+            View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_vault_collection, null);
+            dialog.setContentView(sheetView);
+
+            android.widget.EditText etName = sheetView.findViewById(R.id.etCollectionName);
+            android.widget.Spinner spinnerType = sheetView.findViewById(R.id.spinnerType);
+            android.widget.CheckBox cbIsSecret = sheetView.findViewById(R.id.cbIsSecret);
+
+            sheetView.findViewById(R.id.btnCreateCollection).setOnClickListener(btn -> {
+                String name = etName.getText().toString().trim();
+                if (name.isEmpty()) return;
+                
+                String type = spinnerType.getSelectedItem().toString().toLowerCase();
+                boolean isSecret = cbIsSecret.isChecked();
+                
+                btn.setEnabled(false);
+                new Thread(() -> {
+                    try {
+                        JSONObject col = new JSONObject();
+                        col.put("name", name);
+                        col.put("type", type);
+                        col.put("is_secret", isSecret);
+                        col.put("key_prefix", "col_" + System.currentTimeMillis() + "/");
+                        
+                        SupabaseClient client = new SupabaseClient(getContext());
+                        client.createVaultCollection(col);
+                        
+                        requireActivity().runOnUiThread(() -> {
+                            dialog.dismiss();
+                            loadCollections();
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        requireActivity().runOnUiThread(() -> {
+                            btn.setEnabled(true);
+                            Toast.makeText(getContext(), "Failed to create", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                }).start();
+            });
+            dialog.show();
         });
 
         if (!CryptoService.hasSessionKey()) {

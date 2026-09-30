@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">LunaCoreOS</string>
+
+    <string-array name="vault_collection_types">
+        <item>Gallery</item>
+        <item>Documents</item>
+        <item>Code</item>
+    </string-array>
 </resources>

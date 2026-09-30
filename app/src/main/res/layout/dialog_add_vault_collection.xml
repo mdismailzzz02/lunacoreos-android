@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_sheet_bg"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Collection"
+        android:textSize="20sp"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etCollectionName"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/input_background"
+        android:hint="Collection name"
+        android:textColorHint="@color/text_hint"
+        android:textColor="@color/text_primary"
+        android:paddingHorizontal="16dp"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="16dp" />
+
+    <Spinner
+        android:id="@+id/spinnerType"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="16dp"
+        android:entries="@array/vault_collection_types" />
+
+    <CheckBox
+        android:id="@+id/cbIsSecret"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Make this collection secret (Requires Lock)"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="24dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnCreateCollection"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        app:backgroundTint="@color/accent_primary"
+        android:text="Create"
+        app:cornerRadius="12dp"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold" />
+
+</LinearLayout>
