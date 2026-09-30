@@ -57,7 +57,14 @@ public class LinkboxFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        swipeRefreshLayout.setOnRefreshListener(this::fetchLinks);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            if (etSearch != null && etSearch.hasFocus()) {
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+            }
+            fetchLinks();
+        });
 
         adapter = new LinkAdapter();
         recyclerView.setAdapter(adapter);
@@ -85,6 +92,26 @@ public class LinkboxFragment extends Fragment {
             } else if (!hasFocus) {
                 view.findViewById(R.id.rvTags).setVisibility(View.GONE);
             }
+        });
+        
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING && etSearch.hasFocus()) {
+                    etSearch.clearFocus();
+                    android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                }
+            }
+        });
+        
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (etSearch.hasFocus()) {
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+            }
+            return false; // allow recyclerView to handle the event
         });
 
         RecyclerView rvTags = view.findViewById(R.id.rvTags);
