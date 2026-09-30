@@ -7,7 +7,7 @@
     <color name="bg_input">#FF1A1A1C</color>
     <color name="status_bar">#FF121214</color>
 
-    <!-- Brand accent (matching desktop --brand-color) -->
+    <!-- Brand accent (matching desktop brand-color) -->
     <color name="accent_primary">#FFA29BFE</color>
     <color name="accent_red">#FFFF073A</color>
     <color name="accent_green">#FF00E676</color>
