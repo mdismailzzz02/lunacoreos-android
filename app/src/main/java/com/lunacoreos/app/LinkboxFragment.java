@@ -211,22 +211,17 @@ public class LinkboxFragment extends Fragment {
                 }
             });
             
-            holder.itemView.setOnLongClickListener(v -> {
-                String[] options = {"Edit", "Delete"};
+            holder.ivDelete.setOnClickListener(v -> {
                 new AlertDialog.Builder(getContext())
-                    .setItems(options, (dialog, which) -> {
-                        if (which == 0) {
-                            showEditLinkDialog(item);
-                        } else {
-                            new AlertDialog.Builder(getContext())
-                                .setTitle("Delete Link")
-                                .setMessage("Are you sure you want to delete this link?")
-                                .setPositiveButton("Delete", (d, w) -> deleteLink(item.optString("id")))
-                                .setNegativeButton("Cancel", null)
-                                .show();
-                        }
-                    })
+                    .setTitle("Delete Link")
+                    .setMessage("Are you sure you want to delete this link?")
+                    .setPositiveButton("Delete", (dialog, which) -> deleteLink(item.optString("id")))
+                    .setNegativeButton("Cancel", null)
                     .show();
+            });
+            
+            holder.itemView.setOnLongClickListener(v -> {
+                showEditLinkDialog(item);
                 return true;
             });
         }
@@ -238,11 +233,14 @@ public class LinkboxFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvUrl, tvDesc, tvDate;
+            android.widget.ImageView ivDelete;
+            
             ViewHolder(View itemView) {
                 super(itemView);
                 tvUrl = itemView.findViewById(R.id.tvUrl);
                 tvDesc = itemView.findViewById(R.id.tvDesc);
                 tvDate = itemView.findViewById(R.id.tvDate);
+                ivDelete = itemView.findViewById(R.id.ivDelete);
             }
         }
     }
