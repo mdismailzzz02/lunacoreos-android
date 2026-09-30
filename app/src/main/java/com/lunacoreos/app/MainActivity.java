@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
             Fragment selectedFragment = null;
             if (item.getItemId() == R.id.nav_writing) {
                 selectedFragment = new WritingListFragment();
+            } else if (item.getItemId() == R.id.nav_vault) {
+                selectedFragment = new MediaVaultFragment();
             } else if (item.getItemId() == R.id.nav_passwords) {
                 selectedFragment = new PasswordsFragment();
             } else if (item.getItemId() == R.id.nav_linkbox) {

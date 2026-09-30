@@ -5,9 +5,9 @@
         android:icon="@android:drawable/ic_menu_edit"
         android:title="Writing" />
     <item
-        android:id="@+id/nav_dashboard"
-        android:icon="@android:drawable/ic_menu_today"
-        android:title="Dashboard" />
+        android:id="@+id/nav_vault"
+        android:icon="@android:drawable/ic_menu_gallery"
+        android:title="Vault" />
     <item
         android:id="@+id/nav_linkbox"
         android:icon="@android:drawable/ic_menu_set_as"

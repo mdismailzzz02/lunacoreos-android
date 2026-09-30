@@ -317,4 +317,25 @@ public class SupabaseClient {
             throw new Exception("Failed to delete linkbox: " + conn.getResponseCode());
         }
     }
+
+    public JSONArray getVaultCollections() throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections?order=created_at.desc");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            throw new Exception("Failed to fetch vault collections: " + conn.getResponseCode());
+        }
+    }
 }
