@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@color/bg_surface">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="URL *"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+    <EditText
+        android:id="@+id/etUrl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/text_primary"
+        android:paddingHorizontal="12dp"
+        android:inputType="textUri"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title (Optional)"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/text_primary"
+        android:paddingHorizontal="12dp"
+        android:inputType="textCapWords"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description (Optional)"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/text_primary"
+        android:padding="12dp"
+        android:gravity="top|start"
+        android:inputType="textMultiLine"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tags (Comma separated)"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:layout_marginBottom="4dp" />
+    <EditText
+        android:id="@+id/etTags"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/input_background"
+        android:textColor="@color/text_primary"
+        android:paddingHorizontal="12dp"
+        android:layout_marginBottom="8dp" />
+
+</LinearLayout>

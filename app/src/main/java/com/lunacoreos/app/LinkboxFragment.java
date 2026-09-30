@@ -65,8 +65,55 @@ public class LinkboxFragment extends Fragment {
             public void afterTextChanged(Editable s) {}
         });
 
+        view.findViewById(R.id.fabAddLink).setOnClickListener(v -> showAddLinkDialog());
+
         fetchLinks();
         return view;
+    }
+
+    private void showAddLinkDialog() {
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_link, null);
+        EditText etUrl = dialogView.findViewById(R.id.etUrl);
+        EditText etTitle = dialogView.findViewById(R.id.etTitle);
+        EditText etDescription = dialogView.findViewById(R.id.etDescription);
+        EditText etTags = dialogView.findViewById(R.id.etTags);
+
+        new AlertDialog.Builder(getContext())
+                .setTitle("Add Link")
+                .setView(dialogView)
+                .setPositiveButton("Save", (dialog, which) -> {
+                    String url = etUrl.getText().toString().trim();
+                    if (url.isEmpty()) {
+                        Toast.makeText(getContext(), "URL cannot be empty", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void saveLink(String url, String title, String description, String tags) {
+        new Thread(() -> {
+            try {
+                JSONObject payload = new JSONObject();
+                payload.put("id", java.util.UUID.randomUUID().toString());
+                payload.put("url", url);
+                if (!title.isEmpty()) payload.put("title", title);
+                if (!description.isEmpty()) payload.put("description", description);
+                if (!tags.isEmpty()) payload.put("tags", tags);
+
+                supabaseClient.saveLinkboxEntry(payload);
+                
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Link saved", Toast.LENGTH_SHORT).show();
+                    fetchLinks();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Failed to save: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     private void fetchLinks() {
@@ -122,11 +169,24 @@ public class LinkboxFragment extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             JSONObject item = filteredList.get(position);
             String url = item.optString("url", "No URL");
+            String title = item.optString("title", "");
             String desc = item.optString("description", "");
+            String tags = item.optString("tags", "");
             String date = item.optString("created_at", "");
             
-            holder.tvUrl.setText(url);
-            holder.tvDesc.setText(desc.isEmpty() ? "No description" : desc);
+            if (!title.isEmpty()) {
+                holder.tvUrl.setText(title);
+            } else {
+                holder.tvUrl.setText(url);
+            }
+
+            StringBuilder descText = new StringBuilder();
+            if (!desc.isEmpty()) descText.append(desc);
+            if (!tags.isEmpty()) {
+                if (descText.length() > 0) descText.append("\n");
+                descText.append("Tags: ").append(tags);
+            }
+            holder.tvDesc.setText(descText.toString().isEmpty() ? url : descText.toString());
             
             if (date.length() > 10) date = date.substring(0, 10);
             holder.tvDate.setText(date);
