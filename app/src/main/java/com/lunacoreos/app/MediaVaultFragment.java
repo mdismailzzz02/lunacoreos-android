@@ -146,14 +146,20 @@ public class MediaVaultFragment extends Fragment {
                 btn.setEnabled(false);
                 new Thread(() -> {
                     try {
+                        SupabaseClient client = new SupabaseClient(getContext());
+                        String userId = client.getUserId();
+                        if (userId == null) throw new Exception("Not authenticated");
+                        
+                        String safeName = name.toLowerCase().replaceAll("[^a-z0-9]", "-");
+                        String prefix = "vault/" + userId + "/" + safeName + "/";
+                        
                         JSONObject col = new JSONObject();
                         col.put("name", name);
                         col.put("type", type);
                         col.put("is_secret", "secret".equals(vaultMode) || isSecret);
                         col.put("is_hidden", "hidden".equals(vaultMode));
-                        col.put("key_prefix", "col_" + System.currentTimeMillis() + "/");
+                        col.put("key_prefix", prefix);
                         
-                        SupabaseClient client = new SupabaseClient(getContext());
                         client.createVaultCollection(col);
                         
                         requireActivity().runOnUiThread(() -> {
@@ -200,7 +206,12 @@ public class MediaVaultFragment extends Fragment {
                 
                 List<JSONObject> list = new ArrayList<>();
                 for (int i = 0; i < arr.length(); i++) {
-                    list.add(arr.getJSONObject(i));
+                    JSONObject c = arr.getJSONObject(i);
+                    boolean hasParent = c.has("parent_id") && !c.isNull("parent_id");
+                    String name = c.optString("name", "").toLowerCase();
+                    if (!hasParent && !name.contains("trash")) {
+                        list.add(c);
+                    }
                 }
 
                 requireActivity().runOnUiThread(() -> {
