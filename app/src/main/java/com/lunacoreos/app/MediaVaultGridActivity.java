@@ -86,7 +86,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Failed to load folders", Toast.LENGTH_SHORT).show());
+                    final String msg = e.getMessage();
+                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Folder err: " + msg, Toast.LENGTH_LONG).show());
                 }
                 
                 try {
@@ -99,7 +100,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Failed to load files", Toast.LENGTH_SHORT).show());
+                    final String msg = e.getMessage();
+                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "File err: " + msg, Toast.LENGTH_LONG).show());
                 }
                 
                 runOnUiThread(() -> {
