@@ -103,7 +103,7 @@ public class PasswordsFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
                 requireActivity().runOnUiThread(() -> 
-                    Toast.makeText(getContext(), "Failed to load passwords", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(getContext(), "Failed to load passwords: " + e.getMessage(), Toast.LENGTH_LONG).show()
                 );
             }
         }).start();
