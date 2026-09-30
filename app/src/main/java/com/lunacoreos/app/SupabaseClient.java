@@ -580,8 +580,8 @@ public class SupabaseClient {
         }
     }
 
-    public JSONArray getVaultFiles(String collectionId) throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc");
+    public JSONArray getVaultFiles(String collectionId, int limit, int offset) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc&limit=" + limit + "&offset=" + offset);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", apiKey);

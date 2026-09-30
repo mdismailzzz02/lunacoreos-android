@@ -74,15 +74,13 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private void loadFiles() {
         new Thread(() -> {
             try {
-                java.util.List<org.json.JSONObject> list = new java.util.ArrayList<>();
-                
+                // Fetch and show folders first
                 try {
                     org.json.JSONArray subcollections = client.getVaultSubCollections(collectionId);
-                    // Add folders first
                     for (int i = 0; i < subcollections.length(); i++) {
                         org.json.JSONObject folder = subcollections.getJSONObject(i);
                         folder.put("item_type", "folder");
-                        list.add(folder);
+                        mediaList.add(folder);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -90,22 +88,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Folder err: " + msg, Toast.LENGTH_LONG).show());
                 }
                 
-                try {
-                    org.json.JSONArray files = client.getVaultFiles(collectionId);
-                    // Add files
-                    for (int i = 0; i < files.length(); i++) {
-                        org.json.JSONObject file = files.getJSONObject(i);
-                        file.put("item_type", "file");
-                        list.add(file);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    final String msg = e.getMessage();
-                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "File err: " + msg, Toast.LENGTH_LONG).show());
-                }
-                
                 runOnUiThread(() -> {
-                    mediaList = list;
                     if (adapter == null) {
                         rvMedia = findViewById(R.id.rvMedia);
                         androidx.recyclerview.widget.GridLayoutManager layoutManager = new androidx.recyclerview.widget.GridLayoutManager(this, 3);
@@ -126,6 +109,37 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                 });
+
+                // Fetch files gradually
+                int offset = 0;
+                int limit = 100;
+                while (true) {
+                    try {
+                        org.json.JSONArray files = client.getVaultFiles(collectionId, limit, offset);
+                        if (files.length() == 0) break;
+                        
+                        java.util.List<org.json.JSONObject> newFiles = new java.util.ArrayList<>();
+                        for (int i = 0; i < files.length(); i++) {
+                            org.json.JSONObject file = files.getJSONObject(i);
+                            file.put("item_type", "file");
+                            newFiles.add(file);
+                        }
+                        
+                        runOnUiThread(() -> {
+                            int startPosition = mediaList.size();
+                            mediaList.addAll(newFiles);
+                            if (adapter != null) {
+                                adapter.notifyItemRangeInserted(startPosition, newFiles.size());
+                            }
+                        });
+                        
+                        offset += limit;
+                        if (files.length() < limit) break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
