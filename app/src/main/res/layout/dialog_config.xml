@@ -29,7 +29,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Supabase Anon Key"
+        android:text="Supabase Secret Key (Service Role)"
         android:textColor="@color/text_secondary"
         android:textSize="12sp"
         android:layout_marginBottom="8dp" />
