@@ -72,14 +72,25 @@ public class LinkboxFragment extends Fragment {
     }
 
     private void showAddLinkDialog() {
+        showEditLinkDialog(null);
+    }
+
+    private void showEditLinkDialog(JSONObject existingItem) {
         View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_link, null);
         EditText etUrl = dialogView.findViewById(R.id.etUrl);
         EditText etTitle = dialogView.findViewById(R.id.etTitle);
         EditText etDescription = dialogView.findViewById(R.id.etDescription);
         EditText etTags = dialogView.findViewById(R.id.etTags);
 
+        if (existingItem != null) {
+            etUrl.setText(existingItem.optString("url", ""));
+            etTitle.setText(existingItem.optString("title", ""));
+            etDescription.setText(existingItem.optString("description", ""));
+            etTags.setText(existingItem.optString("tags", ""));
+        }
+
         new AlertDialog.Builder(getContext())
-                .setTitle("Add Link")
+                .setTitle(existingItem == null ? "Add Link" : "Edit Link")
                 .setView(dialogView)
                 .setPositiveButton("Save", (dialog, which) -> {
                     String url = etUrl.getText().toString().trim();
@@ -87,17 +98,17 @@ public class LinkboxFragment extends Fragment {
                         Toast.makeText(getContext(), "URL cannot be empty", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
+                    saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim(), existingItem == null ? null : existingItem.optString("id"));
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
-    private void saveLink(String url, String title, String description, String tags) {
+    private void saveLink(String url, String title, String description, String tags, String existingId) {
         new Thread(() -> {
             try {
                 JSONObject payload = new JSONObject();
-                payload.put("id", java.util.UUID.randomUUID().toString());
+                payload.put("id", existingId == null ? java.util.UUID.randomUUID().toString() : existingId);
                 payload.put("url", url);
                 if (!title.isEmpty()) payload.put("title", title);
                 if (!description.isEmpty()) payload.put("description", description);
@@ -201,11 +212,20 @@ public class LinkboxFragment extends Fragment {
             });
             
             holder.itemView.setOnLongClickListener(v -> {
+                String[] options = {"Edit", "Delete"};
                 new AlertDialog.Builder(getContext())
-                    .setTitle("Delete Link")
-                    .setMessage("Are you sure you want to delete this link?")
-                    .setPositiveButton("Delete", (dialog, which) -> deleteLink(item.optString("id")))
-                    .setNegativeButton("Cancel", null)
+                    .setItems(options, (dialog, which) -> {
+                        if (which == 0) {
+                            showEditLinkDialog(item);
+                        } else {
+                            new AlertDialog.Builder(getContext())
+                                .setTitle("Delete Link")
+                                .setMessage("Are you sure you want to delete this link?")
+                                .setPositiveButton("Delete", (d, w) -> deleteLink(item.optString("id")))
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                        }
+                    })
                     .show();
                 return true;
             });
