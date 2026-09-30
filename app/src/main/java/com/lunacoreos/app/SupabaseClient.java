@@ -14,13 +14,15 @@ public class SupabaseClient {
     private final String apiKey;
     private String authToken;
 
+    private android.content.SharedPreferences prefs;
+
     public SupabaseClient(String url, String key) {
         this.baseUrl = url;
         this.apiKey = key;
     }
 
     public SupabaseClient(android.content.Context context) {
-        android.content.SharedPreferences prefs = context.getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+        this.prefs = context.getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
         this.baseUrl = prefs.getString("supabaseUrl", "");
         this.apiKey = prefs.getString("supabaseKey", "");
         this.authToken = prefs.getString("authToken", null);
@@ -62,6 +64,33 @@ public class SupabaseClient {
             throw new Exception("Login failed: " + err);
         }
     }
+    
+    public void refreshSession() {
+        if (prefs == null) return;
+        String refreshToken = prefs.getString("refreshToken", "");
+        if (!refreshToken.isEmpty()) {
+            try {
+                refreshToken(refreshToken);
+                return;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        String savedEmail = prefs.getString("savedEmail", "");
+        String savedPassword = prefs.getString("savedPassword", "");
+        if (!savedEmail.isEmpty() && !savedPassword.isEmpty()) {
+            try {
+                JSONObject json = login(savedEmail, savedPassword);
+                prefs.edit()
+                     .putString("authToken", json.getString("access_token"))
+                     .putString("refreshToken", json.optString("refresh_token", ""))
+                     .apply();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void refreshToken(String refreshToken) throws Exception {
         URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
@@ -85,6 +114,13 @@ public class SupabaseClient {
             is.close();
             JSONObject json = new JSONObject(result);
             this.authToken = json.getString("access_token");
+            
+            if (prefs != null) {
+                prefs.edit()
+                     .putString("authToken", this.authToken)
+                     .putString("refreshToken", json.optString("refresh_token", ""))
+                     .apply();
+            }
         } else {
             InputStream es = conn.getErrorStream();
             Scanner s = new Scanner(es).useDelimiter("\\A");

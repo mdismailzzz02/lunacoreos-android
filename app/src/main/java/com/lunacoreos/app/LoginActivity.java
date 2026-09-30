@@ -49,6 +49,9 @@ public class LoginActivity extends AppCompatActivity {
         tvStatus = findViewById(R.id.tvStatus);
         tvSettings = findViewById(R.id.tvSettings);
 
+        etEmail.setText(prefs.getString("savedEmail", ""));
+        etPassword.setText(prefs.getString("savedPassword", ""));
+
         btnLogin.setOnClickListener(v -> attemptLogin());
         
         tvSettings.setOnClickListener(v -> showConfigDialog());
@@ -87,6 +90,8 @@ public class LoginActivity extends AppCompatActivity {
                 prefs.edit()
                      .putString("authToken", token)
                      .putString("refreshToken", refreshToken)
+                     .putString("savedEmail", email)
+                     .putString("savedPassword", password)
                      .apply();
                 
                 mainHandler.post(() -> {
