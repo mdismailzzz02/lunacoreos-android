@@ -8,7 +8,7 @@ import android.widget.Toast;
 import org.json.JSONObject;
 import java.util.UUID;
 
-import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -60,7 +60,7 @@ public class ShareActivity extends Activity {
         etUrl.setText(extractedUrl);
         etDescription.setText(extractedDesc);
 
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("Save to LunaCore")
                 .setView(dialogView)
                 .setCancelable(false)

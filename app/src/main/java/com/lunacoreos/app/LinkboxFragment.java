@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,7 +89,7 @@ public class LinkboxFragment extends Fragment {
             etTags.setText(existingItem.optString("tags", ""));
         }
 
-        new AlertDialog.Builder(getContext())
+        new MaterialAlertDialogBuilder(getContext())
                 .setTitle(existingItem == null ? "Add Link" : "Edit Link")
                 .setView(dialogView)
                 .setPositiveButton("Save", (dialog, which) -> {
@@ -212,7 +212,7 @@ public class LinkboxFragment extends Fragment {
             });
             
             holder.ivDelete.setOnClickListener(v -> {
-                new AlertDialog.Builder(getContext())
+                new MaterialAlertDialogBuilder(getContext())
                     .setTitle("Delete Link")
                     .setMessage("Are you sure you want to delete this link?")
                     .setPositiveButton("Delete", (dialog, which) -> deleteLink(item.optString("id")))
