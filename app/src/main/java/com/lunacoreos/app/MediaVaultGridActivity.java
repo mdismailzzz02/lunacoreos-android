@@ -216,6 +216,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 if (!thumbLoaded && publicUrl != null) {
                     com.bumptech.glide.Glide.with(fh.itemView.getContext())
                             .load(publicUrl)
+                            .override(400, 400)
+                            .thumbnail(0.2f)
                             .centerCrop()
                             .into(fh.ivThumbnail);
                 }
