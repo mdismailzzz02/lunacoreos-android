@@ -126,6 +126,9 @@ public class LinkboxFragment extends Fragment {
             public void handleOnBackPressed() {
                 if (etSearch != null && etSearch.hasFocus()) {
                     etSearch.clearFocus();
+                } else if (etSearch != null && etSearch.getText().length() > 0) {
+                    etSearch.setText("");
+                    etSearch.clearFocus();
                 } else {
                     setEnabled(false);
                     requireActivity().getOnBackPressedDispatcher().onBackPressed();
