@@ -201,6 +201,17 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             .load(publicUrl)
                             .centerCrop()
                             .into(fh.ivThumbnail);
+                            
+                    fh.itemView.setOnClickListener(v -> {
+                        if (!mime.startsWith("video/")) {
+                            Intent intent = new Intent(MediaVaultGridActivity.this, MediaViewerActivity.class);
+                            intent.putExtra("IMAGE_URL", publicUrl);
+                            startActivity(intent);
+                        } else {
+                            // Can add video player logic here later
+                            android.widget.Toast.makeText(MediaVaultGridActivity.this, "Video player not implemented yet", android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }

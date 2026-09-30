@@ -22,6 +22,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".MediaViewerActivity" android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
