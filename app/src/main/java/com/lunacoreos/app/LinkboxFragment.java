@@ -122,6 +122,7 @@ public class LinkboxFragment extends Fragment {
         view.findViewById(R.id.fabAddLink).setOnClickListener(v -> showAddLinkDialog());
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new androidx.activity.OnBackPressedCallback(true) {
+            long lastBackPressTime = 0;
             @Override
             public void handleOnBackPressed() {
                 if (etSearch != null && etSearch.hasFocus()) {
@@ -130,9 +131,14 @@ public class LinkboxFragment extends Fragment {
                     etSearch.setText("");
                     etSearch.clearFocus();
                 } else {
-                    setEnabled(false);
-                    requireActivity().getOnBackPressedDispatcher().onBackPressed();
-                    setEnabled(true);
+                    if (System.currentTimeMillis() - lastBackPressTime < 2000) {
+                        setEnabled(false);
+                        requireActivity().getOnBackPressedDispatcher().onBackPressed();
+                        setEnabled(true);
+                    } else {
+                        lastBackPressTime = System.currentTimeMillis();
+                        Toast.makeText(getContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
