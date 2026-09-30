@@ -99,7 +99,7 @@ public class PasswordEditorActivity extends AppCompatActivity {
                 JSONObject json = new JSONObject(data);
                 existingId = json.getString("id");
                 etSiteName.setText(json.optString("site_name"));
-                etUrl.setText(json.optString("url"));
+                etUrl.setText(json.optString("site_url"));
                 etUsername.setText(json.optString("username"));
                 etNotes.setText(json.optString("notes"));
                 
@@ -150,7 +150,7 @@ public class PasswordEditorActivity extends AppCompatActivity {
                 JSONObject payload = new JSONObject();
                 payload.put("id", existingId != null ? existingId : UUID.randomUUID().toString());
                 payload.put("site_name", site);
-                payload.put("url", urlText);
+                payload.put("site_url", urlText);
                 payload.put("username", user);
                 payload.put("enc_password", enc.encPassword);
                 payload.put("enc_iv", enc.encIv);
