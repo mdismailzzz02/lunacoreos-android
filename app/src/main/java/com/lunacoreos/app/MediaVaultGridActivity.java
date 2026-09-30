@@ -74,7 +74,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private boolean isLoading = false;
     private boolean hasMore = true;
     private int currentOffset = 0;
-    private final int PAGE_LIMIT = 50;
+    private final int PAGE_LIMIT = 21;
 
     private void loadFiles() {
         new Thread(() -> {
