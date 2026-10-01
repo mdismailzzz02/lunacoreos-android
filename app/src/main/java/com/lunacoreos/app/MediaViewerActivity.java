@@ -85,59 +85,74 @@ public class MediaViewerActivity extends AppCompatActivity {
             int pos = viewPager.getCurrentItem();
             if (currentViewerFileIds == null || currentViewerFileIds.isEmpty()) return;
 
-            new android.app.AlertDialog.Builder(this)
-                .setTitle("Move to Trash")
-                .setMessage("Are you sure you want to move this photo to the Trash?")
-                .setPositiveButton("Move", (dialog, which) -> {
-                    String fileId = currentViewerFileIds.get(pos);
-                    String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > pos ? currentViewerR2Keys.get(pos) : null;
+            new Thread(() -> {
+                try {
+                    org.json.JSONObject trashFolder = client.getTrashCollection();
+                    boolean inTrash = false;
+                    String trashId = null;
+                    if (trashFolder != null) {
+                        trashId = trashFolder.optString("id");
+                        if (trashId.equals(currentCollectionId)) inTrash = true;
+                    }
                     
-                    new Thread(() -> {
-                        try {
-                            org.json.JSONObject trashFolder = client.getTrashCollection();
-                            if (trashFolder != null && r2Key != null) {
-                                String trashId = trashFolder.optString("id");
-                                String trashPrefix = trashFolder.optString("key_prefix");
+                    final boolean isInTrash = inTrash;
+                    final String finalTrashId = trashId;
+                    final org.json.JSONObject finalTrashFolder = trashFolder;
+
+                    runOnUiThread(() -> {
+                        new android.app.AlertDialog.Builder(this)
+                            .setTitle(isInTrash ? "Delete Permanently" : "Move to Trash")
+                            .setMessage(isInTrash ? "Are you sure you want to permanently delete this photo? This cannot be undone." : "Are you sure you want to move this photo to the Trash?")
+                            .setPositiveButton(isInTrash ? "Delete" : "Move", (dialog, which) -> {
+                                String fileId = currentViewerFileIds.get(pos);
+                                String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > pos ? currentViewerR2Keys.get(pos) : null;
                                 
-                                String filename = r2Key.substring(r2Key.lastIndexOf('/') + 1);
-                                String newR2Key = trashPrefix;
-                                if (!newR2Key.endsWith("/")) newR2Key += "/";
-                                newR2Key += filename;
-                                
-                                client.moveR2File(r2Key, newR2Key);
-                                client.moveVaultFile(fileId, trashId, newR2Key);
-                            } else {
-                                // Fallback to permanent delete if no trash folder found
-                                client.deleteVaultFile(fileId);
-                                if (r2Key != null) {
+                                new Thread(() -> {
                                     try {
-                                        client.deleteR2File(r2Key);
-                                    } catch (Exception e2) { e2.printStackTrace(); }
-                                }
-                            }
-                            
-                            runOnUiThread(() -> {
-                                deletedFileIds.add(fileId);
-                                currentViewerUrls.remove(pos);
-                                currentViewerFileIds.remove(pos);
-                                if (currentViewerR2Keys != null) currentViewerR2Keys.remove(pos);
-                                if (currentViewerLikes != null) currentViewerLikes.remove(pos);
-                                
-                                if (currentViewerUrls.isEmpty()) {
-                                    finish();
-                                } else {
-                                    viewPager.getAdapter().notifyDataSetChanged();
-                                }
-                            });
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            final String msg = e.getMessage() != null ? e.getMessage() : e.toString();
-                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed: " + msg, android.widget.Toast.LENGTH_LONG).show());
-                        }
-                    }).start();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+                                        if (isInTrash || finalTrashFolder == null || r2Key == null) {
+                                            client.deleteVaultFile(fileId);
+                                            if (r2Key != null) {
+                                                try { client.deleteR2File(r2Key); } catch (Exception e2) { e2.printStackTrace(); }
+                                            }
+                                        } else {
+                                            String trashPrefix = finalTrashFolder.optString("key_prefix");
+                                            String filename = r2Key.substring(r2Key.lastIndexOf('/') + 1);
+                                            String newR2Key = trashPrefix;
+                                            if (!newR2Key.endsWith("/")) newR2Key += "/";
+                                            newR2Key += filename;
+                                            
+                                            client.moveR2File(r2Key, newR2Key);
+                                            client.moveVaultFile(fileId, finalTrashId, newR2Key);
+                                        }
+                                        
+                                        runOnUiThread(() -> {
+                                            deletedFileIds.add(fileId);
+                                            currentViewerUrls.remove(pos);
+                                            currentViewerFileIds.remove(pos);
+                                            if (currentViewerR2Keys != null) currentViewerR2Keys.remove(pos);
+                                            if (currentViewerLikes != null) currentViewerLikes.remove(pos);
+                                            
+                                            if (currentViewerUrls.isEmpty()) {
+                                                finish();
+                                            } else {
+                                                viewPager.getAdapter().notifyDataSetChanged();
+                                            }
+                                        });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        final String msg = e.getMessage() != null ? e.getMessage() : e.toString();
+                                        runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed: " + msg, android.widget.Toast.LENGTH_LONG).show());
+                                    }
+                                }).start();
+                            })
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Error checking trash folder", android.widget.Toast.LENGTH_SHORT).show());
+                }
+            }).start();
         });
         
         SwipeToDismissLayout swipeLayout = findViewById(R.id.swipeLayout);

@@ -380,6 +380,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             MediaViewerActivity.currentViewerR2Keys = r2Keys;
                             MediaViewerActivity.currentViewerLikes = likes;
                             MediaViewerActivity.currentViewerIndex = selectedIndex;
+                            MediaViewerActivity.currentCollectionId = collectionId;
                             
                             Intent intent = new Intent(MediaVaultGridActivity.this, MediaViewerActivity.class);
                             startActivity(intent);
