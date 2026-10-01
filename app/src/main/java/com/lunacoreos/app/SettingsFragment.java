@@ -28,20 +28,24 @@ public class SettingsFragment extends Fragment {
         EditText etUrl = view.findViewById(R.id.etSupabaseUrl);
         EditText etKey = view.findViewById(R.id.etSupabaseKey);
         EditText etR2 = view.findViewById(R.id.etR2PublicUrl);
+        EditText etTrash = view.findViewById(R.id.etTrashPath);
         
         etUrl.setText(prefs.getString("supabaseUrl", ""));
         etKey.setText(prefs.getString("supabaseKey", ""));
         etR2.setText(prefs.getString("r2PublicUrl", ""));
+        etTrash.setText(prefs.getString("trashPath", "luna-vault/vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/Trash/"));
 
         view.findViewById(R.id.btnSaveCredentials).setOnClickListener(v -> {
             String url = etUrl.getText().toString().trim();
             String key = etKey.getText().toString().trim();
             String r2 = etR2.getText().toString().trim();
+            String trash = etTrash.getText().toString().trim();
             
             prefs.edit()
                 .putString("supabaseUrl", url)
                 .putString("supabaseKey", key)
                 .putString("r2PublicUrl", r2)
+                .putString("trashPath", trash)
                 .apply();
                 
             Toast.makeText(getContext(), "Backend settings saved", Toast.LENGTH_SHORT).show();
