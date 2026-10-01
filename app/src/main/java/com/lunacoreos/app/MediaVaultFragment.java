@@ -86,17 +86,19 @@ public class MediaVaultFragment extends Fragment {
 
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         tvTitle.setOnClickListener(v -> {
+            if (!"normal".equals(vaultMode)) {
+                vaultMode = "normal";
+                loadCollections();
+                return;
+            }
+            
             long now = System.currentTimeMillis();
             if (now - lastTitleClickTime > 500) titleClickCount = 0;
             lastTitleClickTime = now;
             titleClickCount++;
             if (titleClickCount == 3) {
                 titleClickCount = 0;
-                if (!"normal".equals(vaultMode)) {
-                    vaultMode = "normal";
-                    loadCollections();
-                } else {
-                    Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
                     intent.putExtra("LOCK_ID", "vault_hidden");
                     intent.putExtra("LOCK_TITLE", "Hidden Vault");
                     intent.putExtra("VAULT_MODE", "hidden");
