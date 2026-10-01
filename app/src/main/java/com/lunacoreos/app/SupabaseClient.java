@@ -593,6 +593,20 @@ public class SupabaseClient {
             throw new Exception("Failed to delete vault file: " + conn.getResponseCode());
         }
     }
+    
+    public void deleteR2File(String r2Key) throws Exception {
+        URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=delete&key=" + java.net.URLEncoder.encode(r2Key, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to delete from R2: " + conn.getResponseCode());
+        }
+    }
 
     public JSONArray getVaultFiles(String collectionId, int limit, int offset, boolean favoritesOnly) throws Exception {
         String urlStr = baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc&limit=" + limit + "&offset=" + offset;

@@ -19,6 +19,7 @@ public class MediaViewerActivity extends AppCompatActivity {
     
     public static List<String> currentViewerUrls = null;
     public static List<String> currentViewerFileIds = null;
+    public static List<String> currentViewerR2Keys = null;
     public static List<Boolean> currentViewerLikes = null;
     public static int currentViewerIndex = 0;
     
@@ -88,13 +89,20 @@ public class MediaViewerActivity extends AppCompatActivity {
                 .setMessage("Are you sure you want to permanently delete this photo?")
                 .setPositiveButton("Delete", (dialog, which) -> {
                     String fileId = currentViewerFileIds.get(pos);
+                    String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > pos ? currentViewerR2Keys.get(pos) : null;
                     
                     new Thread(() -> {
                         try {
                             client.deleteVaultFile(fileId);
+                            if (r2Key != null) {
+                                try {
+                                    client.deleteR2File(r2Key);
+                                } catch (Exception e2) { e2.printStackTrace(); }
+                            }
                             runOnUiThread(() -> {
                                 currentViewerUrls.remove(pos);
                                 currentViewerFileIds.remove(pos);
+                                if (currentViewerR2Keys != null) currentViewerR2Keys.remove(pos);
                                 if (currentViewerLikes != null) currentViewerLikes.remove(pos);
                                 
                                 if (currentViewerUrls.isEmpty()) {

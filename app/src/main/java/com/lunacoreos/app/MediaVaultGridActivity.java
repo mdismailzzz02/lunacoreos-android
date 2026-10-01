@@ -321,15 +321,18 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         if (!mime.startsWith("video/")) {
                             java.util.List<String> urls = new java.util.ArrayList<>();
                             java.util.List<String> ids = new java.util.ArrayList<>();
+                            java.util.List<String> r2Keys = new java.util.ArrayList<>();
                             java.util.List<Boolean> likes = new java.util.ArrayList<>();
                             int selectedIndex = 0;
                             for (int i = 0; i < mediaList.size(); i++) {
                                 org.json.JSONObject obj = mediaList.get(i);
                                 if ("file".equals(obj.optString("item_type")) && !obj.optString("mime_type", "").startsWith("video/")) {
-                                    String u = client.getR2PublicUrl(obj.optString("r2_key", ""));
+                                    String r2KeyInner = obj.optString("r2_key", "");
+                                    String u = client.getR2PublicUrl(r2KeyInner);
                                     if (u != null) {
                                         urls.add(u);
                                         ids.add(obj.optString("id"));
+                                        r2Keys.add(r2KeyInner);
                                         
                                         boolean isLiked = false;
                                         try {
@@ -350,6 +353,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             }
                             MediaViewerActivity.currentViewerUrls = urls;
                             MediaViewerActivity.currentViewerFileIds = ids;
+                            MediaViewerActivity.currentViewerR2Keys = r2Keys;
                             MediaViewerActivity.currentViewerLikes = likes;
                             MediaViewerActivity.currentViewerIndex = selectedIndex;
                             
