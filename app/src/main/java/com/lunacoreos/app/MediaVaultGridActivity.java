@@ -105,21 +105,39 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private boolean showFavorites = false;
 
     private void loadFiles() {
+        // Reset state
+        currentOffset = 0;
+        hasMore = true;
+        isLoading = false;
+        
+        mediaList.clear();
+        if (adapter != null) adapter.notifyDataSetChanged();
+        
         new Thread(() -> {
             try {
+                java.util.List<org.json.JSONObject> newFolders = new java.util.ArrayList<>();
+                
                 // Fetch and show folders first
                 try {
                     org.json.JSONArray subcollections = client.getVaultSubCollections(collectionId);
                     for (int i = 0; i < subcollections.length(); i++) {
                         org.json.JSONObject folder = subcollections.getJSONObject(i);
                         folder.put("item_type", "folder");
-                        mediaList.add(folder);
+                        newFolders.add(folder);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     final String msg = e.getMessage();
-                    runOnUiThread(() -> Toast.makeText(MediaVaultGridActivity.this, "Folder err: " + msg, Toast.LENGTH_LONG).show());
+                    runOnUiThread(() -> android.widget.Toast.makeText(MediaVaultGridActivity.this, "Folder err: " + msg, android.widget.Toast.LENGTH_LONG).show());
                 }
+                
+                runOnUiThread(() -> {
+                    // Only add folders if we are still at offset 0 (no files loaded yet)
+                    if (currentOffset == 0) {
+                        mediaList.addAll(0, newFolders);
+                        if (adapter != null) adapter.notifyDataSetChanged();
+                    }
+                });
                 
                 runOnUiThread(() -> {
                     if (adapter == null) {
