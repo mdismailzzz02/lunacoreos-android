@@ -3226,6 +3226,7 @@ int id btnBack 0x7f090063
 int id btnClose 0x7f09024a
 int id btnCreateCollection 0x7f090064
 int id btnDelete 0x7f090065
+int id btnFavorites 0x7f09024e
 int id btnGeneratePassword 0x7f090066
 int id btnLogin 0x7f090067
 int id btnLogout 0x7f090068
@@ -3393,7 +3394,9 @@ int id italic 0x7f090109
 int id item_touch_helper_previous_elevation 0x7f09010a
 int id ivDelete 0x7f09010b
 int id ivEdit 0x7f09010c
+int id ivHeart 0x7f09024f
 int id ivIcon 0x7f09010d
+int id ivLike 0x7f090250
 int id ivPlayIcon 0x7f09010e
 int id ivSecretLock 0x7f09010f
 int id ivThumbnail 0x7f090110
@@ -3670,6 +3673,7 @@ int id tvDesc 0x7f09021c
 int id tvDialogTitle 0x7f09021d
 int id tvEmpty 0x7f09021e
 int id tvError 0x7f09021f
+int id tvFavorites 0x7f090251
 int id tvName 0x7f090220
 int id tvPasswordHidden 0x7f090221
 int id tvPreview 0x7f090222

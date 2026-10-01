@@ -35,6 +35,7 @@ id btnBack
 id btnClose
 id btnCreateCollection
 id btnDelete
+id btnFavorites
 id btnGeneratePassword
 id btnLogin
 id btnLogout
@@ -70,7 +71,9 @@ id fabUpload
 id fragmentContainer
 id ivDelete
 id ivEdit
+id ivHeart
 id ivIcon
+id ivLike
 id ivPlayIcon
 id ivSecretLock
 id ivThumbnail
@@ -96,6 +99,7 @@ id tvDesc
 id tvDialogTitle
 id tvEmpty
 id tvError
+id tvFavorites
 id tvName
 id tvPasswordHidden
 id tvPreview
