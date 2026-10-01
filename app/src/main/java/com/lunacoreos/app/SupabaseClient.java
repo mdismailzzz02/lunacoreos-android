@@ -476,7 +476,7 @@ public class SupabaseClient {
     }
 
     public JSONObject getTrashCollection() throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_collections?name=eq.Trash&limit=1");
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections?name=eq.Trash&is_hidden=eq.false&limit=1");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", apiKey);
@@ -622,7 +622,8 @@ public class SupabaseClient {
     public void moveVaultFile(String fileId, String newCollectionId, String newR2Key) throws Exception {
         URL url = new URL(baseUrl + "/rest/v1/vault_files?id=eq." + fileId);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("PATCH");
+        conn.setRequestMethod("POST"); // Use POST with override to avoid ProtocolException on older Androids
+        conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
         conn.setRequestProperty("apikey", apiKey);
         if (authToken != null) {
             conn.setRequestProperty("Authorization", "Bearer " + authToken);
