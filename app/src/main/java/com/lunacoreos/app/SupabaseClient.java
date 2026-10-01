@@ -620,10 +620,33 @@ public class SupabaseClient {
     }
     
     public void moveVaultFile(String fileId, String newCollectionId, String newR2Key) throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_files?id=eq." + fileId);
+        // 1. Fetch current row
+        URL getUrl = new URL(baseUrl + "/rest/v1/vault_files?id=eq." + fileId + "&select=*");
+        HttpURLConnection getConn = (HttpURLConnection) getUrl.openConnection();
+        getConn.setRequestMethod("GET");
+        getConn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            getConn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        
+        String result;
+        try (InputStream is = getConn.getInputStream(); java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A")) {
+            result = s.hasNext() ? s.next() : "";
+        }
+        
+        JSONArray arr = new JSONArray(result);
+        if (arr.length() == 0) throw new Exception("File not found");
+        JSONObject row = arr.getJSONObject(0);
+        
+        // 2. Modify row
+        row.put("collection_id", newCollectionId);
+        row.put("r2_key", newR2Key);
+        
+        // 3. Upsert full row
+        URL url = new URL(baseUrl + "/rest/v1/vault_files");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST"); // Use POST with override to avoid ProtocolException on older Androids
-        conn.setRequestProperty("X-HTTP-Method-Override", "PATCH");
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
         conn.setRequestProperty("apikey", apiKey);
         if (authToken != null) {
             conn.setRequestProperty("Authorization", "Bearer " + authToken);
@@ -631,12 +654,8 @@ public class SupabaseClient {
         conn.setRequestProperty("Content-Type", "application/json");
         conn.setDoOutput(true);
         
-        JSONObject data = new JSONObject();
-        data.put("collection_id", newCollectionId);
-        data.put("r2_key", newR2Key);
-        
         try (OutputStream os = conn.getOutputStream()) {
-            os.write(data.toString().getBytes("UTF-8"));
+            os.write(row.toString().getBytes("UTF-8"));
         }
         
         if (conn.getResponseCode() >= 400) {
