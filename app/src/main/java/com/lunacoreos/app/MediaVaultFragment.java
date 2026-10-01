@@ -103,7 +103,6 @@ public class MediaVaultFragment extends Fragment {
                     intent.putExtra("LOCK_TITLE", "Hidden Vault");
                     intent.putExtra("VAULT_MODE", "hidden");
                     appPasswordLauncher.launch(intent);
-                }
             }
         });
 
