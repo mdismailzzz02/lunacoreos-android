@@ -580,6 +580,20 @@ public class SupabaseClient {
         }
     }
 
+    public void deleteVaultFile(String fileId) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?id=eq." + fileId);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to delete vault file: " + conn.getResponseCode());
+        }
+    }
+
     public JSONArray getVaultFiles(String collectionId, int limit, int offset, boolean favoritesOnly) throws Exception {
         String urlStr = baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc&limit=" + limit + "&offset=" + offset;
         if (favoritesOnly) {

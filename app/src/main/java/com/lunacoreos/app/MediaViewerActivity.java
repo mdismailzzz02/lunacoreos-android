@@ -78,6 +78,41 @@ public class MediaViewerActivity extends AppCompatActivity {
             }).start();
         });
         
+        ImageView ivDelete = findViewById(R.id.ivDelete);
+        ivDelete.setOnClickListener(v -> {
+            int pos = viewPager.getCurrentItem();
+            if (currentViewerFileIds == null || currentViewerFileIds.isEmpty()) return;
+            
+            new android.app.AlertDialog.Builder(this)
+                .setTitle("Delete Photo")
+                .setMessage("Are you sure you want to permanently delete this photo?")
+                .setPositiveButton("Delete", (dialog, which) -> {
+                    String fileId = currentViewerFileIds.get(pos);
+                    
+                    new Thread(() -> {
+                        try {
+                            client.deleteVaultFile(fileId);
+                            runOnUiThread(() -> {
+                                currentViewerUrls.remove(pos);
+                                currentViewerFileIds.remove(pos);
+                                if (currentViewerLikes != null) currentViewerLikes.remove(pos);
+                                
+                                if (currentViewerUrls.isEmpty()) {
+                                    finish();
+                                } else {
+                                    viewPager.getAdapter().notifyDataSetChanged();
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed to delete", android.widget.Toast.LENGTH_SHORT).show());
+                        }
+                    }).start();
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+        
         SwipeToDismissLayout swipeLayout = findViewById(R.id.swipeLayout);
         View rootFrame = findViewById(android.R.id.content);
         swipeLayout.setBackgroundView(rootFrame);
