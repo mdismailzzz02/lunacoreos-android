@@ -131,7 +131,8 @@ public class MediaViewerActivity extends AppCompatActivity {
                             });
                         } catch (Exception e) {
                             e.printStackTrace();
-                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed to move/delete", android.widget.Toast.LENGTH_SHORT).show());
+                            final String msg = e.getMessage() != null ? e.getMessage() : e.toString();
+                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed: " + msg, android.widget.Toast.LENGTH_LONG).show());
                         }
                     }).start();
                 })
