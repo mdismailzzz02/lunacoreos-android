@@ -594,6 +594,30 @@ public class SupabaseClient {
         }
     }
     
+    public void moveVaultFile(String fileId, String newCollectionId, String newR2Key) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?id=eq." + fileId);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("PATCH");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+        
+        JSONObject data = new JSONObject();
+        data.put("collection_id", newCollectionId);
+        data.put("r2_key", newR2Key);
+        
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(data.toString().getBytes("UTF-8"));
+        }
+        
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to update vault file: " + conn.getResponseCode());
+        }
+    }
+    
     public void deleteR2File(String r2Key) throws Exception {
         URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=delete&key=" + java.net.URLEncoder.encode(r2Key, "UTF-8"));
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -605,6 +629,20 @@ public class SupabaseClient {
         
         if (conn.getResponseCode() >= 400) {
             throw new Exception("Failed to delete from R2: " + conn.getResponseCode());
+        }
+    }
+    
+    public void moveR2File(String sourceKey, String destKey) throws Exception {
+        URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=copy&source_key=" + java.net.URLEncoder.encode(sourceKey, "UTF-8") + "&dest_key=" + java.net.URLEncoder.encode(destKey, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to move file in R2: " + conn.getResponseCode());
         }
     }
 

@@ -85,21 +85,44 @@ public class MediaViewerActivity extends AppCompatActivity {
             int pos = viewPager.getCurrentItem();
             if (currentViewerFileIds == null || currentViewerFileIds.isEmpty()) return;
             
+            String trashPath = getSharedPreferences("LunaCorePrefs", MODE_PRIVATE).getString("trashPath", "luna-vault/vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/Trash/");
+            String trashCollectionId = null;
+            if (trashPath != null && !trashPath.isEmpty()) {
+                java.util.regex.Matcher m = java.util.regex.Pattern.compile("([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})").matcher(trashPath);
+                if (m.find()) {
+                    trashCollectionId = m.group(1);
+                }
+            }
+            
+            final String finalTrashCollectionId = trashCollectionId;
+            final String finalTrashPath = trashPath;
+
             new android.app.AlertDialog.Builder(this)
-                .setTitle("Delete Photo")
-                .setMessage("Are you sure you want to permanently delete this photo?")
-                .setPositiveButton("Delete", (dialog, which) -> {
+                .setTitle(finalTrashCollectionId != null ? "Move to Trash" : "Delete Photo")
+                .setMessage(finalTrashCollectionId != null ? "Are you sure you want to move this photo to the Trash?" : "Are you sure you want to permanently delete this photo?")
+                .setPositiveButton(finalTrashCollectionId != null ? "Move" : "Delete", (dialog, which) -> {
                     String fileId = currentViewerFileIds.get(pos);
                     String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > pos ? currentViewerR2Keys.get(pos) : null;
                     
                     new Thread(() -> {
                         try {
-                            client.deleteVaultFile(fileId);
-                            if (r2Key != null) {
-                                try {
-                                    client.deleteR2File(r2Key);
-                                } catch (Exception e2) { e2.printStackTrace(); }
+                            if (finalTrashCollectionId != null && r2Key != null) {
+                                String filename = r2Key.substring(r2Key.lastIndexOf('/') + 1);
+                                String newR2Key = finalTrashPath;
+                                if (!newR2Key.endsWith("/")) newR2Key += "/";
+                                newR2Key += filename;
+                                
+                                client.moveR2File(r2Key, newR2Key);
+                                client.moveVaultFile(fileId, finalTrashCollectionId, newR2Key);
+                            } else {
+                                client.deleteVaultFile(fileId);
+                                if (r2Key != null) {
+                                    try {
+                                        client.deleteR2File(r2Key);
+                                    } catch (Exception e2) { e2.printStackTrace(); }
+                                }
                             }
+                            
                             runOnUiThread(() -> {
                                 deletedFileIds.add(fileId);
                                 currentViewerUrls.remove(pos);
@@ -115,7 +138,7 @@ public class MediaViewerActivity extends AppCompatActivity {
                             });
                         } catch (Exception e) {
                             e.printStackTrace();
-                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed to delete", android.widget.Toast.LENGTH_SHORT).show());
+                            runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed to " + (finalTrashCollectionId != null ? "move" : "delete"), android.widget.Toast.LENGTH_SHORT).show());
                         }
                     }).start();
                 })
