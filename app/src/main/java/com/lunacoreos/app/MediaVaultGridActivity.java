@@ -64,6 +64,32 @@ public class MediaVaultGridActivity extends AppCompatActivity {
             filePicker.launch(intent);
         });
 
+        android.widget.LinearLayout btnFavorites = findViewById(R.id.btnFavorites);
+        android.widget.ImageView ivHeart = findViewById(R.id.ivHeart);
+        android.widget.TextView tvFavorites = findViewById(R.id.tvFavorites);
+        
+        btnFavorites.setOnClickListener(v -> {
+            showFavorites = !showFavorites;
+            ivHeart.setColorFilter(showFavorites ? 0xFFEC4899 : getResources().getColor(R.color.text_secondary));
+            tvFavorites.setTextColor(showFavorites ? 0xFFEC4899 : getResources().getColor(R.color.text_secondary));
+            
+            // Reload grid
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                mediaList.removeIf(item -> "file".equals(item.optString("item_type")));
+            } else {
+                java.util.Iterator<org.json.JSONObject> it = mediaList.iterator();
+                while(it.hasNext()){
+                    if("file".equals(it.next().optString("item_type"))) it.remove();
+                }
+            }
+            if (adapter != null) adapter.notifyDataSetChanged();
+            
+            currentOffset = 0;
+            hasMore = true;
+            isLoading = false;
+            fetchNextPage();
+        });
+
         loadFiles();
     }
 
@@ -75,6 +101,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private boolean hasMore = true;
     private int currentOffset = 0;
     private final int PAGE_LIMIT = 21;
+    
+    private boolean showFavorites = false;
 
     private void loadFiles() {
         new Thread(() -> {
@@ -145,7 +173,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
         isLoading = true;
         new Thread(() -> {
             try {
-                org.json.JSONArray files = client.getVaultFiles(collectionId, PAGE_LIMIT, currentOffset);
+                org.json.JSONArray files = client.getVaultFiles(collectionId, PAGE_LIMIT, currentOffset, showFavorites);
                 if (files.length() == 0) {
                     hasMore = false;
                     isLoading = false;

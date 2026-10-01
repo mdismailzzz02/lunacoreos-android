@@ -580,8 +580,14 @@ public class SupabaseClient {
         }
     }
 
-    public JSONArray getVaultFiles(String collectionId, int limit, int offset) throws Exception {
-        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc&limit=" + limit + "&offset=" + offset);
+    public JSONArray getVaultFiles(String collectionId, int limit, int offset, boolean favoritesOnly) throws Exception {
+        String urlStr = baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId + "&order=uploaded_at.desc&limit=" + limit + "&offset=" + offset;
+        if (favoritesOnly) {
+            urlStr += "&select=*,vault_liked_files!inner(id)";
+        } else {
+            urlStr += "&select=*,vault_liked_files(id)";
+        }
+        URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("apikey", apiKey);
@@ -616,6 +622,31 @@ public class SupabaseClient {
             return publicBase + "/" + key.replace(" ", "%20"); // simple encode
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    public void toggleFileLike(String fileId, boolean like) throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_liked_files" + (!like ? "?file_id=eq." + fileId : ""));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod(like ? "POST" : "DELETE");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        
+        if (like) {
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Prefer", "resolution=merge-duplicates");
+            conn.setDoOutput(true);
+            JSONObject payload = new JSONObject();
+            payload.put("file_id", fileId);
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(payload.toString().getBytes("UTF-8"));
+            }
+        }
+        
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to toggle like: " + conn.getResponseCode());
         }
     }
 }
