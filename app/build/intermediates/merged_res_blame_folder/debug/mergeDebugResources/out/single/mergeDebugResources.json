@@ -52,10 +52,6 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_link.xml"
     },
     {
-        "merged": "com.lunacoreos.app-debug-37:/layout_activity_media_viewer.xml.flat",
-        "source": "com.lunacoreos.app-main-39:/layout/activity_media_viewer.xml"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-hdpi_ic_launcher_round.png.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-hdpi\\ic_launcher_round.png"
     },
@@ -146,6 +142,10 @@
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "com.lunacoreos.app-debug-37:/layout_fragment_settings.xml.flat",
+        "source": "com.lunacoreos.app-main-39:/layout/fragment_settings.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_media_vault_grid.xml.flat",

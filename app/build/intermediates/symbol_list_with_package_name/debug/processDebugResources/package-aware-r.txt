@@ -3336,6 +3336,7 @@ id etSupabaseKey
 id etSupabaseUrl
 id etTags
 id etTitle
+id etTrashPath
 id etUrl
 id etUsername
 id exitUntilCollapsed

@@ -475,6 +475,31 @@ public class SupabaseClient {
         }
     }
 
+    public JSONObject getTrashCollection() throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections?name=eq.Trash&limit=1");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("Content-Type", "application/json");
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONArray arr = new JSONArray(result);
+            if (arr.length() > 0) {
+                return arr.getJSONObject(0);
+            }
+            return null;
+        } else {
+            throw new Exception("Failed to fetch trash collection: " + conn.getResponseCode());
+        }
+    }
+
     public JSONArray getVaultSubCollections(String parentId) throws Exception {
         URL url = new URL(baseUrl + "/rest/v1/vault_collections?parent_id=eq." + parentId + "&order=created_at.desc");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();

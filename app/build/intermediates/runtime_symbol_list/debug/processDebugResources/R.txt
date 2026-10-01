@@ -3335,6 +3335,7 @@ int id etSupabaseKey 0x7f0900ce
 int id etSupabaseUrl 0x7f0900cf
 int id etTags 0x7f0900d0
 int id etTitle 0x7f0900d1
+int id etTrashPath 0x7f090252
 int id etUrl 0x7f0900d2
 int id etUsername 0x7f0900d3
 int id exitUntilCollapsed 0x7f0900d4
