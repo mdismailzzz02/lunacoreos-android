@@ -264,9 +264,11 @@ public class MediaVaultFragment extends Fragment {
             String type = col.optString("type", "gallery");
             int fileCount = col.optInt("file_count", 0);
             long sizeBytes = col.optLong("size_bytes", 0);
-            String info = type.substring(0, 1).toUpperCase() + type.substring(1)
-                    + " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
-                    + " · " + formatBytes(sizeBytes);
+            String info = type.substring(0, 1).toUpperCase() + type.substring(1);
+            if (fileCount > 0 || sizeBytes > 0) {
+                info += " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
+                      + " · " + formatBytes(sizeBytes);
+            }
             holder.tvType.setText(info);
             
             boolean isSecret = col.optBoolean("is_secret", false);

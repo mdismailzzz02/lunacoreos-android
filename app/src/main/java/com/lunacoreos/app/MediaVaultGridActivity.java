@@ -217,9 +217,11 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 String type = item.optString("type", "folder");
                 int fileCount = item.optInt("file_count", 0);
                 long sizeBytes = item.optLong("size_bytes", 0);
-                String info = type.substring(0, 1).toUpperCase() + type.substring(1)
-                        + " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
-                        + " · " + formatBytes(sizeBytes);
+                String info = type.substring(0, 1).toUpperCase() + type.substring(1);
+                if (fileCount > 0 || sizeBytes > 0) {
+                    info += " · " + fileCount + " file" + (fileCount != 1 ? "s" : "")
+                          + " · " + formatBytes(sizeBytes);
+                }
                 fh.tvType.setText(info);
                 
                 boolean isSecret = item.optBoolean("is_secret", false);
