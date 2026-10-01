@@ -104,6 +104,30 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     
     private boolean showFavorites = false;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (MediaViewerActivity.deletedFileIds != null && !MediaViewerActivity.deletedFileIds.isEmpty()) {
+            boolean changed = false;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                changed = mediaList.removeIf(item -> "file".equals(item.optString("item_type")) && MediaViewerActivity.deletedFileIds.contains(item.optString("id")));
+            } else {
+                java.util.Iterator<org.json.JSONObject> it = mediaList.iterator();
+                while(it.hasNext()){
+                    org.json.JSONObject item = it.next();
+                    if("file".equals(item.optString("item_type")) && MediaViewerActivity.deletedFileIds.contains(item.optString("id"))) {
+                        it.remove();
+                        changed = true;
+                    }
+                }
+            }
+            if (changed && adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
+            MediaViewerActivity.deletedFileIds.clear();
+        }
+    }
+
     private void loadFiles() {
         // Reset state
         currentOffset = 0;
