@@ -23,6 +23,7 @@ public class MediaViewerActivity extends AppCompatActivity {
     public static List<String> currentViewerR2Keys = null;
     public static List<Boolean> currentViewerLikes = null;
     public static int currentViewerIndex = 0;
+    public static String currentCollectionId = null;
     
     private SupabaseClient client;
 
