@@ -18,15 +18,23 @@ import java.util.List;
 public class MediaViewerActivity extends AppCompatActivity {
     
     public static List<String> currentViewerUrls = null;
+    public static List<String> currentViewerFileIds = null;
+    public static List<Boolean> currentViewerLikes = null;
     public static int currentViewerIndex = 0;
+    
+    private SupabaseClient client;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_viewer);
+        
+        client = new SupabaseClient(this);
 
         ImageView btnClose = findViewById(R.id.btnClose);
         btnClose.setOnClickListener(v -> finish());
+        
+        ImageView ivLike = findViewById(R.id.ivLike);
 
         if (currentViewerUrls == null || currentViewerUrls.isEmpty()) {
             finish();
@@ -36,6 +44,39 @@ public class MediaViewerActivity extends AppCompatActivity {
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         viewPager.setAdapter(new PhotoPagerAdapter(currentViewerUrls));
         viewPager.setCurrentItem(currentViewerIndex, false);
+        
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                boolean isLiked = currentViewerLikes != null && currentViewerLikes.get(position);
+                ivLike.setColorFilter(isLiked ? 0xFFEC4899 : 0xFFFFFFFF);
+            }
+        });
+        
+        ivLike.setOnClickListener(v -> {
+            int pos = viewPager.getCurrentItem();
+            if (currentViewerFileIds == null || currentViewerLikes == null) return;
+            
+            String fileId = currentViewerFileIds.get(pos);
+            boolean currentlyLiked = currentViewerLikes.get(pos);
+            boolean newLiked = !currentlyLiked;
+            
+            currentViewerLikes.set(pos, newLiked);
+            ivLike.setColorFilter(newLiked ? 0xFFEC4899 : 0xFFFFFFFF);
+            
+            new Thread(() -> {
+                try {
+                    client.toggleFileLike(fileId, newLiked);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    runOnUiThread(() -> android.widget.Toast.makeText(MediaViewerActivity.this, "Failed to update like", android.widget.Toast.LENGTH_SHORT).show());
+                    // Revert UI on fail
+                    currentViewerLikes.set(pos, currentlyLiked);
+                    runOnUiThread(() -> ivLike.setColorFilter(currentlyLiked ? 0xFFEC4899 : 0xFFFFFFFF));
+                }
+            }).start();
+        });
         
         SwipeToDismissLayout swipeLayout = findViewById(R.id.swipeLayout);
         View rootFrame = findViewById(android.R.id.content);

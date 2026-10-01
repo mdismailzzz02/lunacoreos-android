@@ -20,6 +20,8 @@ color text_hint
 color text_muted
 color text_primary
 color text_secondary
+drawable bg_pill_pink_alpha
+drawable bg_round_dark
 drawable bottom_sheet_bg
 drawable btn_danger
 drawable btn_danger_outline

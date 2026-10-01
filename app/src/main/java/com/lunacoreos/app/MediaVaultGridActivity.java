@@ -302,6 +302,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     fh.itemView.setOnClickListener(v -> {
                         if (!mime.startsWith("video/")) {
                             java.util.List<String> urls = new java.util.ArrayList<>();
+                            java.util.List<String> ids = new java.util.ArrayList<>();
+                            java.util.List<Boolean> likes = new java.util.ArrayList<>();
                             int selectedIndex = 0;
                             for (int i = 0; i < mediaList.size(); i++) {
                                 org.json.JSONObject obj = mediaList.get(i);
@@ -309,6 +311,19 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                                     String u = client.getR2PublicUrl(obj.optString("r2_key", ""));
                                     if (u != null) {
                                         urls.add(u);
+                                        ids.add(obj.optString("id"));
+                                        
+                                        boolean isLiked = false;
+                                        try {
+                                            if (obj.has("vault_liked_files")) {
+                                                Object vlf = obj.get("vault_liked_files");
+                                                if (vlf instanceof org.json.JSONArray && ((org.json.JSONArray) vlf).length() > 0) {
+                                                    isLiked = true;
+                                                }
+                                            }
+                                        } catch (Exception e) {}
+                                        likes.add(isLiked);
+                                        
                                         if (u.equals(publicUrl)) {
                                             selectedIndex = urls.size() - 1;
                                         }
@@ -316,6 +331,8 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                                 }
                             }
                             MediaViewerActivity.currentViewerUrls = urls;
+                            MediaViewerActivity.currentViewerFileIds = ids;
+                            MediaViewerActivity.currentViewerLikes = likes;
                             MediaViewerActivity.currentViewerIndex = selectedIndex;
                             
                             Intent intent = new Intent(MediaVaultGridActivity.this, MediaViewerActivity.class);
