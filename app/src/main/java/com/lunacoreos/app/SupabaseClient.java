@@ -659,7 +659,11 @@ public class SupabaseClient {
         }
         
         if (conn.getResponseCode() >= 400) {
-            throw new Exception("Failed to update vault file: " + conn.getResponseCode());
+            String errBody = "";
+            try (InputStream es = conn.getErrorStream(); java.util.Scanner s = new java.util.Scanner(es).useDelimiter("\\A")) {
+                errBody = s.hasNext() ? s.next() : "";
+            } catch (Exception ignored) {}
+            throw new Exception("DB Error 400: " + errBody);
         }
     }
     

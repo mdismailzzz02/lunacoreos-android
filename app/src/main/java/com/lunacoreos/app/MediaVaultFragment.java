@@ -209,7 +209,7 @@ public class MediaVaultFragment extends Fragment {
                     JSONObject c = arr.getJSONObject(i);
                     boolean hasParent = c.has("parent_id") && !c.isNull("parent_id");
                     String name = c.optString("name", "").toLowerCase();
-                    if (!hasParent && !name.contains("trash")) {
+                    if (!hasParent) {
                         list.add(c);
                     }
                 }
