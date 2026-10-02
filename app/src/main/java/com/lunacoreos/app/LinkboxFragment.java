@@ -73,19 +73,24 @@ public class LinkboxFragment extends Fragment {
         android.widget.ImageView ivSearch = view.findViewById(R.id.ivSearch);
         android.view.View llHeader = view.findViewById(R.id.llHeader);
 
-        android.view.View.OnClickListener closeSearch = v -> {
+        android.view.View.OnClickListener unfocusSearch = v -> {
             if (etSearch.getVisibility() == android.view.View.VISIBLE) {
-                etSearch.setVisibility(android.view.View.GONE);
-                etSearch.setText("");
                 etSearch.clearFocus();
                 android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                if (etSearch.getText().length() == 0) {
+                    etSearch.setVisibility(android.view.View.GONE);
+                }
             }
         };
 
         ivSearch.setOnClickListener(v -> {
             if (etSearch.getVisibility() == android.view.View.VISIBLE) {
-                closeSearch.onClick(v);
+                etSearch.setText("");
+                etSearch.setVisibility(android.view.View.GONE);
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
             } else {
                 etSearch.setVisibility(android.view.View.VISIBLE);
                 etSearch.requestFocus();
@@ -94,8 +99,8 @@ public class LinkboxFragment extends Fragment {
             }
         });
         
-        llHeader.setOnClickListener(closeSearch);
-        view.findViewById(R.id.tvTitle).setOnClickListener(closeSearch);
+        llHeader.setOnClickListener(unfocusSearch);
+        view.findViewById(R.id.tvTitle).setOnClickListener(unfocusSearch);
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
