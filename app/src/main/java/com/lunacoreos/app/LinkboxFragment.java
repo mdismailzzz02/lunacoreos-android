@@ -351,8 +351,18 @@ public class LinkboxFragment extends Fragment {
             }
             holder.tvDesc.setText(descText.toString().isEmpty() ? url : descText.toString());
             
-            if (date.length() > 10) date = date.substring(0, 10);
-            holder.tvDate.setText(date);
+            if (date.length() > 19) date = date.substring(0, 19);
+            try {
+                java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
+                sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+                java.util.Date parsedDate = sdf.parse(date);
+                java.text.SimpleDateFormat out = new java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault());
+                out.setTimeZone(java.util.TimeZone.getDefault());
+                holder.tvDate.setText(out.format(parsedDate));
+            } catch (Exception e) {
+                if (date.length() > 10) date = date.substring(0, 10);
+                holder.tvDate.setText(date);
+            }
 
             holder.itemView.setOnClickListener(v -> {
                 try {

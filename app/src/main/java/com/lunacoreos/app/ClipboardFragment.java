@@ -264,8 +264,10 @@ public class ClipboardFragment extends Fragment {
             String dateStr = clip.optString("created_at");
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
                 Date date = sdf.parse(dateStr);
                 SimpleDateFormat out = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
+                out.setTimeZone(java.util.TimeZone.getDefault());
                 holder.tvDate.setText(out.format(date));
             } catch (Exception e) {
                 holder.tvDate.setText(dateStr);

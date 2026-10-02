@@ -23,6 +23,11 @@ public class WritingAdapter extends RecyclerView.Adapter<WritingAdapter.ViewHold
     private final OnDraftClickListener listener;
     private final SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
     private final SimpleDateFormat displayFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+    
+    {
+        apiFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+        displayFormat.setTimeZone(java.util.TimeZone.getDefault());
+    }
 
     public interface OnDraftClickListener {
         void onDraftClick(JSONObject draft);
