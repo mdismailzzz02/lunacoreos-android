@@ -10,7 +10,7 @@
         android:title="Vault" />
     <item
         android:id="@+id/nav_clipboard"
-        android:icon="@android:drawable/ic_menu_paste"
+        android:icon="@android:drawable/ic_menu_set_as"
         android:title="Clipboard" />
     <item
         android:id="@+id/nav_passwords"

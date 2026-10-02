@@ -3346,6 +3346,7 @@ int id fabAddCollection 0x7f0900d9
 int id fabAddLink 0x7f0900da
 int id fabAddPassword 0x7f0900db
 int id fabNew 0x7f0900dc
+int id fabPaste 0x7f090256
 int id fabUpload 0x7f0900dd
 int id fade 0x7f0900de
 int id fill 0x7f0900df
@@ -3402,6 +3403,7 @@ int id ivHeart 0x7f090111
 int id ivIcon 0x7f090112
 int id ivLike 0x7f090113
 int id ivPlayIcon 0x7f090114
+int id ivSearch 0x7f090257
 int id ivSecretLock 0x7f090115
 int id ivThumbnail 0x7f090116
 int id jumpToEnd 0x7f090117
@@ -3476,7 +3478,7 @@ int id mtrl_picker_text_input_range_start 0x7f09015b
 int id mtrl_picker_title_text 0x7f09015c
 int id mtrl_view_tag_bottom_padding 0x7f09015d
 int id multiply 0x7f09015e
-int id nav_linkbox 0x7f09015f
+int id nav_clipboard 0x7f090258
 int id nav_passwords 0x7f090160
 int id nav_settings 0x7f090161
 int id nav_vault 0x7f090162
@@ -3550,6 +3552,7 @@ int id right_icon 0x7f0901a5
 int id right_side 0x7f0901a6
 int id rounded 0x7f0901a7
 int id row_index_key 0x7f0901a8
+int id rvClips 0x7f090259
 int id rvCollections 0x7f0901a9
 int id rvMedia 0x7f0901aa
 int id rvPasswords 0x7f0901ab
@@ -3674,6 +3677,7 @@ int id transition_transform 0x7f090221
 int id triangle 0x7f090222
 int id tvCategory 0x7f090223
 int id tvClipPreview 0x7f090224
+int id tvContent 0x7f09025a
 int id tvDate 0x7f090225
 int id tvDesc 0x7f090226
 int id tvDialogTitle 0x7f090227
@@ -3864,6 +3868,7 @@ int layout design_text_input_start_icon 0x7f0c0033
 int layout dialog_add_link 0x7f0c0034
 int layout dialog_add_vault_collection 0x7f0c0035
 int layout dialog_config 0x7f0c0036
+int layout fragment_clipboard 0x7f0c0082
 int layout fragment_linkbox 0x7f0c0037
 int layout fragment_media_vault 0x7f0c0038
 int layout fragment_passwords 0x7f0c0039
@@ -3871,6 +3876,7 @@ int layout fragment_settings 0x7f0c003a
 int layout fragment_writing_list 0x7f0c003b
 int layout ime_base_split_test_activity 0x7f0c003c
 int layout ime_secondary_split_test_activity 0x7f0c003d
+int layout item_clipboard 0x7f0c0083
 int layout item_link 0x7f0c003e
 int layout item_password 0x7f0c003f
 int layout item_tag 0x7f0c0040

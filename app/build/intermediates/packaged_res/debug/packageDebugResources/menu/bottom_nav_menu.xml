@@ -9,9 +9,9 @@
         android:icon="@android:drawable/ic_menu_gallery"
         android:title="Vault" />
     <item
-        android:id="@+id/nav_linkbox"
-        android:icon="@android:drawable/ic_menu_set_as"
-        android:title="Linkbox" />
+        android:id="@+id/nav_clipboard"
+        android:icon="@android:drawable/ic_menu_paste"
+        android:title="Clipboard" />
     <item
         android:id="@+id/nav_passwords"
         android:icon="@android:drawable/ic_lock_lock"
