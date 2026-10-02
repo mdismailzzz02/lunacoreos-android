@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 public class ShareActivity extends Activity {
 
+    private boolean actionSelected = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +30,7 @@ public class ShareActivity extends Activity {
             if ("text/plain".equals(type)) {
                 String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
                 if (sharedText != null) {
-                    showAddLinkDialog(sharedText);
+                    showPicker(sharedText);
                 } else {
                     finish();
                 }
@@ -38,6 +40,46 @@ public class ShareActivity extends Activity {
         } else {
             finish();
         }
+    }
+
+    private void showPicker(String sharedText) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+        builder.setTitle("Save to LunaCore");
+        builder.setItems(new String[]{"📦 Save to Linkbox", "📋 Save to Clipboard", "🔒 Save to Secret Clipboard"}, (dialog, which) -> {
+            actionSelected = true;
+            if (which == 0) {
+                showAddLinkDialog(sharedText);
+            } else if (which == 1) {
+                saveToClipboard(sharedText, false);
+            } else if (which == 2) {
+                saveToClipboard(sharedText, true);
+            }
+        });
+        builder.setOnDismissListener(dialog -> {
+            if (!actionSelected) finish();
+        });
+        builder.show();
+    }
+
+    private void saveToClipboard(String text, boolean isSecret) {
+        Toast.makeText(this, "Saving to Clipboard...", Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            try {
+                SupabaseClient client = new SupabaseClient(this);
+                client.refreshSession();
+                client.saveClipboardText(text, isSecret);
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Saved to Clipboard!", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    finish();
+                });
+            }
+        }).start();
     }
 
     private void showAddLinkDialog(String sharedText) {
