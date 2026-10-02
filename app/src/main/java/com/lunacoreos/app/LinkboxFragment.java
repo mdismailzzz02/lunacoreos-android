@@ -102,6 +102,18 @@ public class LinkboxFragment extends Fragment {
         llHeader.setOnClickListener(unfocusSearch);
         view.findViewById(R.id.tvTitle).setOnClickListener(unfocusSearch);
 
+        etSearch.setOnTouchListener((v, event) -> {
+            if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                if (etSearch.getCompoundDrawables()[2] != null) {
+                    if (event.getRawX() >= (etSearch.getRight() - etSearch.getCompoundDrawables()[2].getBounds().width() - etSearch.getPaddingRight() - 32)) {
+                        etSearch.setText("");
+                        return true;
+                    }
+                }
+            }
+            return false;
+        });
+
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -115,7 +127,13 @@ public class LinkboxFragment extends Fragment {
                 filterLinks(s.toString());
             }
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                if (s.length() > 0) {
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.ic_menu_close_clear_cancel, 0);
+                } else {
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                }
+            }
         });
 
         etSearch.setOnFocusChangeListener((v, hasFocus) -> {
