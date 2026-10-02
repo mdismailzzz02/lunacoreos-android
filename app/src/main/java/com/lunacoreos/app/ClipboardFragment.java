@@ -54,9 +54,17 @@ public class ClipboardFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == android.app.Activity.RESULT_OK) {
                     isVaultUnlocked = true;
+                    vaultMode = "secret";
+                    TextView tvTitle = getView().findViewById(R.id.tvTitle);
+                    tvTitle.setText("Secret Clipboard");
+                    tvTitle.setTextColor(0xFFEF4444);
                     loadClips();
                 } else {
                     vaultMode = "normal";
+                    isVaultUnlocked = false;
+                    TextView tvTitle = getView().findViewById(R.id.tvTitle);
+                    tvTitle.setText("Clipboard");
+                    tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
                     loadClips();
                 }
             }
@@ -99,6 +107,9 @@ public class ClipboardFragment extends Fragment {
         tvTitle.setOnClickListener(v -> {
             if (!"normal".equals(vaultMode)) {
                 vaultMode = "normal";
+                isVaultUnlocked = false;
+                tvTitle.setText("Clipboard");
+                tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
                 loadClips();
                 return;
             }
@@ -119,6 +130,9 @@ public class ClipboardFragment extends Fragment {
         tvTitle.setOnLongClickListener(v -> {
             if (!"normal".equals(vaultMode)) {
                 vaultMode = "normal";
+                isVaultUnlocked = false;
+                tvTitle.setText("Clipboard");
+                tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
                 loadClips();
             } else {
                 Intent intent = new Intent(getContext(), AppPasswordActivity.class);
@@ -147,6 +161,7 @@ public class ClipboardFragment extends Fragment {
                     intent.setAction(Intent.ACTION_SEND);
                     intent.setType("text/plain");
                     intent.putExtra(Intent.EXTRA_TEXT, text.toString());
+                    intent.putExtra("IS_SECRET_MODE", "secret".equals(vaultMode));
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();

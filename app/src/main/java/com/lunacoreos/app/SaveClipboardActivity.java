@@ -48,6 +48,10 @@ public class SaveClipboardActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(v -> finish());
 
         Switch switchPrivate = findViewById(R.id.switchPrivate);
+        if (intent != null && intent.hasExtra("IS_SECRET_MODE")) {
+            switchPrivate.setChecked(intent.getBooleanExtra("IS_SECRET_MODE", false));
+        }
+        
         Button btnSave = findViewById(R.id.btnSave);
 
         btnSave.setOnClickListener(v -> {
