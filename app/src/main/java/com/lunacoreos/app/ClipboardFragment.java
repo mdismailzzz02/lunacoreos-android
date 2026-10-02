@@ -141,8 +141,16 @@ public class ClipboardFragment extends Fragment {
         view.findViewById(R.id.fabPaste).setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClip().getItemCount() > 0) {
-                Intent intent = new Intent(getContext(), SaveClipboardActivity.class);
-                startActivity(intent);
+                CharSequence text = clipboard.getPrimaryClip().getItemAt(0).getText();
+                if (text != null && !text.toString().trim().isEmpty()) {
+                    Intent intent = new Intent(getContext(), SaveClipboardActivity.class);
+                    intent.setAction(Intent.ACTION_SEND);
+                    intent.setType("text/plain");
+                    intent.putExtra(Intent.EXTRA_TEXT, text.toString());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
             }
