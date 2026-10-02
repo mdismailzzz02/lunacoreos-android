@@ -194,23 +194,7 @@ public class ClipboardFragment extends Fragment {
             try {
                 SupabaseClient client = new SupabaseClient(getContext());
                 String mode = vaultMode;
-                String urlStr = client.baseUrl + "/rest/v1/vault_clipboard?select=*&order=created_at.desc";
-                if ("secret".equals(mode)) {
-                    urlStr += "&is_secret=eq.true";
-                } else {
-                    urlStr += "&is_secret=eq.false";
-                }
-
-                java.net.URL url = new java.net.URL(urlStr);
-                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.setRequestProperty("apikey", client.apiKey);
-                conn.setRequestProperty("Authorization", "Bearer " + client.authToken);
-
-                java.io.InputStream is = conn.getInputStream();
-                java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-                String resp = s.hasNext() ? s.next() : "[]";
-                JSONArray arr = new JSONArray(resp);
+                JSONArray arr = client.getClipboardClips("secret".equals(mode));
 
                 List<JSONObject> list = new ArrayList<>();
                 for (int i = 0; i < arr.length(); i++) {
@@ -281,14 +265,7 @@ public class ClipboardFragment extends Fragment {
                         new Thread(() -> {
                             try {
                                 SupabaseClient client = new SupabaseClient(getContext());
-                                java.net.URL url = new java.net.URL(client.baseUrl + "/rest/v1/vault_clipboard?id=eq." + id);
-                                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                                conn.setRequestMethod("DELETE");
-                                conn.setRequestProperty("apikey", client.apiKey);
-                                conn.setRequestProperty("Authorization", "Bearer " + client.authToken);
-                                int code = conn.getResponseCode();
-                                if (code >= 400) throw new Exception("HTTP " + code);
-                                
+                                client.deleteClipboardClip(id);
                                 requireActivity().runOnUiThread(() -> loadClips());
                             } catch (Exception e) {
                                 e.printStackTrace();

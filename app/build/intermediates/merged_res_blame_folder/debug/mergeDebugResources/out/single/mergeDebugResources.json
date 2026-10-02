@@ -48,8 +48,8 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_tag.xml"
     },
     {
-        "merged": "com.lunacoreos.app-debug-37:/layout_item_clipboard.xml.flat",
-        "source": "com.lunacoreos.app-main-39:/layout/item_clipboard.xml"
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_clipboard.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_clipboard.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_linkbox.xml.flat",
@@ -162,6 +162,10 @@
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_vault_media.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_vault_media.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_clipboard.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_clipboard.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_media_vault_grid.xml.flat",

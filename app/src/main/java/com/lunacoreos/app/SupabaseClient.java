@@ -798,4 +798,32 @@ public class SupabaseClient {
             throw new Exception("HTTP " + code);
         }
     }
+    public org.json.JSONArray getClipboardClips(boolean isSecret) throws Exception {
+        if (authToken == null) throw new Exception("Not authenticated");
+        String urlStr = baseUrl + "/rest/v1/vault_clipboard?select=*&order=created_at.desc";
+        if (isSecret) urlStr += "&is_secret=eq.true";
+        else urlStr += "&is_secret=eq.false";
+
+        java.net.URL url = new java.net.URL(urlStr);
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+
+        java.io.InputStream is = conn.getInputStream();
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        String resp = s.hasNext() ? s.next() : "[]";
+        return new org.json.JSONArray(resp);
+    }
+
+    public void deleteClipboardClip(String id) throws Exception {
+        if (authToken == null) throw new Exception("Not authenticated");
+        java.net.URL url = new java.net.URL(baseUrl + "/rest/v1/vault_clipboard?id=eq." + id);
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        int code = conn.getResponseCode();
+        if (code >= 400) throw new Exception("HTTP " + code);
+    }
 }
