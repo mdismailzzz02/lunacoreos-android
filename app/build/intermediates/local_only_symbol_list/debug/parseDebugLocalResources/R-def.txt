@@ -84,6 +84,7 @@ id ivPlayIcon
 id ivSearch
 id ivSecretLock
 id ivThumbnail
+id llHeader
 id navView
 id nav_clipboard
 id nav_linkbox
