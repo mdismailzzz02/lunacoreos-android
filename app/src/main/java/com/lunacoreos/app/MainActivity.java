@@ -83,6 +83,39 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        getOnBackPressedDispatcher().addCallback(this, new androidx.activity.OnBackPressedCallback(true) {
+            private int backPressCount = 0;
+            private long lastBackPressTime = 0;
+
+            @Override
+            public void handleOnBackPressed() {
+                if (drawerLayout.isOpen()) {
+                    drawerLayout.close();
+                    return;
+                }
+                
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastBackPressTime > 2000) {
+                    backPressCount = 0;
+                }
+                
+                backPressCount++;
+                lastBackPressTime = currentTime;
+
+                if (backPressCount >= 3) {
+                    backPressCount = 0;
+                    new android.app.AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Exit LunaCoreOS")
+                            .setMessage("Are you sure you want to leave the app?")
+                            .setPositiveButton("Leave", (dialog, which) -> finishAffinity())
+                            .setNegativeButton("Cancel", null)
+                            .show();
+                } else {
+                    android.widget.Toast.makeText(MainActivity.this, "Swipe back " + (3 - backPressCount) + " more times to exit", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         // Set default selection
         if (savedInstanceState == null) {
             bottomNav.setSelectedItemId(R.id.nav_writing);

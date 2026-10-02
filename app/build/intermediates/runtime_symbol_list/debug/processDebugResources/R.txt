@@ -3033,6 +3033,7 @@ int drawable ic_call_answer_video 0x7f080090
 int drawable ic_call_answer_video_low 0x7f080091
 int drawable ic_call_decline 0x7f080092
 int drawable ic_call_decline_low 0x7f080093
+int drawable ic_clear 0x7f0800f0
 int drawable ic_clear_black_24 0x7f080094
 int drawable ic_clock_black_24dp 0x7f080095
 int drawable ic_keyboard_black_24dp 0x7f080096
