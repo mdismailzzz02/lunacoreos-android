@@ -28,7 +28,7 @@ public class SaveClipboardActivity extends AppCompatActivity {
             // Coming from Quick Settings Tile or elsewhere
             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClip().getItemCount() > 0) {
-                CharSequence text = clipboard.getPrimaryClip().getItemAt(0).getText();
+                CharSequence text = clipboard.getPrimaryClip().getItemAt(0).coerceToText(this);
                 if (text != null) {
                     textToSave = text.toString();
                 }
