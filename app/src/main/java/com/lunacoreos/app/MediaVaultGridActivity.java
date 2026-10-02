@@ -22,6 +22,9 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private String collectionId;
     private String collectionPrefix;
     private SupabaseClient client;
+    
+    // Cache for known broken thumbnail URLs to prevent 404 network delays on scroll
+    private final java.util.Set<String> brokenThumbUrls = new java.util.HashSet<>();
 
     private final ActivityResultLauncher<Intent> filePicker = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -520,29 +523,48 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         String loadUrl = thumbSigned.isEmpty() ? publicUrl : thumbSigned;
 
                         if (loadUrl != null && !loadUrl.isEmpty()) {
-                            com.bumptech.glide.Glide.with(fh.itemView.getContext())
-                                    .load(loadUrl)
-                                    .override(400, 400)
-                                    .placeholder(android.R.color.darker_gray)
-                                    .error(android.R.drawable.ic_menu_gallery)
-                                    .centerCrop()
-                                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
-                                        @Override
-                                        public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e,
-                                                                    Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
-                                                                    boolean isFirstResource) {
-                                            android.util.Log.e("MediaVault", "Glide load FAILED for url: " + loadUrl + " | error: " + (e != null ? e.getMessage() : "null"));
-                                            if (e != null) e.logRootCauses("MediaVault");
-                                            return false;
-                                        }
-                                        @Override
-                                        public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
-                                                                        com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
-                                                                        com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
-                                            return false;
-                                        }
-                                    })
-                                    .into(fh.ivThumbnail);
+                            com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> fallbackRequest = null;
+                            if (!thumbSigned.isEmpty() && publicUrl != null && !publicUrl.isEmpty() && !thumbSigned.equals(publicUrl)) {
+                                fallbackRequest = com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                        .load(publicUrl)
+                                        .override(400, 400)
+                                        .centerCrop()
+                                        .error(android.R.drawable.ic_menu_gallery);
+                            }
+
+                            // If we already know this thumbnail URL is broken, skip straight to fallback
+                            if (brokenThumbUrls.contains(loadUrl) && fallbackRequest != null) {
+                                fallbackRequest.into(fh.ivThumbnail);
+                            } else {
+                                com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> request = com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                        .load(loadUrl)
+                                        .override(400, 400)
+                                        .placeholder(android.R.color.darker_gray)
+                                        .centerCrop()
+                                        .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                                            @Override
+                                            public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e,
+                                                                        Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                                        boolean isFirstResource) {
+                                                brokenThumbUrls.add(loadUrl);
+                                                return false;
+                                            }
+                                            @Override
+                                            public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
+                                                                            com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                                            com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                                                return false;
+                                            }
+                                        });
+                                
+                                if (fallbackRequest != null) {
+                                    request = request.error(fallbackRequest);
+                                } else {
+                                    request = request.error(android.R.drawable.ic_menu_gallery);
+                                }
+                                
+                                request.into(fh.ivThumbnail);
+                            }
                         } else {
                             android.util.Log.w("MediaVault", "publicUrl is null/empty for r2Key: " + r2Key + " — r2PublicUrl pref may not be set");
                             fh.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);

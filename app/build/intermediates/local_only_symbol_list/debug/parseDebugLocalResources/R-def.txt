@@ -43,9 +43,6 @@ id btnClose
 id btnCreateCollection
 id btnDelete
 id btnFavorites
-id btnFormatBold
-id btnFormatItalic
-id btnFormatUnderline
 id btnGeneratePassword
 id btnLogin
 id btnLogout

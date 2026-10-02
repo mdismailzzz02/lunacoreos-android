@@ -3234,9 +3234,6 @@ int id btnClose 0x7f090065
 int id btnCreateCollection 0x7f090066
 int id btnDelete 0x7f090067
 int id btnFavorites 0x7f090068
-int id btnFormatBold 0x7f090265
-int id btnFormatItalic 0x7f090266
-int id btnFormatUnderline 0x7f090267
 int id btnGeneratePassword 0x7f090069
 int id btnLogin 0x7f09006a
 int id btnLogout 0x7f09006b
