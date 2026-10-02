@@ -57,7 +57,7 @@
         <activity
             android:name=".ShareActivity"
             android:exported="true"
-            android:theme="@style/Theme.Lunacore.Translucent">
+            android:theme="@style/Theme.LunaCoreOS.Translucent">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
                 <category android:name="android.intent.category.DEFAULT" />

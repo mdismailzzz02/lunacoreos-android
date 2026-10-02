@@ -24,7 +24,7 @@
 17-->[androidx.core:core:1.17.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\f2d0a6b3611526053f9b1d9ae1a159e7\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
 18
 19    <application
-19-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-74:19
+19-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-85:19
 20        android:allowBackup="true"
 20-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:7:9-35
 21        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -118,101 +118,124 @@
 67            android:theme="@style/Theme.Lunacore.Translucent" >
 67-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:54:13-62
 68        </activity>
-69
-70        <service
-70-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:9-66:19
-71            android:name="com.lunacoreos.app.ClipboardTileService"
-71-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:13-49
-72            android:exported="true"
-72-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:13-36
-73            android:icon="@android:drawable/ic_menu_save"
-73-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:59:13-58
-74            android:label="Save Clip"
-74-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:60:13-38
-75            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
-75-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:61:13-77
-76            <intent-filter>
-76-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-65:29
-77                <action android:name="android.service.quicksettings.action.QS_TILE" />
-77-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:17-87
-77-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:25-84
-78            </intent-filter>
-79        </service>
-80
-81        <activity
-81-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:69:9-72:52
-82            android:name="com.lunacoreos.app.MediaVaultGridActivity"
-82-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:70:13-51
-83            android:exported="false"
-83-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:71:13-37
-84            android:screenOrientation="portrait" />
-84-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:72:13-49
-85
-86        <provider
-86-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-87            android:name="androidx.startup.InitializationProvider"
-87-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-88            android:authorities="com.lunacoreos.app.androidx-startup"
-88-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-89            android:exported="false" >
-89-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-90            <meta-data
-90-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-91                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-91-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-92                android:value="androidx.startup" />
-92-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-93            <meta-data
-93-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
-94                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-94-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
-95                android:value="androidx.startup" />
-95-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
-96            <meta-data
-96-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-97                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-97-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-98                android:value="androidx.startup" />
-98-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-99        </provider>
-100
-101        <receiver
-101-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-102            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-102-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-103            android:directBootAware="false"
-103-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-104            android:enabled="true"
-104-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-105            android:exported="true"
-105-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-106            android:permission="android.permission.DUMP" >
-106-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-107            <intent-filter>
-107-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-108                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-109            </intent-filter>
-110            <intent-filter>
-110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-111                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-111-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-112            </intent-filter>
-113            <intent-filter>
-113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-114                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-115            </intent-filter>
-116            <intent-filter>
-116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-117                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-118            </intent-filter>
-119        </receiver>
-120    </application>
-121
-122</manifest>
+69        <activity
+69-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:57:9-66:20
+70            android:name="com.lunacoreos.app.ShareActivity"
+70-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:13-42
+71            android:exported="true"
+71-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:59:13-36
+72            android:theme="@style/Theme.Lunacore.Translucent" >
+72-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:60:13-62
+73            <intent-filter>
+73-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:61:13-65:29
+74                <action android:name="android.intent.action.SEND" />
+74-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:17-69
+74-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:25-66
+75
+76                <category android:name="android.intent.category.DEFAULT" />
+76-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:17-76
+76-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:27-73
+77
+78                <data android:mimeType="text/plain" />
+78-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:17-55
+78-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:23-52
+79            </intent-filter>
+80        </activity>
+81
+82        <service
+82-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:68:9-77:19
+83            android:name="com.lunacoreos.app.ClipboardTileService"
+83-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:69:13-49
+84            android:exported="true"
+84-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:73:13-36
+85            android:icon="@android:drawable/ic_menu_save"
+85-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:70:13-58
+86            android:label="Save Clip"
+86-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:71:13-38
+87            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+87-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:72:13-77
+88            <intent-filter>
+88-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:74:13-76:29
+89                <action android:name="android.service.quicksettings.action.QS_TILE" />
+89-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:75:17-87
+89-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:75:25-84
+90            </intent-filter>
+91        </service>
+92
+93        <activity
+93-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:80:9-83:52
+94            android:name="com.lunacoreos.app.MediaVaultGridActivity"
+94-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:81:13-51
+95            android:exported="false"
+95-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:82:13-37
+96            android:screenOrientation="portrait" />
+96-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:83:13-49
+97
+98        <provider
+98-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+99            android:name="androidx.startup.InitializationProvider"
+99-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+100            android:authorities="com.lunacoreos.app.androidx-startup"
+100-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+101            android:exported="false" >
+101-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+102            <meta-data
+102-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+103-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+104                android:value="androidx.startup" />
+104-->[androidx.emoji2:emoji2:1.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\9d1b43af1a3b9b621868f42d34a22ac5\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+105            <meta-data
+105-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
+106                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+106-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
+107                android:value="androidx.startup" />
+107-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ismail\.gradle\caches\8.14.3\transforms\b9fccaea96a88401b0bb166ccae6467c\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
+108            <meta-data
+108-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
+109                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+109-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
+110                android:value="androidx.startup" />
+110-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
+111        </provider>
+112
+113        <receiver
+113-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
+114            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+114-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
+115            android:directBootAware="false"
+115-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
+116            android:enabled="true"
+116-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
+117            android:exported="true"
+117-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
+118            android:permission="android.permission.DUMP" >
+118-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
+120                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
+120-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
+123                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
+123-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
+126                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
+126-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
+127            </intent-filter>
+128            <intent-filter>
+128-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
+129                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
+129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2e9dfb09fcd1ae8335553c36604f1209\transformed\profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
+130            </intent-filter>
+131        </receiver>
+132    </application>
+133
+134</manifest>
