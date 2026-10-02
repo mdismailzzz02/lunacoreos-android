@@ -3306,6 +3306,7 @@ int id dragLeft 0x7f0900b1
 int id dragRight 0x7f0900b2
 int id dragStart 0x7f0900b3
 int id dragUp 0x7f0900b4
+int id drawerLayout 0x7f09025a
 int id dropdown_menu 0x7f0900b5
 int id easeIn 0x7f0900b6
 int id easeInOut 0x7f0900b7
@@ -3478,7 +3479,11 @@ int id mtrl_picker_text_input_range_start 0x7f09015d
 int id mtrl_picker_title_text 0x7f09015e
 int id mtrl_view_tag_bottom_padding 0x7f09015f
 int id multiply 0x7f090160
+int id navView 0x7f09025b
 int id nav_clipboard 0x7f090161
+int id nav_linkbox 0x7f09025c
+int id nav_logout 0x7f09025d
+int id nav_more 0x7f09025e
 int id nav_passwords 0x7f090162
 int id nav_settings 0x7f090163
 int id nav_vault 0x7f090164
@@ -3946,6 +3951,7 @@ int layout select_dialog_multichoice_material 0x7f0c0081
 int layout select_dialog_singlechoice_material 0x7f0c0082
 int layout support_simple_spinner_dropdown_item 0x7f0c0083
 int menu bottom_nav_menu 0x7f0e0000
+int menu drawer_menu 0x7f0e0001
 int mipmap ic_launcher 0x7f0f0000
 int mipmap ic_launcher_round 0x7f0f0001
 int plurals mtrl_badge_content_description 0x7f100000

@@ -3307,6 +3307,7 @@ id dragLeft
 id dragRight
 id dragStart
 id dragUp
+id drawerLayout
 id dropdown_menu
 id easeIn
 id easeInOut
@@ -3479,7 +3480,11 @@ id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id mtrl_view_tag_bottom_padding
 id multiply
+id navView
 id nav_clipboard
+id nav_linkbox
+id nav_logout
+id nav_more
 id nav_passwords
 id nav_settings
 id nav_vault
@@ -3947,6 +3952,7 @@ layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 menu bottom_nav_menu
+menu drawer_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 plurals mtrl_badge_content_description

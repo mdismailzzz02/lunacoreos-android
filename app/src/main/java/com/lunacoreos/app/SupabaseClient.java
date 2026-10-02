@@ -810,6 +810,20 @@ public class SupabaseClient {
         conn.setRequestProperty("apikey", apiKey);
         conn.setRequestProperty("Authorization", "Bearer " + authToken);
 
+        int code = conn.getResponseCode();
+        if (code >= 400) {
+            java.io.InputStream errStr = conn.getErrorStream();
+            if (errStr != null) {
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(errStr));
+                StringBuilder errBody = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) errBody.append(line);
+                br.close();
+                throw new Exception("HTTP " + code + ": " + errBody.toString());
+            }
+            throw new Exception("HTTP " + code);
+        }
+
         java.io.InputStream is = conn.getInputStream();
         java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
         String resp = s.hasNext() ? s.next() : "[]";

@@ -217,7 +217,7 @@ public class ClipboardFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
                 requireActivity().runOnUiThread(() -> {
-                    Toast.makeText(getContext(), "Failed to load clips", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed to load clips: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     swipeRefresh.setRefreshing(false);
                 });
             }

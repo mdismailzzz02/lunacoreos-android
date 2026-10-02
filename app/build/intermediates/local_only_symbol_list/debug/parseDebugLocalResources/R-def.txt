@@ -49,6 +49,7 @@ id btnSaveCredentials
 id btnUnlock
 id cbIsSecret
 id container
+id drawerLayout
 id etCollectionName
 id etContent
 id etDescription
@@ -83,7 +84,11 @@ id ivPlayIcon
 id ivSearch
 id ivSecretLock
 id ivThumbnail
+id navView
 id nav_clipboard
+id nav_linkbox
+id nav_logout
+id nav_more
 id nav_passwords
 id nav_settings
 id nav_vault
@@ -155,6 +160,7 @@ layout item_vault_media
 layout item_viewer_photo
 layout item_writing_draft
 menu bottom_nav_menu
+menu drawer_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
