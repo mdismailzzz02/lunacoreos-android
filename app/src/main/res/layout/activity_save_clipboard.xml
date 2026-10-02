@@ -49,8 +49,7 @@
             <Switch
                 android:id="@+id/switchPrivate"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:theme="@style/SwitchTheme" />
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
         <LinearLayout

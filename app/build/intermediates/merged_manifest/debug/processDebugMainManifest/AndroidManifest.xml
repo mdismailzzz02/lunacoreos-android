@@ -77,7 +77,7 @@
         <service
             android:name="com.lunacoreos.app.ClipboardTileService"
             android:exported="true"
-            android:icon="@drawable/ic_dashboard"
+            android:icon="@android:drawable/ic_menu_save"
             android:label="Save Clip"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
             <intent-filter>

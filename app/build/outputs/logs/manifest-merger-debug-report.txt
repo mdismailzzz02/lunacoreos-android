@@ -196,7 +196,7 @@ ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifes
 	android:permission
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:66:13-77
 	android:icon
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-50
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-58
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-49
 intent-filter#action:name:android.service.quicksettings.action.QS_TILE
