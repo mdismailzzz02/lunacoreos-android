@@ -129,7 +129,7 @@ public class LinkboxFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.length() > 0) {
-                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, android.R.drawable.ic_menu_close_clear_cancel, 0);
+                    etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_clear, 0);
                 } else {
                     etSearch.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 }
