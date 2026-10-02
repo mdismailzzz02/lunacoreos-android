@@ -3406,6 +3406,7 @@ id ivHeart
 id ivIcon
 id ivLike
 id ivPlayIcon
+id ivPreview
 id ivSearch
 id ivSecretLock
 id ivThumbnail

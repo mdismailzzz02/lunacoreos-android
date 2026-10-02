@@ -3405,6 +3405,7 @@ int id ivHeart 0x7f090112
 int id ivIcon 0x7f090113
 int id ivLike 0x7f090114
 int id ivPlayIcon 0x7f090115
+int id ivPreview 0x7f090260
 int id ivSearch 0x7f090116
 int id ivSecretLock 0x7f090117
 int id ivThumbnail 0x7f090118

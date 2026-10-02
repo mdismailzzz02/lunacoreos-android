@@ -301,7 +301,41 @@ public class ClipboardFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             JSONObject clip = filteredList.get(position);
-            holder.tvContent.setText(clip.optString("content"));
+            String content = clip.optString("content");
+            holder.tvContent.setText(content);
+            
+            String url = null;
+            if (android.util.Patterns.WEB_URL.matcher(content).matches()) {
+                url = content;
+            } else {
+                java.util.regex.Matcher matcher = android.util.Patterns.WEB_URL.matcher(content);
+                if (matcher.find()) {
+                    url = matcher.group();
+                }
+            }
+
+            if (url != null) {
+                holder.ivPreview.setVisibility(View.VISIBLE);
+                String domain = "";
+                try {
+                    if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                        url = "https://" + url;
+                    }
+                    android.net.Uri uri = android.net.Uri.parse(url);
+                    domain = uri.getHost();
+                } catch (Exception e) {}
+                if (domain != null && !domain.isEmpty()) {
+                    String faviconUrl = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+                    com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                            .load(faviconUrl)
+                            .placeholder(android.R.drawable.ic_menu_gallery)
+                            .into(holder.ivPreview);
+                } else {
+                    holder.ivPreview.setImageResource(android.R.drawable.ic_menu_gallery);
+                }
+            } else {
+                holder.ivPreview.setVisibility(View.GONE);
+            }
             
             String dateStr = clip.optString("created_at");
             if (dateStr.length() > 19) dateStr = dateStr.substring(0, 19);
@@ -355,13 +389,14 @@ public class ClipboardFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvContent, tvDate;
-            ImageView ivSecretLock, ivDelete;
+            ImageView ivSecretLock, ivDelete, ivPreview;
             ViewHolder(View itemView) {
                 super(itemView);
                 tvContent = itemView.findViewById(R.id.tvContent);
                 tvDate = itemView.findViewById(R.id.tvDate);
                 ivSecretLock = itemView.findViewById(R.id.ivSecretLock);
                 ivDelete = itemView.findViewById(R.id.ivDelete);
+                ivPreview = itemView.findViewById(R.id.ivPreview);
             }
         }
     }
