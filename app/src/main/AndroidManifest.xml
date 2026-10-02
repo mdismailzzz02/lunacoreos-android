@@ -54,6 +54,17 @@
             android:theme="@style/Theme.Lunacore.Translucent">
         </activity>
 
+        <activity
+            android:name=".ShareActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Lunacore.Translucent">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".ClipboardTileService"
             android:icon="@android:drawable/ic_menu_save"
