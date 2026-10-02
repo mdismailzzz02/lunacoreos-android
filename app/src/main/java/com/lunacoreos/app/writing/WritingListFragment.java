@@ -76,6 +76,32 @@ public class WritingListFragment extends Fragment {
 
         swipeRefresh.setOnRefreshListener(this::loadDrafts);
 
+        android.widget.ImageView ivSearch = view.findViewById(R.id.ivSearch);
+        android.view.View llHeader = view.findViewById(R.id.llHeader);
+
+        android.view.View.OnClickListener closeSearch = v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                etSearch.setVisibility(android.view.View.GONE);
+                etSearch.setText("");
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+            }
+        };
+
+        ivSearch.setOnClickListener(v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                closeSearch.onClick(v);
+            } else {
+                etSearch.setVisibility(android.view.View.VISIBLE);
+                etSearch.requestFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(etSearch, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+        
+        llHeader.setOnClickListener(closeSearch);
+
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -85,6 +111,10 @@ public class WritingListFragment extends Fragment {
         });
 
         tvTitle.setOnClickListener(v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                closeSearch.onClick(v);
+                return;
+            }
             if (currentMode.equals("secret")) return;
             secretClickCount++;
             if (secretClickCount >= 3) {

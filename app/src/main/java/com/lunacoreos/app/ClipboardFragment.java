@@ -85,15 +85,31 @@ public class ClipboardFragment extends Fragment {
         rvClips.setAdapter(adapter);
 
         etSearch = view.findViewById(R.id.etSearch);
-        view.findViewById(R.id.ivSearch).setOnClickListener(v -> {
-            if (etSearch.getVisibility() == View.VISIBLE) {
-                etSearch.setVisibility(View.GONE);
+        android.widget.ImageView ivSearch = view.findViewById(R.id.ivSearch);
+        android.view.View llHeader = view.findViewById(R.id.llHeader);
+        
+        android.view.View.OnClickListener closeSearch = v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                etSearch.setVisibility(android.view.View.GONE);
                 etSearch.setText("");
+                etSearch.clearFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+            }
+        };
+
+        ivSearch.setOnClickListener(v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                closeSearch.onClick(v);
             } else {
-                etSearch.setVisibility(View.VISIBLE);
+                etSearch.setVisibility(android.view.View.VISIBLE);
                 etSearch.requestFocus();
+                android.view.inputmethod.InputMethodManager imm = (android.view.inputmethod.InputMethodManager) requireContext().getSystemService(android.content.Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(etSearch, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
             }
         });
+        
+        llHeader.setOnClickListener(closeSearch);
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -105,6 +121,10 @@ public class ClipboardFragment extends Fragment {
 
         TextView tvTitle = view.findViewById(R.id.tvTitle);
         tvTitle.setOnClickListener(v -> {
+            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
+                closeSearch.onClick(v);
+                return;
+            }
             if (!"normal".equals(vaultMode)) {
                 vaultMode = "normal";
                 isVaultUnlocked = false;
