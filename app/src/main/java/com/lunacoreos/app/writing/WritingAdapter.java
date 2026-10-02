@@ -22,7 +22,7 @@ public class WritingAdapter extends RecyclerView.Adapter<WritingAdapter.ViewHold
     private List<JSONObject> drafts = new ArrayList<>();
     private final OnDraftClickListener listener;
     private final SimpleDateFormat apiFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
-    private final SimpleDateFormat displayFormat = new SimpleDateFormat("MMM d, yyyy", Locale.US);
+    private final SimpleDateFormat displayFormat = new SimpleDateFormat("MMM d, yyyy HH:mm", Locale.US);
     
     {
         apiFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
@@ -65,7 +65,9 @@ public class WritingAdapter extends RecyclerView.Adapter<WritingAdapter.ViewHold
             String dateStr = draft.optString("updatedAt", draft.optString("created_at", ""));
             try {
                 if (!dateStr.isEmpty()) {
-                    Date date = apiFormat.parse(dateStr.substring(0, 19));
+                    if (dateStr.length() > 19) dateStr = dateStr.substring(0, 19);
+                    dateStr = dateStr.replace(" ", "T");
+                    Date date = apiFormat.parse(dateStr);
                     holder.tvDate.setText(displayFormat.format(date));
                 } else {
                     holder.tvDate.setText("");

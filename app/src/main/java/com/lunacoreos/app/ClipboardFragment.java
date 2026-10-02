@@ -262,6 +262,8 @@ public class ClipboardFragment extends Fragment {
             holder.tvContent.setText(clip.optString("content"));
             
             String dateStr = clip.optString("created_at");
+            if (dateStr.length() > 19) dateStr = dateStr.substring(0, 19);
+            dateStr = dateStr.replace(" ", "T");
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
                 sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));

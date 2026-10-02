@@ -352,6 +352,7 @@ public class LinkboxFragment extends Fragment {
             holder.tvDesc.setText(descText.toString().isEmpty() ? url : descText.toString());
             
             if (date.length() > 19) date = date.substring(0, 19);
+            date = date.replace(" ", "T");
             try {
                 java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", java.util.Locale.getDefault());
                 sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
