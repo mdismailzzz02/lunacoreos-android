@@ -141,19 +141,22 @@ public class ClipboardFragment extends Fragment {
         view.findViewById(R.id.fabPaste).setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClip().getItemCount() > 0) {
-                CharSequence text = clipboard.getPrimaryClip().getItemAt(0).getText();
-                if (text != null && !text.toString().trim().isEmpty()) {
-                    boolean isSecret = "secret".equals(vaultMode);
-                    saveClip(text.toString(), isSecret);
-                } else {
-                    Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
-                }
+                Intent intent = new Intent(getContext(), SaveClipboardActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
             }
         });
 
         loadClips();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isVaultUnlocked) {
+            loadClips();
+        }
     }
 
     private void filterClips(String query) {
