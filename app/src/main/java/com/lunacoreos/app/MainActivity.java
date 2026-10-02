@@ -30,8 +30,39 @@ public class MainActivity extends AppCompatActivity {
                 .getInstance(this)
                 .registerReceiver(logoutReceiver, new android.content.IntentFilter(SupabaseClient.ACTION_FORCE_LOGOUT));
 
+        androidx.drawerlayout.widget.DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        com.google.android.material.navigation.NavigationView navView = findViewById(R.id.navView);
+        
+        navView.setNavigationItemSelectedListener(item -> {
+            drawerLayout.close();
+            Fragment selectedFragment = null;
+            if (item.getItemId() == R.id.nav_settings) {
+                selectedFragment = new SettingsFragment();
+            } else if (item.getItemId() == R.id.nav_linkbox) {
+                selectedFragment = new LinkboxFragment();
+            } else if (item.getItemId() == R.id.nav_logout) {
+                android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
+                loginIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(loginIntent);
+                finish();
+                return true;
+            }
+            
+            if (selectedFragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragmentContainer, selectedFragment)
+                        .commit();
+            }
+            return true;
+        });
+
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_more) {
+                drawerLayout.open();
+                return false; // Don't check the More icon
+            }
+            
             Fragment selectedFragment = null;
             if (item.getItemId() == R.id.nav_writing) {
                 selectedFragment = new WritingListFragment();
@@ -41,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new PasswordsFragment();
             } else if (item.getItemId() == R.id.nav_clipboard) {
                 selectedFragment = new ClipboardFragment();
-            } else if (item.getItemId() == R.id.nav_settings) {
-                selectedFragment = new SettingsFragment();
             }
             
             if (selectedFragment != null) {
