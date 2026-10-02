@@ -414,18 +414,33 @@ public class LinkboxFragment extends Fragment {
                 if (date.length() > 10) date = date.substring(0, 10);
                 holder.tvDate.setText(date);
             }
+            
+            String domain = "";
+            try {
+                android.net.Uri uri = android.net.Uri.parse(url);
+                domain = uri.getHost();
+            } catch (Exception e) {}
+            if (domain != null && !domain.isEmpty()) {
+                String faviconUrl = "https://www.google.com/s2/favicons?domain=" + domain + "&sz=128";
+                com.bumptech.glide.Glide.with(holder.itemView.getContext())
+                        .load(faviconUrl)
+                        .placeholder(android.R.drawable.ic_menu_gallery)
+                        .into(holder.ivPreview);
+            } else {
+                holder.ivPreview.setImageResource(android.R.drawable.ic_menu_gallery);
+            }
 
             holder.itemView.setOnClickListener(v -> {
                 try {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    android.content.Intent browserIntent = new android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url));
                     startActivity(browserIntent);
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "Invalid URL", Toast.LENGTH_SHORT).show();
+                    android.widget.Toast.makeText(getContext(), "Invalid URL", android.widget.Toast.LENGTH_SHORT).show();
                 }
             });
             
             holder.ivDelete.setOnClickListener(v -> {
-                new MaterialAlertDialogBuilder(getContext())
+                new com.google.android.material.dialog.MaterialAlertDialogBuilder(getContext())
                     .setTitle("Delete Link")
                     .setMessage("Are you sure you want to delete this link?")
                     .setPositiveButton("Delete", (dialog, which) -> deleteLink(item.optString("id")))
@@ -450,7 +465,7 @@ public class LinkboxFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvUrl, tvDesc, tvDate;
-            android.widget.ImageView ivDelete, ivEdit;
+            android.widget.ImageView ivDelete, ivEdit, ivPreview;
             
             ViewHolder(View itemView) {
                 super(itemView);
@@ -459,6 +474,7 @@ public class LinkboxFragment extends Fragment {
                 tvDate = itemView.findViewById(R.id.tvDate);
                 ivDelete = itemView.findViewById(R.id.ivDelete);
                 ivEdit = itemView.findViewById(R.id.ivEdit);
+                ivPreview = itemView.findViewById(R.id.ivPreview);
             }
         }
     }
