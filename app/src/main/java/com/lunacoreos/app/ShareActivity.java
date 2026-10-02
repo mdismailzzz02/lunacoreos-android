@@ -133,17 +133,21 @@ public class ShareActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void saveLink(String url, String title, String description, String tags, boolean isSecret) {
+    private void saveLink(String url, String title, String description, String rawTags, boolean isSecret) {
         Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
+                String tags = rawTags;
+                if (isSecret && !tags.contains("__secret__")) {
+                    tags = tags.isEmpty() ? "__secret__" : tags + ", __secret__";
+                }
+                
                 JSONObject payload = new JSONObject();
                 payload.put("id", UUID.randomUUID().toString());
                 payload.put("url", url);
                 if (!title.isEmpty()) payload.put("title", title);
                 if (!description.isEmpty()) payload.put("description", description);
                 if (!tags.isEmpty()) payload.put("tags", tags);
-                if (isSecret) payload.put("mode", "secret");
 
                 SupabaseClient client = new SupabaseClient(this);
                 client.refreshSession();
