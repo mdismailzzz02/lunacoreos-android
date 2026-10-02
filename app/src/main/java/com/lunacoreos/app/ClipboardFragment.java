@@ -1,0 +1,321 @@
+package com.lunacoreos.app;
+
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+public class ClipboardFragment extends Fragment {
+
+    private SwipeRefreshLayout swipeRefresh;
+    private RecyclerView rvClips;
+    private ClipboardAdapter adapter;
+    private List<JSONObject> clipList = new ArrayList<>();
+    private List<JSONObject> filteredList = new ArrayList<>();
+    
+    private String vaultMode = "normal"; // normal, hidden, secret
+    private boolean isVaultUnlocked = true;
+    private long lastTitleClickTime = 0;
+    private int titleClickCount = 0;
+    
+    private EditText etSearch;
+
+    private ActivityResultLauncher<Intent> appPasswordLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK) {
+                    isVaultUnlocked = true;
+                    loadClips();
+                } else {
+                    vaultMode = "normal";
+                    loadClips();
+                }
+            }
+    );
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_clipboard, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
+        rvClips = view.findViewById(R.id.rvClips);
+        rvClips.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new ClipboardAdapter();
+        rvClips.setAdapter(adapter);
+
+        etSearch = view.findViewById(R.id.etSearch);
+        view.findViewById(R.id.ivSearch).setOnClickListener(v -> {
+            if (etSearch.getVisibility() == View.VISIBLE) {
+                etSearch.setVisibility(View.GONE);
+                etSearch.setText("");
+            } else {
+                etSearch.setVisibility(View.VISIBLE);
+                etSearch.requestFocus();
+            }
+        });
+
+        etSearch.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void afterTextChanged(Editable s) {
+                filterClips(s.toString());
+            }
+        });
+
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        tvTitle.setOnClickListener(v -> {
+            if (!"normal".equals(vaultMode)) {
+                vaultMode = "normal";
+                loadClips();
+                return;
+            }
+            long now = System.currentTimeMillis();
+            if (now - lastTitleClickTime > 500) titleClickCount = 0;
+            lastTitleClickTime = now;
+            titleClickCount++;
+            if (titleClickCount == 3) {
+                titleClickCount = 0;
+                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                intent.putExtra("LOCK_ID", "clipboard_secret");
+                intent.putExtra("LOCK_TITLE", "Secret Clipboard");
+                intent.putExtra("VAULT_MODE", "secret");
+                appPasswordLauncher.launch(intent);
+            }
+        });
+
+        tvTitle.setOnLongClickListener(v -> {
+            if (!"normal".equals(vaultMode)) {
+                vaultMode = "normal";
+                loadClips();
+            } else {
+                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                intent.putExtra("LOCK_ID", "clipboard_secret");
+                intent.putExtra("LOCK_TITLE", "Secret Clipboard");
+                intent.putExtra("VAULT_MODE", "secret");
+                appPasswordLauncher.launch(intent);
+            }
+            return true;
+        });
+
+        swipeRefresh.setOnRefreshListener(() -> {
+            if (isVaultUnlocked) {
+                loadClips();
+            } else {
+                swipeRefresh.setRefreshing(false);
+            }
+        });
+
+        view.findViewById(R.id.fabPaste).setOnClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard.hasPrimaryClip() && clipboard.getPrimaryClip().getItemCount() > 0) {
+                CharSequence text = clipboard.getPrimaryClip().getItemAt(0).getText();
+                if (text != null && !text.toString().trim().isEmpty()) {
+                    boolean isSecret = "secret".equals(vaultMode);
+                    saveClip(text.toString(), isSecret);
+                } else {
+                    Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Clipboard is empty", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        loadClips();
+    }
+
+    private void filterClips(String query) {
+        filteredList.clear();
+        String q = query.toLowerCase();
+        for (JSONObject clip : clipList) {
+            String content = clip.optString("content", "").toLowerCase();
+            if (content.contains(q)) {
+                filteredList.add(clip);
+            }
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void saveClip(String content, boolean isSecret) {
+        swipeRefresh.setRefreshing(true);
+        new Thread(() -> {
+            try {
+                SupabaseClient client = new SupabaseClient(getContext());
+                client.saveClipboardText(content, isSecret);
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Saved to " + (isSecret ? "Secret" : "Public") + " Clipboard", Toast.LENGTH_SHORT).show();
+                    loadClips();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    swipeRefresh.setRefreshing(false);
+                });
+            }
+        }).start();
+    }
+
+    private void loadClips() {
+        swipeRefresh.setRefreshing(true);
+        new Thread(() -> {
+            try {
+                SupabaseClient client = new SupabaseClient(getContext());
+                String mode = vaultMode;
+                String urlStr = client.baseUrl + "/rest/v1/vault_clipboard?select=*&order=created_at.desc";
+                if ("secret".equals(mode)) {
+                    urlStr += "&is_secret=eq.true";
+                } else {
+                    urlStr += "&is_secret=eq.false";
+                }
+
+                java.net.URL url = new java.net.URL(urlStr);
+                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("apikey", client.apiKey);
+                conn.setRequestProperty("Authorization", "Bearer " + client.authToken);
+
+                java.io.InputStream is = conn.getInputStream();
+                java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+                String resp = s.hasNext() ? s.next() : "[]";
+                JSONArray arr = new JSONArray(resp);
+
+                List<JSONObject> list = new ArrayList<>();
+                for (int i = 0; i < arr.length(); i++) {
+                    list.add(arr.getJSONObject(i));
+                }
+
+                requireActivity().runOnUiThread(() -> {
+                    clipList = list;
+                    TextView tvTitle = getView().findViewById(R.id.tvTitle);
+                    if ("secret".equals(vaultMode)) {
+                        tvTitle.setText("Secret Clipboard");
+                        tvTitle.setTextColor(0xFFEC4899);
+                    } else {
+                        tvTitle.setText("Clipboard");
+                        tvTitle.setTextColor(getResources().getColor(R.color.text_primary));
+                    }
+                    filterClips(etSearch.getText().toString());
+                    swipeRefresh.setRefreshing(false);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(getContext(), "Failed to load clips", Toast.LENGTH_SHORT).show();
+                    swipeRefresh.setRefreshing(false);
+                });
+            }
+        }).start();
+    }
+
+    private class ClipboardAdapter extends RecyclerView.Adapter<ClipboardAdapter.ViewHolder> {
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_clipboard, parent, false);
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            JSONObject clip = filteredList.get(position);
+            holder.tvContent.setText(clip.optString("content"));
+            
+            String dateStr = clip.optString("created_at");
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                Date date = sdf.parse(dateStr);
+                SimpleDateFormat out = new SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault());
+                holder.tvDate.setText(out.format(date));
+            } catch (Exception e) {
+                holder.tvDate.setText(dateStr);
+            }
+
+            holder.ivSecretLock.setVisibility(clip.optBoolean("is_secret") ? View.VISIBLE : View.GONE);
+
+            holder.itemView.setOnClickListener(v -> {
+                ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clipData = ClipData.newPlainText("Lunacore Clip", clip.optString("content"));
+                clipboard.setPrimaryClip(clipData);
+                Toast.makeText(getContext(), "Copied to clipboard", Toast.LENGTH_SHORT).show();
+            });
+
+            holder.ivDelete.setOnClickListener(v -> {
+                new AlertDialog.Builder(getContext())
+                    .setTitle("Delete Clip")
+                    .setMessage("Are you sure you want to delete this clip?")
+                    .setPositiveButton("Delete", (d, w) -> {
+                        String id = clip.optString("id");
+                        new Thread(() -> {
+                            try {
+                                SupabaseClient client = new SupabaseClient(getContext());
+                                java.net.URL url = new java.net.URL(client.baseUrl + "/rest/v1/vault_clipboard?id=eq." + id);
+                                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                                conn.setRequestMethod("DELETE");
+                                conn.setRequestProperty("apikey", client.apiKey);
+                                conn.setRequestProperty("Authorization", "Bearer " + client.authToken);
+                                int code = conn.getResponseCode();
+                                if (code >= 400) throw new Exception("HTTP " + code);
+                                
+                                requireActivity().runOnUiThread(() -> loadClips());
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Failed to delete", Toast.LENGTH_SHORT).show());
+                            }
+                        }).start();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return filteredList.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+            TextView tvContent, tvDate;
+            ImageView ivSecretLock, ivDelete;
+            ViewHolder(View itemView) {
+                super(itemView);
+                tvContent = itemView.findViewById(R.id.tvContent);
+                tvDate = itemView.findViewById(R.id.tvDate);
+                ivSecretLock = itemView.findViewById(R.id.ivSecretLock);
+                ivDelete = itemView.findViewById(R.id.ivDelete);
+            }
+        }
+    }
+}

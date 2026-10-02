@@ -39,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new MediaVaultFragment();
             } else if (item.getItemId() == R.id.nav_passwords) {
                 selectedFragment = new PasswordsFragment();
-            } else if (item.getItemId() == R.id.nav_linkbox) {
-                selectedFragment = new LinkboxFragment();
+            } else if (item.getItemId() == R.id.nav_clipboard) {
+                selectedFragment = new ClipboardFragment();
             } else if (item.getItemId() == R.id.nav_settings) {
                 selectedFragment = new SettingsFragment();
             }

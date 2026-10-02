@@ -4,6 +4,70 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\bg_round_dark.xml"
     },
     {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_media_viewer.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_media_viewer.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_bg_pill_pink_alpha.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\bg_pill_pink_alpha.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_vault_lock.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_vault_lock.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_password_editor.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_password_editor.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_search_background.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\search_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_media_vault.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_media_vault.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-mdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxxhdpi\\ic_launcher_round.png"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_tag.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_tag.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_linkbox.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_linkbox.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_btn_danger_outline.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\btn_danger_outline.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\menu_bottom_nav_menu.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\menu\\bottom_nav_menu.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_btn_primary.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\btn_primary.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_writing_list.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_writing_list.xml"
+    },
+    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_tag_background.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\tag_background.xml"
     },
@@ -12,24 +76,12 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxhdpi\\ic_launcher_round.png"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_media_viewer.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_media_viewer.xml"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_dialog_add_vault_collection.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\dialog_add_vault_collection.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_vault_lock.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_vault_lock.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_bg_pill_pink_alpha.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\bg_pill_pink_alpha.xml"
     },
     {
         "merged": "com.lunacoreos.app-debug-37:/layout_activity_save_clipboard.xml.flat",
@@ -48,12 +100,12 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-hdpi\\ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xhdpi\\ic_launcher.png"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_link.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_link.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_save_clipboard.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_save_clipboard.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-hdpi_ic_launcher_round.png.flat",
@@ -68,40 +120,16 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_password_editor.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_password_editor.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_search_background.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\search_background.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_media_vault.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_media_vault.xml"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_toolbar_btn_active.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\toolbar_btn_active.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-mdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-mdpi\\ic_launcher_round.png"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_bottom_sheet_bg.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\bottom_sheet_bg.xml"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxxhdpi_ic_launcher_round.png.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxxhdpi\\ic_launcher_round.png"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_input_background.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\input_background.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_tag.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_tag.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_settings.xml.flat",
@@ -128,24 +156,8 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_viewer_photo.xml"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_linkbox.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_linkbox.xml"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_vault_media.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_vault_media.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_btn_danger_outline.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\btn_danger_outline.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\menu_bottom_nav_menu.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\menu\\bottom_nav_menu.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\mipmap-xxhdpi\\ic_launcher.png"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_media_vault_grid.xml.flat",
@@ -156,16 +168,8 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_writing_draft.xml"
     },
     {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_btn_primary.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\btn_primary.xml"
-    },
-    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_item_vault_collection.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\item_vault_collection.xml"
-    },
-    {
-        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_writing_list.xml.flat",
-        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_writing_list.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_writing_editor.xml.flat",
