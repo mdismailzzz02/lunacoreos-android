@@ -34,6 +34,7 @@ drawable tag_background
 drawable toolbar_btn_active
 id bottomNav
 id btnBack
+id btnCancel
 id btnClose
 id btnCreateCollection
 id btnDelete
@@ -96,7 +97,9 @@ id spinnerType
 id swipeLayout
 id swipeRefresh
 id swipeRefreshLayout
+id switchPrivate
 id tvCategory
+id tvClipPreview
 id tvDate
 id tvDesc
 id tvDialogTitle
@@ -127,6 +130,7 @@ layout activity_main
 layout activity_media_vault_grid
 layout activity_media_viewer
 layout activity_password_editor
+layout activity_save_clipboard
 layout activity_vault_lock
 layout activity_writing_editor
 layout dialog_add_link
@@ -150,3 +154,4 @@ mipmap ic_launcher_round
 string app_name
 style Theme.LunaCoreOS
 style Theme.LunaCoreOS.Translucent
+style Theme.Lunacore.Translucent

@@ -62,9 +62,9 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.lunacoreos.app.ShareActivity"
+            android:name="com.lunacoreos.app.SaveClipboardActivity"
             android:exported="true"
-            android:theme="@style/Theme.LunaCoreOS.Translucent" >
+            android:theme="@style/Theme.Lunacore.Translucent" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -73,6 +73,18 @@
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.lunacoreos.app.ClipboardTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_dashboard"
+            android:label="Save Clip"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name="com.lunacoreos.app.MediaVaultGridActivity"
             android:exported="false"

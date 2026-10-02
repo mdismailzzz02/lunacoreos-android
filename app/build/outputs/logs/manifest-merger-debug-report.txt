@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-69:12
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-81:12
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:2:1-81:12
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:2:1-11:12
 MERGED from [com.github.chrisbanes:PhotoView:2.3.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\686bb89513258cd63f6fc490afb9c185\transformed\PhotoView-2.3.0\AndroidManifest.xml:2:1-11:12
@@ -65,8 +65,8 @@ ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifes
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:4:22-64
 application
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-67:19
-INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-67:19
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-79:19
+INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:6:5-79:19
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] C:\Users\ismail\.gradle\caches\8.14.3\transforms\2337ff1699ed8438700de3f7352ce6a8\transformed\material-1.12.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] C:\Users\ismail\.gradle\caches\8.14.3\transforms\a91ed35a5f4b56f123d297de8904b0cf\transformed\constraintlayout-2.1.4\AndroidManifest.xml:9:5-20
@@ -165,14 +165,14 @@ ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifes
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:48:13-37
 	android:name
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:47:13-51
-activity#com.lunacoreos.app.ShareActivity
+activity#com.lunacoreos.app.SaveClipboardActivity
 ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:51:9-60:20
 	android:exported
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:53:13-36
 	android:theme
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:54:13-64
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:54:13-62
 	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:13-42
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:52:13-50
 intent-filter#action:name:android.intent.action.SEND+category:name:android.intent.category.DEFAULT+data:mimeType:text/plain
 ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:55:13-59:29
 action#android.intent.action.SEND
@@ -187,14 +187,32 @@ data
 ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:17-55
 	android:mimeType
 		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:23-52
-activity#com.lunacoreos.app.MediaVaultGridActivity
-ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:9-65:52
-	android:screenOrientation
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:65:13-49
+service#com.lunacoreos.app.ClipboardTileService
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:62:9-71:19
+	android:label
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:65:13-38
 	android:exported
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-37
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:67:13-36
+	android:permission
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:66:13-77
+	android:icon
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:64:13-50
 	android:name
-		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-51
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:63:13-49
+intent-filter#action:name:android.service.quicksettings.action.QS_TILE
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:68:13-70:29
+action#android.service.quicksettings.action.QS_TILE
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:69:17-87
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:69:25-84
+activity#com.lunacoreos.app.MediaVaultGridActivity
+ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:74:9-77:52
+	android:screenOrientation
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:77:13-49
+	android:exported
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:76:13-37
+	android:name
+		ADDED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:75:13-51
 uses-sdk
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml
