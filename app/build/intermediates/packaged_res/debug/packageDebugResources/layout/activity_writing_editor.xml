@@ -133,26 +133,38 @@
 
         <ImageButton
             android:id="@+id/btnFormatBold"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:layout_marginEnd="4dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_edit"
             app:tint="@color/text_primary" />
             
         <ImageButton
             android:id="@+id/btnFormatItalic"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:layout_marginEnd="4dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_sort_alphabetically"
             app:tint="@color/text_primary" />
             
         <ImageButton
             android:id="@+id/btnFormatUnderline"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_manage"
             app:tint="@color/text_primary" />
