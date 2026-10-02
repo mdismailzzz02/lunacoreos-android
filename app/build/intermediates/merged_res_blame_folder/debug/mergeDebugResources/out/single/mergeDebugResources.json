@@ -12,12 +12,24 @@
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\ic_clear.xml"
     },
     {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_ic_unlock.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\ic_unlock.xml"
+    },
+    {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_activity_vault_lock.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\activity_vault_lock.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_bg_pill_pink_alpha.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\bg_pill_pink_alpha.xml"
+    },
+    {
+        "merged": "com.lunacoreos.app-debug-37:/layout_activity_writing_editor.xml.flat",
+        "source": "com.lunacoreos.app-main-39:/layout/activity_writing_editor.xml"
+    },
+    {
+        "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\drawable_ic_lock.xml.flat",
+        "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\drawable\\ic_lock.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-xhdpi_ic_launcher.png.flat",
@@ -34,10 +46,6 @@
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\layout_fragment_media_vault.xml.flat",
         "source": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-main-39:\\layout\\fragment_media_vault.xml"
-    },
-    {
-        "merged": "com.lunacoreos.app-debug-37:/layout_item_link.xml.flat",
-        "source": "com.lunacoreos.app-main-39:/layout/item_link.xml"
     },
     {
         "merged": "C:\\Users\\ismail\\.gradle\\daemon\\8.14.3\\com.lunacoreos.app-debug-37:\\mipmap-mdpi_ic_launcher_round.png.flat",

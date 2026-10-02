@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.text.HtmlCompat;
 
 import com.lunacoreos.app.R;
 import com.lunacoreos.app.SupabaseClient;
@@ -34,7 +37,7 @@ public class WritingEditorActivity extends AppCompatActivity {
     private EditText etTitle, etTags, etContent;
     private TextView tvSaveStatus, tvWordCount;
     private Button btnDelete, btnSaveClose;
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnFormatBold, btnFormatItalic, btnFormatUnderline;
 
     private String currentId;
     private String currentMode;
@@ -42,7 +45,7 @@ public class WritingEditorActivity extends AppCompatActivity {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private Runnable saveRunnable;
-    private final long AUTO_SAVE_DELAY = 1500;
+    private final long AUTO_SAVE_DELAY = 750;
     
     private boolean isSaving = false;
 
@@ -59,6 +62,10 @@ public class WritingEditorActivity extends AppCompatActivity {
         btnDelete = findViewById(R.id.btnDelete);
         btnSaveClose = findViewById(R.id.btnSaveClose);
         btnBack = findViewById(R.id.btnBack);
+        
+        btnFormatBold = findViewById(R.id.btnFormatBold);
+        btnFormatItalic = findViewById(R.id.btnFormatItalic);
+        btnFormatUnderline = findViewById(R.id.btnFormatUnderline);
 
         SharedPreferences prefs = getSharedPreferences("LunaCorePrefs", Context.MODE_PRIVATE);
         String url = prefs.getString("supabaseUrl", "");
@@ -77,7 +84,9 @@ public class WritingEditorActivity extends AppCompatActivity {
         } else {
             etTitle.setText(getIntent().getStringExtra("title"));
             etTags.setText(getIntent().getStringExtra("tags"));
-            etContent.setText(getIntent().getStringExtra("content"));
+            String htmlContent = getIntent().getStringExtra("content");
+            if (htmlContent == null) htmlContent = "";
+            etContent.setText(HtmlCompat.fromHtml(htmlContent, HtmlCompat.FROM_HTML_MODE_LEGACY));
             updateWordCount();
         }
 
@@ -99,6 +108,19 @@ public class WritingEditorActivity extends AppCompatActivity {
                 .setNegativeButton("Cancel", null)
                 .show();
         });
+        
+        btnFormatBold.setOnClickListener(v -> applyStyleToSelection(android.graphics.Typeface.BOLD));
+        btnFormatItalic.setOnClickListener(v -> applyStyleToSelection(android.graphics.Typeface.ITALIC));
+        btnFormatUnderline.setOnClickListener(v -> {
+            int start = etContent.getSelectionStart();
+            int end = etContent.getSelectionEnd();
+            if (start > end) { int t = start; start = end; end = t; }
+            if (start != end) {
+                android.text.Spannable str = etContent.getText();
+                str.setSpan(new UnderlineSpan(), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                triggerAutoSave();
+            }
+        });
 
         TextWatcher autoSaveWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -118,6 +140,26 @@ public class WritingEditorActivity extends AppCompatActivity {
         etTags.addTextChangedListener(autoSaveWatcher);
         etContent.addTextChangedListener(autoSaveWatcher);
     }
+    
+    private void triggerAutoSave() {
+        if (saveRunnable != null) {
+            mainHandler.removeCallbacks(saveRunnable);
+        }
+        tvSaveStatus.setText("Typing...");
+        saveRunnable = () -> saveDraft(false);
+        mainHandler.postDelayed(saveRunnable, AUTO_SAVE_DELAY);
+    }
+
+    private void applyStyleToSelection(int style) {
+        int start = etContent.getSelectionStart();
+        int end = etContent.getSelectionEnd();
+        if (start > end) { int t = start; start = end; end = t; }
+        if (start != end) {
+            android.text.Spannable str = etContent.getText();
+            str.setSpan(new StyleSpan(style), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            triggerAutoSave();
+        }
+    }
 
     private void updateWordCount() {
         String text = etContent.getText().toString().trim();
@@ -130,13 +172,13 @@ public class WritingEditorActivity extends AppCompatActivity {
     }
 
     private void saveDraft(boolean closeOnSuccess) {
-        if (etTitle.getText().toString().trim().isEmpty()) return;
+        String rawTitle = etTitle.getText().toString().trim();
+        final String title = rawTitle.isEmpty() ? "Untitled Draft" : rawTitle;
 
         tvSaveStatus.setText("Saving...");
         
-        final String title = etTitle.getText().toString().trim();
         final String tags = etTags.getText().toString().trim();
-        final String content = etContent.getText().toString().trim();
+        final String content = HtmlCompat.toHtml(etContent.getText(), HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE).trim();
         final String wordCount = tvWordCount.getText().toString().replace(" words", "");
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);

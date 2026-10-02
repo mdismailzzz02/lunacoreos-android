@@ -47,6 +47,25 @@ public class MediaVaultGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_vault_grid);
         
+        com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        bottomNav.setSelectedItemId(R.id.nav_vault);
+        bottomNav.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_vault) return true;
+            if (item.getItemId() == R.id.nav_more) {
+                Intent i = new Intent(MediaVaultGridActivity.this, MainActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(i);
+                return false;
+            }
+            
+            Intent i = new Intent(MediaVaultGridActivity.this, MainActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.putExtra("TARGET_TAB", item.getItemId());
+            startActivity(i);
+            finish();
+            return true;
+        });
+        
         collectionId = getIntent().getStringExtra("COLLECTION_ID");
         collectionPrefix = getIntent().getStringExtra("COLLECTION_PREFIX");
         String collectionName = getIntent().getStringExtra("COLLECTION_NAME");
@@ -68,6 +87,43 @@ public class MediaVaultGridActivity extends AppCompatActivity {
         android.widget.ImageView ivHeart = findViewById(R.id.ivHeart);
         android.widget.TextView tvFavorites = findViewById(R.id.tvFavorites);
         
+        findViewById(R.id.btnAddFolder).setOnClickListener(v -> {
+            android.widget.EditText input = new android.widget.EditText(this);
+            input.setHint("Folder Name");
+            input.setTextColor(0xFF000000); // Black text for light dialog
+            input.setHintTextColor(0xFF888888); // Gray hint
+            
+            new android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
+                .setTitle("New Folder")
+                .setView(input)
+                .setPositiveButton("Create", (dialog, which) -> {
+                    String name = input.getText().toString().trim();
+                    if (!name.isEmpty()) {
+                        new Thread(() -> {
+                            try {
+                                org.json.JSONObject folder = new org.json.JSONObject();
+                                folder.put("name", name);
+                                folder.put("type", "gallery");
+                                folder.put("key_prefix", collectionPrefix + name.replaceAll("[^a-zA-Z0-9._-]", "_") + "/");
+                                folder.put("parent_id", collectionId);
+                                folder.put("is_hidden", false);
+                                folder.put("is_secret", false);
+                                client.createVaultCollection(folder);
+                                runOnUiThread(() -> {
+                                    android.widget.Toast.makeText(MediaVaultGridActivity.this, "Folder created", android.widget.Toast.LENGTH_SHORT).show();
+                                    loadFiles();
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                runOnUiThread(() -> android.widget.Toast.makeText(MediaVaultGridActivity.this, "Failed: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show());
+                            }
+                        }).start();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+        });
+
         btnFavorites.setOnClickListener(v -> {
             showFavorites = !showFavorites;
             ivHeart.setColorFilter(showFavorites ? 0xFFEC4899 : getResources().getColor(R.color.text_secondary));
@@ -170,6 +226,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         layoutManager.setSpanSizeLookup(new androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup() {
                             @Override
                             public int getSpanSize(int position) {
+                                if (position == mediaList.size()) return 3; // Load More button spans full width
                                 if ("folder".equals(mediaList.get(position).optString("item_type"))) {
                                     return 3;
                                 }
@@ -219,31 +276,67 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 if (files.length() == 0) {
                     hasMore = false;
                     isLoading = false;
+                    runOnUiThread(() -> {
+                        if (adapter != null) adapter.notifyDataSetChanged();
+                    });
                     return;
                 }
                 
                 java.util.List<org.json.JSONObject> newFiles = new java.util.ArrayList<>();
+                java.util.List<String> batchKeys = new java.util.ArrayList<>();
+                
                 for (int i = 0; i < files.length(); i++) {
                     org.json.JSONObject file = files.getJSONObject(i);
                     file.put("item_type", "file");
+                    
+                    String r2Key = file.optString("r2_key", "");
+                    if (!r2Key.isEmpty()) batchKeys.add(r2Key);
+                    
+                    String thumbKey = file.optString("thumbnail_key", "");
+                    if (!thumbKey.isEmpty() && !thumbKey.startsWith("data:image/")) {
+                        batchKeys.add(thumbKey);
+                    }
+                    
                     newFiles.add(file);
+                }
+
+                if (!batchKeys.isEmpty()) {
+                    try {
+                        org.json.JSONObject batchUrls = client.getR2PresignedBatch(batchKeys);
+                        for (org.json.JSONObject file : newFiles) {
+                            String r2Key = file.optString("r2_key", "");
+                            if (!r2Key.isEmpty() && batchUrls.has(r2Key)) {
+                                file.put("signed_url", batchUrls.optString(r2Key));
+                            }
+                            String thumbKey = file.optString("thumbnail_key", "");
+                            if (!thumbKey.isEmpty() && !thumbKey.startsWith("data:image/") && batchUrls.has(thumbKey)) {
+                                file.put("thumbnail_signed_url", batchUrls.optString(thumbKey));
+                            }
+                        }
+                        android.util.Log.d("MediaVault", "Batched " + batchKeys.size() + " presigned URLs successfully");
+                    } catch (Exception e) {
+                        android.util.Log.w("MediaVault", "Batch presign GET failed: " + e.getMessage());
+                    }
                 }
                 
                 runOnUiThread(() -> {
                     int startPosition = mediaList.size();
                     mediaList.addAll(newFiles);
-                    if (adapter != null) {
-                        adapter.notifyItemRangeInserted(startPosition, newFiles.size());
-                    }
                     currentOffset += PAGE_LIMIT;
                     isLoading = false;
                     if (files.length() < PAGE_LIMIT) {
                         hasMore = false;
                     }
+                    if (adapter != null) {
+                        adapter.notifyDataSetChanged();
+                    }
                 });
             } catch (Exception e) {
                 e.printStackTrace();
                 isLoading = false;
+                runOnUiThread(() -> {
+                    if (adapter != null) adapter.notifyDataSetChanged();
+                });
             }
         }).start();
     }
@@ -259,16 +352,33 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     private class MediaAdapter extends androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder> {
         private static final int TYPE_FOLDER = 0;
         private static final int TYPE_FILE = 1;
+        private static final int TYPE_LOAD_MORE = 2;
 
         @Override
         public int getItemViewType(int position) {
+            if (position == mediaList.size()) return TYPE_LOAD_MORE;
             return "folder".equals(mediaList.get(position).optString("item_type")) ? TYPE_FOLDER : TYPE_FILE;
         }
 
         @androidx.annotation.NonNull
         @Override
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(@androidx.annotation.NonNull android.view.ViewGroup parent, int viewType) {
-            if (viewType == TYPE_FOLDER) {
+            if (viewType == TYPE_LOAD_MORE) {
+                android.widget.Button btn = new android.widget.Button(parent.getContext());
+                btn.setText("Load More");
+                btn.setTextColor(0xFFA78BFA); // #A78BFA
+                btn.setBackgroundColor(0x1AA78BFA); // 10% opacity
+                btn.setAllCaps(false);
+                btn.setTypeface(null, android.graphics.Typeface.BOLD);
+                androidx.recyclerview.widget.RecyclerView.LayoutParams lp = new androidx.recyclerview.widget.RecyclerView.LayoutParams(
+                        android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                        android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                lp.setMargins(32, 64, 32, 128);
+                btn.setLayoutParams(lp);
+                btn.setPadding(0, 32, 0, 32);
+                return new LoadMoreViewHolder(btn);
+            } else if (viewType == TYPE_FOLDER) {
                 android.view.View view = android.view.LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vault_collection, parent, false);
                 return new FolderViewHolder(view);
             } else {
@@ -279,6 +389,15 @@ public class MediaVaultGridActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@androidx.annotation.NonNull androidx.recyclerview.widget.RecyclerView.ViewHolder holder, int position) {
+            if (getItemViewType(position) == TYPE_LOAD_MORE) {
+                LoadMoreViewHolder lh = (LoadMoreViewHolder) holder;
+                lh.btn.setText(isLoading ? "Loading..." : "Load More");
+                lh.btn.setOnClickListener(v -> {
+                    if (!isLoading && hasMore) fetchNextPage();
+                });
+                return;
+            }
+
             org.json.JSONObject item = mediaList.get(position);
             
             if (getItemViewType(position) == TYPE_FOLDER) {
@@ -306,38 +425,129 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     intent.putExtra("COLLECTION_NAME", item.optString("name"));
                     startActivity(intent);
                 });
+
+                fh.itemView.setOnLongClickListener(v -> {
+                    new android.app.AlertDialog.Builder(MediaVaultGridActivity.this, android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
+                        .setTitle("Delete Folder")
+                        .setMessage("Are you sure you want to delete '" + item.optString("name") + "'? All files inside will be moved to Trash.")
+                        .setPositiveButton("Delete", (dialog, which) -> {
+                            new Thread(() -> {
+                                try {
+                                    String id = item.optString("id");
+                                    client.trashCollectionFiles(id);
+                                    client.deleteVaultCollection(id);
+                                    runOnUiThread(() -> {
+                                        android.widget.Toast.makeText(MediaVaultGridActivity.this, "Folder deleted", android.widget.Toast.LENGTH_SHORT).show();
+                                        loadFiles();
+                                    });
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    runOnUiThread(() -> android.widget.Toast.makeText(MediaVaultGridActivity.this, "Delete failed: " + e.getMessage(), android.widget.Toast.LENGTH_LONG).show());
+                                }
+                            }).start();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+                    return true;
+                });
             } else {
                 FileViewHolder fh = (FileViewHolder) holder;
                 String mime = item.optString("mime_type", "");
+                String nameStr = item.optString("name", "");
+                if (nameStr.isEmpty()) nameStr = item.optString("filename", "Unknown");
+                fh.tvFileName.setText(nameStr);
+                fh.tvFileName.setVisibility(android.view.View.VISIBLE);
                 fh.ivPlayIcon.setVisibility(mime.startsWith("video/") ? android.view.View.VISIBLE : android.view.View.GONE);
                 
                 String r2Key = item.optString("r2_key", "");
-                String publicUrl = client.getR2PublicUrl(r2Key);
-                
+                // Prefer pre-fetched signed URL, fall back to public URL
+                String signedUrl = item.optString("signed_url", "");
+                String publicUrl = signedUrl.isEmpty() ? client.getR2PublicUrl(r2Key) : signedUrl;
+
+                android.util.Log.d("MediaVault", "Binding: using " + (signedUrl.isEmpty() ? "publicUrl" : "signedUrl") + " for " + r2Key);
+
                 String thumb = item.optString("thumbnail_key", "");
                 boolean thumbLoaded = false;
                 
-                if (thumb != null && thumb.startsWith("data:image/")) {
-                    try {
-                        String base64Image = thumb.split(",")[1];
-                        byte[] imageBytes = android.util.Base64.decode(base64Image, android.util.Base64.DEFAULT);
-                        com.bumptech.glide.Glide.with(fh.itemView.getContext())
-                                .load(imageBytes)
-                                .centerCrop()
-                                .into(fh.ivThumbnail);
-                        thumbLoaded = true;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                boolean isMedia = mime.startsWith("image/") || mime.startsWith("video/");
                 
-                if (!thumbLoaded && publicUrl != null) {
-                    com.bumptech.glide.Glide.with(fh.itemView.getContext())
-                            .load(publicUrl)
-                            .override(400, 400)
-                            .thumbnail(0.2f)
-                            .centerCrop()
-                            .into(fh.ivThumbnail);
+                if (!isMedia) {
+                    int iconRes = android.R.drawable.ic_menu_help;
+                    String lowMime = mime.toLowerCase();
+                    String name = item.optString("filename", "").toLowerCase();
+                    if (name.isEmpty()) name = item.optString("name", "").toLowerCase();
+                    
+                    if (lowMime.contains("android.package-archive") || name.endsWith(".apk") || name.endsWith(".xapk") || name.endsWith(".exe") || name.endsWith(".msi") || lowMime.contains("msdownload")) {
+                        iconRes = android.R.drawable.sym_def_app_icon; // App/Executable
+                    } else if (lowMime.contains("pdf") || name.endsWith(".pdf")) {
+                        iconRes = android.R.drawable.ic_menu_agenda; // Document/PDF
+                    } else if (lowMime.contains("spreadsheet") || lowMime.contains("excel") || name.endsWith(".xls") || name.endsWith(".xlsx") || name.endsWith(".csv")) {
+                        iconRes = android.R.drawable.ic_menu_view; // Spreadsheet/Data
+                    } else if (lowMime.contains("wordprocessing") || lowMime.contains("document") || name.endsWith(".doc") || name.endsWith(".docx")) {
+                        iconRes = android.R.drawable.ic_menu_edit; // Text Document
+                    } else if (lowMime.startsWith("text/") || lowMime.contains("javascript") || lowMime.contains("json") || lowMime.contains("html") || lowMime.contains("css") || lowMime.contains("xml") || name.endsWith(".txt") || name.endsWith(".md") || name.endsWith(".py") || name.endsWith(".java")) {
+                        iconRes = android.R.drawable.ic_menu_sort_by_size; // Code/Text
+                    } else if (lowMime.contains("zip") || lowMime.contains("archive") || lowMime.contains("tar") || lowMime.contains("rar") || lowMime.contains("compressed") || name.endsWith(".7z")) {
+                        iconRes = android.R.drawable.ic_menu_save; // Archive
+                    } else if (lowMime.startsWith("audio/") || name.endsWith(".mp3") || name.endsWith(".wav") || name.endsWith(".ogg")) {
+                        iconRes = android.R.drawable.ic_media_play; // Audio
+                    }
+                    
+                    com.bumptech.glide.Glide.with(fh.itemView.getContext()).clear(fh.ivThumbnail);
+                    fh.ivThumbnail.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+                    fh.ivThumbnail.setBackgroundColor(android.graphics.Color.DKGRAY);
+                    fh.ivThumbnail.setImageResource(iconRes);
+                } else {
+                    fh.ivThumbnail.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+                    fh.ivThumbnail.setScaleType(android.widget.ImageView.ScaleType.CENTER_CROP);
+                    if (thumb != null && thumb.startsWith("data:image/")) {
+                        try {
+                            String base64Image = thumb.split(",")[1];
+                            byte[] imageBytes = android.util.Base64.decode(base64Image, android.util.Base64.DEFAULT);
+                            com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                    .load(imageBytes)
+                                    .placeholder(android.R.color.darker_gray)
+                                    .centerCrop()
+                                    .into(fh.ivThumbnail);
+                            thumbLoaded = true;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    
+                    if (!thumbLoaded) {
+                        String thumbSigned = item.optString("thumbnail_signed_url", "");
+                        String loadUrl = thumbSigned.isEmpty() ? publicUrl : thumbSigned;
+
+                        if (loadUrl != null && !loadUrl.isEmpty()) {
+                            com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                    .load(loadUrl)
+                                    .override(400, 400)
+                                    .placeholder(android.R.color.darker_gray)
+                                    .error(android.R.drawable.ic_menu_gallery)
+                                    .centerCrop()
+                                    .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                                        @Override
+                                        public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e,
+                                                                    Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                                    boolean isFirstResource) {
+                                            android.util.Log.e("MediaVault", "Glide load FAILED for url: " + loadUrl + " | error: " + (e != null ? e.getMessage() : "null"));
+                                            if (e != null) e.logRootCauses("MediaVault");
+                                            return false;
+                                        }
+                                        @Override
+                                        public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
+                                                                        com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                                                                        com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                                            return false;
+                                        }
+                                    })
+                                    .into(fh.ivThumbnail);
+                        } else {
+                            android.util.Log.w("MediaVault", "publicUrl is null/empty for r2Key: " + r2Key + " — r2PublicUrl pref may not be set");
+                            fh.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);
+                        }
+                    }
                 }
                             
                 if (publicUrl != null) {
@@ -352,7 +562,9 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                                 org.json.JSONObject obj = mediaList.get(i);
                                 if ("file".equals(obj.optString("item_type")) && !obj.optString("mime_type", "").startsWith("video/")) {
                                     String r2KeyInner = obj.optString("r2_key", "");
-                                    String u = client.getR2PublicUrl(r2KeyInner);
+                                    // Prefer signed URL, fall back to public URL
+                                    String innerSigned = obj.optString("signed_url", "");
+                                    String u = innerSigned.isEmpty() ? client.getR2PublicUrl(r2KeyInner) : innerSigned;
                                     if (u != null) {
                                         urls.add(u);
                                         ids.add(obj.optString("id"));
@@ -389,19 +601,56 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             android.widget.Toast.makeText(MediaVaultGridActivity.this, "Video player not implemented yet", android.widget.Toast.LENGTH_SHORT).show();
                         }
                     });
+                    
+                    fh.ivDownload.setOnClickListener(v -> {
+                        String url = item.optString("signed_url");
+                        if (url.isEmpty()) url = publicUrl;
+                        if (url == null || url.isEmpty()) {
+                            android.widget.Toast.makeText(MediaVaultGridActivity.this, "Cannot download: No valid URL", android.widget.Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        try {
+                            android.app.DownloadManager.Request request = new android.app.DownloadManager.Request(android.net.Uri.parse(url));
+                            String title = item.optString("filename", "Vault_Download");
+                            request.setTitle(title);
+                            request.setDescription("Downloading file...");
+                            request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                            request.setDestinationInExternalPublicDir(android.os.Environment.DIRECTORY_DOWNLOADS, title);
+                            
+                            android.app.DownloadManager manager = (android.app.DownloadManager) getSystemService(android.content.Context.DOWNLOAD_SERVICE);
+                            if (manager != null) {
+                                manager.enqueue(request);
+                                android.widget.Toast.makeText(MediaVaultGridActivity.this, "Downloading " + title + "...", android.widget.Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (Exception e) {
+                            android.widget.Toast.makeText(MediaVaultGridActivity.this, "Download failed: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         }
 
         @Override
-        public int getItemCount() { return mediaList.size(); }
+        public int getItemCount() { return mediaList.size() + (hasMore ? 1 : 0); }
+
+        class LoadMoreViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
+            android.widget.Button btn;
+            LoadMoreViewHolder(android.view.View itemView) {
+                super(itemView);
+                btn = (android.widget.Button) itemView;
+            }
+        }
 
         class FileViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-            android.widget.ImageView ivThumbnail, ivPlayIcon;
+            android.widget.ImageView ivThumbnail, ivPlayIcon, ivDownload;
+            android.widget.TextView tvFileName;
             FileViewHolder(android.view.View itemView) {
                 super(itemView);
                 ivThumbnail = itemView.findViewById(R.id.ivThumbnail);
                 ivPlayIcon = itemView.findViewById(R.id.ivPlayIcon);
+                ivDownload = itemView.findViewById(R.id.ivDownload);
+                tvFileName = itemView.findViewById(R.id.tvFileName);
             }
         }
         

@@ -3038,6 +3038,7 @@ drawable ic_clear
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_keyboard_black_24dp
+drawable ic_lock
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
@@ -3046,6 +3047,7 @@ drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
 drawable ic_search_black_24
+drawable ic_unlock
 drawable icon_background
 drawable indeterminate_static
 drawable input_background
@@ -3226,12 +3228,16 @@ id bounce
 id bounceBoth
 id bounceEnd
 id bounceStart
+id btnAddFolder
 id btnBack
 id btnCancel
 id btnClose
 id btnCreateCollection
 id btnDelete
 id btnFavorites
+id btnFormatBold
+id btnFormatItalic
+id btnFormatUnderline
 id btnGeneratePassword
 id btnLogin
 id btnLogout
@@ -3401,10 +3407,12 @@ id is_pooling_container_tag
 id italic
 id item_touch_helper_previous_elevation
 id ivDelete
+id ivDownload
 id ivEdit
 id ivHeart
 id ivIcon
 id ivLike
+id ivLock
 id ivPlayIcon
 id ivPreview
 id ivSearch
@@ -3693,11 +3701,11 @@ id tvDialogTitle
 id tvEmpty
 id tvError
 id tvFavorites
+id tvFileName
 id tvName
 id tvPasswordHidden
 id tvPreview
 id tvSaveStatus
-id tvSettings
 id tvSiteName
 id tvStatus
 id tvStrength
@@ -4416,6 +4424,7 @@ style Base_Widget_MaterialComponents_TextView
 style CardView
 style CardView_Dark
 style CardView_Light
+style LunaCoreDialogTheme
 style MaterialAlertDialog_Material3
 style MaterialAlertDialog_Material3_Animation
 style MaterialAlertDialog_Material3_Body_Text
@@ -4436,6 +4445,7 @@ style MaterialAlertDialog_MaterialComponents_Title_Panel
 style MaterialAlertDialog_MaterialComponents_Title_Panel_CenterStacked
 style MaterialAlertDialog_MaterialComponents_Title_Text
 style MaterialAlertDialog_MaterialComponents_Title_Text_CenterStacked
+style NavigationViewTextStyle
 style Platform_AppCompat
 style Platform_AppCompat_Light
 style Platform_MaterialComponents
@@ -4510,6 +4520,7 @@ style ShapeAppearance_MaterialComponents_LargeComponent
 style ShapeAppearance_MaterialComponents_MediumComponent
 style ShapeAppearance_MaterialComponents_SmallComponent
 style ShapeAppearance_MaterialComponents_Tooltip
+style ShapeAppearanceOverlay_LunaCore_Dialog
 style ShapeAppearanceOverlay_Material3_Button
 style ShapeAppearanceOverlay_Material3_Chip
 style ShapeAppearanceOverlay_Material3_Corner_Bottom

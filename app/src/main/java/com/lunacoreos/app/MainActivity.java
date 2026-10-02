@@ -15,11 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Listen for force-logout broadcasts (expired token)
+        // Listen for force-logout broadcasts (expired/invalid token)
         logoutReceiver = new android.content.BroadcastReceiver() {
             @Override
             public void onReceive(android.content.Context context, android.content.Intent intent) {
-                android.widget.Toast.makeText(context, "Session expired. Please log in again.", android.widget.Toast.LENGTH_LONG).show();
+                android.widget.Toast.makeText(context, "Session expired. Please sign in again.", android.widget.Toast.LENGTH_LONG).show();
+                // Clear tokens so LoginActivity shows the login form
+                getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE)
+                        .edit().remove("authToken").remove("refreshToken").apply();
                 android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
                 loginIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginIntent);
@@ -41,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_linkbox) {
                 selectedFragment = new LinkboxFragment();
             } else if (item.getItemId() == R.id.nav_logout) {
+                // Clear tokens so next launch shows login screen
+                getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE)
+                        .edit().remove("authToken").remove("refreshToken").apply();
                 android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
                 loginIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(loginIntent);
@@ -118,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Set default selection
         if (savedInstanceState == null) {
-            bottomNav.setSelectedItemId(R.id.nav_writing);
+            int targetTab = getIntent().getIntExtra("TARGET_TAB", R.id.nav_writing);
+            bottomNav.setSelectedItemId(targetTab);
         }
 
         new Thread(() -> {
@@ -137,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
             androidx.localbroadcastmanager.content.LocalBroadcastManager
                     .getInstance(this)
                     .unregisterReceiver(logoutReceiver);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        if (intent.hasExtra("TARGET_TAB")) {
+            com.google.android.material.bottomnavigation.BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+            bottomNav.setSelectedItemId(intent.getIntExtra("TARGET_TAB", R.id.nav_writing));
         }
     }
 }

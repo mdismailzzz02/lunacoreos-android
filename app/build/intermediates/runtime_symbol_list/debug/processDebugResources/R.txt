@@ -3037,6 +3037,7 @@ int drawable ic_clear 0x7f0800f0
 int drawable ic_clear_black_24 0x7f080094
 int drawable ic_clock_black_24dp 0x7f080095
 int drawable ic_keyboard_black_24dp 0x7f080096
+int drawable ic_lock 0x7f0800f1
 int drawable ic_m3_chip_check 0x7f080097
 int drawable ic_m3_chip_checked_circle 0x7f080098
 int drawable ic_m3_chip_close 0x7f080099
@@ -3045,6 +3046,7 @@ int drawable ic_mtrl_chip_checked_black 0x7f08009b
 int drawable ic_mtrl_chip_checked_circle 0x7f08009c
 int drawable ic_mtrl_chip_close_circle 0x7f08009d
 int drawable ic_search_black_24 0x7f08009e
+int drawable ic_unlock 0x7f0800f2
 int drawable icon_background 0x7f08009f
 int drawable indeterminate_static 0x7f0800a0
 int drawable input_background 0x7f0800a1
@@ -3225,12 +3227,16 @@ int id bounce 0x7f09005f
 int id bounceBoth 0x7f090060
 int id bounceEnd 0x7f090061
 int id bounceStart 0x7f090062
+int id btnAddFolder 0x7f090262
 int id btnBack 0x7f090063
 int id btnCancel 0x7f090064
 int id btnClose 0x7f090065
 int id btnCreateCollection 0x7f090066
 int id btnDelete 0x7f090067
 int id btnFavorites 0x7f090068
+int id btnFormatBold 0x7f090265
+int id btnFormatItalic 0x7f090266
+int id btnFormatUnderline 0x7f090267
 int id btnGeneratePassword 0x7f090069
 int id btnLogin 0x7f09006a
 int id btnLogout 0x7f09006b
@@ -3400,10 +3406,12 @@ int id is_pooling_container_tag 0x7f09010d
 int id italic 0x7f09010e
 int id item_touch_helper_previous_elevation 0x7f09010f
 int id ivDelete 0x7f090110
+int id ivDownload 0x7f090263
 int id ivEdit 0x7f090111
 int id ivHeart 0x7f090112
 int id ivIcon 0x7f090113
 int id ivLike 0x7f090114
+int id ivLock 0x7f090261
 int id ivPlayIcon 0x7f090115
 int id ivPreview 0x7f090260
 int id ivSearch 0x7f090116
@@ -3692,11 +3700,11 @@ int id tvDialogTitle 0x7f09022b
 int id tvEmpty 0x7f09022c
 int id tvError 0x7f09022d
 int id tvFavorites 0x7f09022e
+int id tvFileName 0x7f090264
 int id tvName 0x7f09022f
 int id tvPasswordHidden 0x7f090230
 int id tvPreview 0x7f090231
 int id tvSaveStatus 0x7f090232
-int id tvSettings 0x7f090233
 int id tvSiteName 0x7f090234
 int id tvStatus 0x7f090235
 int id tvStrength 0x7f090236
@@ -4415,6 +4423,7 @@ int style Base_Widget_MaterialComponents_TextView 0x7f12011e
 int style CardView 0x7f12011f
 int style CardView_Dark 0x7f120120
 int style CardView_Light 0x7f120121
+int style LunaCoreDialogTheme 0x7f12046a
 int style MaterialAlertDialog_Material3 0x7f120122
 int style MaterialAlertDialog_Material3_Animation 0x7f120123
 int style MaterialAlertDialog_Material3_Body_Text 0x7f120124
@@ -4435,6 +4444,7 @@ int style MaterialAlertDialog_MaterialComponents_Title_Panel 0x7f120132
 int style MaterialAlertDialog_MaterialComponents_Title_Panel_CenterStacked 0x7f120133
 int style MaterialAlertDialog_MaterialComponents_Title_Text 0x7f120134
 int style MaterialAlertDialog_MaterialComponents_Title_Text_CenterStacked 0x7f120135
+int style NavigationViewTextStyle 0x7f120469
 int style Platform_AppCompat 0x7f120136
 int style Platform_AppCompat_Light 0x7f120137
 int style Platform_MaterialComponents 0x7f120138
@@ -4509,6 +4519,7 @@ int style ShapeAppearance_MaterialComponents_LargeComponent 0x7f12017c
 int style ShapeAppearance_MaterialComponents_MediumComponent 0x7f12017d
 int style ShapeAppearance_MaterialComponents_SmallComponent 0x7f12017e
 int style ShapeAppearance_MaterialComponents_Tooltip 0x7f12017f
+int style ShapeAppearanceOverlay_LunaCore_Dialog 0x7f12046b
 int style ShapeAppearanceOverlay_Material3_Button 0x7f120180
 int style ShapeAppearanceOverlay_Material3_Chip 0x7f120181
 int style ShapeAppearanceOverlay_Material3_Corner_Bottom 0x7f120182

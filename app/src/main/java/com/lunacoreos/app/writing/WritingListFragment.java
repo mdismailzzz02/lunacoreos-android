@@ -48,6 +48,18 @@ public class WritingListFragment extends Fragment {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
     private int secretClickCount = 0;
     private String currentMode = "normal"; // "normal" or "secret"
+    
+    private final androidx.activity.result.ActivityResultLauncher<Intent> vaultLockLauncher = registerForActivityResult(
+            new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK) {
+                    currentMode = "secret";
+                    tvTitle.setText("Secret Writings");
+                    tvTitle.setTextColor(getResources().getColor(R.color.danger, null));
+                    loadDrafts();
+                }
+            }
+    );
 
     @Nullable
     @Override
@@ -137,16 +149,19 @@ public class WritingListFragment extends Fragment {
                 unfocusSearch.onClick(v);
                 return;
             }
-            if (currentMode.equals("secret")) return;
+            if (currentMode.equals("secret")) {
+                currentMode = "normal";
+                tvTitle.setText("Long-form Writing"); // Or whatever the original title was
+                tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
+                loadDrafts();
+                return;
+            }
             secretClickCount++;
             if (secretClickCount >= 3) {
                 secretClickCount = 0;
-                // In a full implementation, we'd prompt for the SecondaryVaultLock PIN here.
-                // For now, we just switch modes.
-                currentMode = "secret";
-                tvTitle.setText("Secret Writings");
-                tvTitle.setTextColor(getResources().getColor(R.color.danger, null));
-                loadDrafts();
+                Intent intent = new Intent(requireContext(), com.lunacoreos.app.VaultLockActivity.class);
+                intent.putExtra("LOCK_TITLE", "Unlock Secret Writings");
+                vaultLockLauncher.launch(intent);
             }
             mainHandler.postDelayed(() -> secretClickCount = 0, 3000);
         });

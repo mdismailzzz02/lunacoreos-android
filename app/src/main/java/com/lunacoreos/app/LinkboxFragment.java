@@ -45,6 +45,38 @@ public class LinkboxFragment extends Fragment {
         TagItem(String name, int count) { this.name = name; this.count = count; }
     }
 
+    private boolean isSecretMode = false;
+    private androidx.activity.result.ActivityResultLauncher<Intent> appPasswordLauncher = registerForActivityResult(
+            new androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK) {
+                    isSecretMode = true;
+                    if (tvTitle != null) {
+                        tvTitle.setText("Secret Linkbox");
+                        tvTitle.setTextColor(0xFFEC4899);
+                    }
+                    android.widget.ImageView ivLock = getView().findViewById(R.id.ivLock);
+                    if (ivLock != null) {
+                        ivLock.setImageResource(R.drawable.ic_unlock);
+                        ivLock.setColorFilter(0xFFEC4899);
+                    }
+                    fetchLinks();
+                } else {
+                    isSecretMode = false;
+                    if (tvTitle != null) {
+                        tvTitle.setText("Linkbox");
+                        tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
+                    }
+                    android.widget.ImageView ivLock = getView().findViewById(R.id.ivLock);
+                    if (ivLock != null) {
+                        ivLock.setImageResource(R.drawable.ic_lock);
+                        ivLock.setColorFilter(getResources().getColor(R.color.text_primary, null));
+                    }
+                    fetchLinks();
+                }
+            }
+    );
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,6 +133,26 @@ public class LinkboxFragment extends Fragment {
         
         llHeader.setOnClickListener(unfocusSearch);
         view.findViewById(R.id.tvTitle).setOnClickListener(unfocusSearch);
+        
+        android.widget.ImageView ivLock = view.findViewById(R.id.ivLock);
+        ivLock.setOnClickListener(v -> {
+            if (isSecretMode) {
+                isSecretMode = false;
+                if (tvTitle != null) {
+                    tvTitle.setText("Linkbox");
+                    tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
+                }
+                ivLock.setImageResource(R.drawable.ic_lock);
+                ivLock.setColorFilter(getResources().getColor(R.color.text_primary, null));
+                fetchLinks();
+            } else {
+                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
+                intent.putExtra("LOCK_ID", "linkbox_secret");
+                intent.putExtra("LOCK_TITLE", "Secret Linkbox");
+                intent.putExtra("VAULT_MODE", "secret");
+                appPasswordLauncher.launch(intent);
+            }
+        });
 
         etSearch.setOnTouchListener((v, event) -> {
             if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
@@ -240,7 +292,15 @@ public class LinkboxFragment extends Fragment {
                 Toast.makeText(getContext(), "URL cannot be empty", Toast.LENGTH_SHORT).show();
                 return;
             }
-            saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim(), existingItem == null ? null : existingItem.optString("id"));
+            String tags = etTags.getText().toString().trim();
+            if (isSecretMode && !tags.contains("__secret__")) {
+                tags = tags.isEmpty() ? "__secret__" : tags + ", __secret__";
+            } else if (!isSecretMode && tags.contains("__secret__")) {
+                tags = tags.replace("__secret__", "").replaceAll(",\\s*,", ",").trim();
+                if (tags.startsWith(",")) tags = tags.substring(1).trim();
+                if (tags.endsWith(",")) tags = tags.substring(0, tags.length() - 1).trim();
+            }
+            saveLink(url, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), tags, existingItem == null ? null : existingItem.optString("id"));
             bottomSheetDialog.dismiss();
         });
 
@@ -321,6 +381,11 @@ public class LinkboxFragment extends Fragment {
             String desc = link.optString("description", "").toLowerCase();
             String title = link.optString("title", "").toLowerCase();
             String tags = link.optString("tags", "").toLowerCase();
+            
+            boolean hasSecretTag = tags.contains("__secret__");
+            if (isSecretMode && !hasSecretTag) continue;
+            if (!isSecretMode && hasSecretTag) continue;
+            
             if (url.contains(lowerQuery) || desc.contains(lowerQuery) || title.contains(lowerQuery) || tags.contains(lowerQuery)) {
                 filteredList.add(link);
             }

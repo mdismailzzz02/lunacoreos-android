@@ -29,6 +29,14 @@
                 android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/ivLock"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/text_primary" />
+
+            <ImageView
                 android:id="@+id/ivSearch"
                 android:layout_width="24dp"
                 android:layout_height="24dp"

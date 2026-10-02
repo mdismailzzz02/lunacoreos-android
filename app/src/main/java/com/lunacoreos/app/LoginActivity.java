@@ -1,6 +1,5 @@
 package com.lunacoreos.app;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,8 +21,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin;
-    private TextView tvStatus, tvSettings;
-    
+    private TextView tvStatus, tvAppVersion;
+
     private SharedPreferences prefs;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
@@ -31,30 +30,73 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         prefs = getSharedPreferences("LunaCorePrefs", Context.MODE_PRIVATE);
-        
-        // Auto-login if token exists
-        if (!prefs.getString("authToken", "").isEmpty()) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+
+        boolean isConfigured = isBackendConfigured();
+
+        // --- Case 1: Not configured yet → go straight to the app as guest ---
+        if (!isConfigured) {
+            goToMain();
             return;
         }
 
+        // --- Case 2: Configured and valid token exists → try silent refresh then go in ---
+        String existingToken = prefs.getString("authToken", "");
+        if (!existingToken.isEmpty()) {
+            // Attempt silent token refresh on a background thread
+            executor.execute(() -> {
+                try {
+                    String refreshToken = prefs.getString("refreshToken", "");
+                    if (!refreshToken.isEmpty()) {
+                        SupabaseClient client = new SupabaseClient(
+                                prefs.getString("supabaseUrl", ""),
+                                prefs.getString("supabaseKey", ""));
+                        JSONObject json = client.refreshToken(refreshToken);
+                        prefs.edit()
+                                .putString("authToken", json.getString("access_token"))
+                                .putString("refreshToken", json.optString("refresh_token", refreshToken))
+                                .apply();
+                        mainHandler.post(this::goToMain);
+                        return;
+                    }
+                } catch (Exception e) {
+                    // Refresh failed — clear stale token and show login
+                    prefs.edit().remove("authToken").remove("refreshToken").apply();
+                }
+                // Show login screen (token expired and refresh failed)
+                mainHandler.post(this::showLoginScreen);
+            });
+            return;
+        }
+
+        // --- Case 3: Configured but no token → show login screen ---
+        showLoginScreen();
+    }
+
+    private boolean isBackendConfigured() {
+        String url = prefs.getString("supabaseUrl", "");
+        String key = prefs.getString("supabaseKey", "");
+        return !url.isEmpty() && !key.isEmpty();
+    }
+
+    private void showLoginScreen() {
         setContentView(R.layout.activity_login);
 
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         tvStatus = findViewById(R.id.tvStatus);
-        tvSettings = findViewById(R.id.tvSettings);
 
+        // Pre-fill saved email (not password for security)
         etEmail.setText(prefs.getString("savedEmail", ""));
-        etPassword.setText(prefs.getString("savedPassword", ""));
 
         btnLogin.setOnClickListener(v -> attemptLogin());
-        
-        tvSettings.setOnClickListener(v -> showConfigDialog());
+    }
+
+    private void goToMain() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
     }
 
     private void attemptLogin() {
@@ -63,12 +105,6 @@ public class LoginActivity extends AppCompatActivity {
 
         String url = prefs.getString("supabaseUrl", "");
         String key = prefs.getString("supabaseKey", "");
-
-        if (url.isEmpty() || key.isEmpty()) {
-            tvStatus.setText("Backend not configured. Tap 'Configure Backend' first.");
-            tvStatus.setVisibility(View.VISIBLE);
-            return;
-        }
 
         if (email.isEmpty() || password.isEmpty()) {
             tvStatus.setText("Enter email and password.");
@@ -86,48 +122,24 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject loginJson = client.login(email, password);
                 String token = loginJson.getString("access_token");
                 String refreshToken = loginJson.optString("refresh_token", "");
-                
+
                 prefs.edit()
-                     .putString("authToken", token)
-                     .putString("refreshToken", refreshToken)
-                     .putString("savedEmail", email)
-                     .putString("savedPassword", password)
-                     .apply();
-                
-                mainHandler.post(() -> {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
-                });
+                        .putString("authToken", token)
+                        .putString("refreshToken", refreshToken)
+                        .putString("savedEmail", email)
+                        // Do NOT save password — use refresh tokens instead
+                        .remove("savedPassword")
+                        .apply();
+
+                mainHandler.post(this::goToMain);
             } catch (Exception e) {
                 mainHandler.post(() -> {
-                    tvStatus.setText(e.getMessage());
+                    tvStatus.setText("Sign in failed. Check your credentials.");
                     tvStatus.setVisibility(View.VISIBLE);
                     btnLogin.setEnabled(true);
                     btnLogin.setText("Sign In");
                 });
             }
         });
-    }
-
-    private void showConfigDialog() {
-        View view = getLayoutInflater().inflate(R.layout.dialog_config, null);
-        EditText etUrl = view.findViewById(R.id.etUrl);
-        EditText etKey = view.findViewById(R.id.etKey);
-        
-        etUrl.setText(prefs.getString("supabaseUrl", ""));
-        etKey.setText(prefs.getString("supabaseKey", ""));
-
-        new AlertDialog.Builder(this)
-            .setTitle("Configure Backend")
-            .setView(view)
-            .setPositiveButton("Save", (dialog, which) -> {
-                prefs.edit()
-                    .putString("supabaseUrl", etUrl.getText().toString().trim())
-                    .putString("supabaseKey", etKey.getText().toString().trim())
-                    .apply();
-                tvStatus.setVisibility(View.GONE);
-            })
-            .setNegativeButton("Cancel", null)
-            .show();
     }
 }

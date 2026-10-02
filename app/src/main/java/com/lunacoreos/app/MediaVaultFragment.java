@@ -52,21 +52,15 @@ public class MediaVaultFragment extends Fragment {
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     Intent data = result.getData();
-                    if (data != null) {
-                        String mode = data.getStringExtra("VAULT_MODE");
-                        if (mode != null) {
-                            vaultMode = mode;
-                            isVaultUnlocked = true;
-                            loadCollections();
-                            return;
-                        }
-                    } else if ("normal".equals(vaultMode)) {
-                        isVaultUnlocked = true;
-                        loadCollections();
-                        return;
+                    String mode = (data != null) ? data.getStringExtra("VAULT_MODE") : null;
+                    if (mode != null) {
+                        vaultMode = mode;
                     }
+                    isVaultUnlocked = true;
+                    loadCollections();
+                } else {
+                    Toast.makeText(getContext(), "Access Denied", Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(getContext(), "Access Denied", Toast.LENGTH_SHORT).show();
             }
     );
 

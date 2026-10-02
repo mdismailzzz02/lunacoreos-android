@@ -33,7 +33,7 @@ public class SettingsFragment extends Fragment {
         etUrl.setText(prefs.getString("supabaseUrl", ""));
         etKey.setText(prefs.getString("supabaseKey", ""));
         etR2.setText(prefs.getString("r2PublicUrl", ""));
-        etTrash.setText(prefs.getString("trashPath", "luna-vault/vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/Trash/"));
+        etTrash.setText(prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/"));
 
         view.findViewById(R.id.btnSaveCredentials).setOnClickListener(v -> {
             String url = etUrl.getText().toString().trim();

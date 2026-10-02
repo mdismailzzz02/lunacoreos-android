@@ -57,7 +57,12 @@ public class ClipboardFragment extends Fragment {
                     vaultMode = "secret";
                     TextView tvTitle = getView().findViewById(R.id.tvTitle);
                     tvTitle.setText("Secret Clipboard");
-                    tvTitle.setTextColor(0xFFEF4444);
+                    tvTitle.setTextColor(0xFFEC4899);
+                    ImageView ivLock = getView().findViewById(R.id.ivLock);
+                    if (ivLock != null) {
+                        ivLock.setImageResource(R.drawable.ic_unlock);
+                        ivLock.setColorFilter(0xFFEC4899);
+                    }
                     loadClips();
                 } else {
                     vaultMode = "normal";
@@ -65,6 +70,11 @@ public class ClipboardFragment extends Fragment {
                     TextView tvTitle = getView().findViewById(R.id.tvTitle);
                     tvTitle.setText("Clipboard");
                     tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
+                    ImageView ivLock = getView().findViewById(R.id.ivLock);
+                    if (ivLock != null) {
+                        ivLock.setImageResource(R.drawable.ic_lock);
+                        ivLock.setColorFilter(getResources().getColor(R.color.text_primary, null));
+                    }
                     loadClips();
                 }
             }
@@ -142,39 +152,15 @@ public class ClipboardFragment extends Fragment {
         });
 
         TextView tvTitle = view.findViewById(R.id.tvTitle);
-        tvTitle.setOnClickListener(v -> {
-            if (etSearch.getVisibility() == android.view.View.VISIBLE) {
-                unfocusSearch.onClick(v);
-                return;
-            }
+        ImageView ivLock = view.findViewById(R.id.ivLock);
+        ivLock.setOnClickListener(v -> {
             if (!"normal".equals(vaultMode)) {
                 vaultMode = "normal";
                 isVaultUnlocked = false;
                 tvTitle.setText("Clipboard");
                 tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
-                loadClips();
-                return;
-            }
-            long now = System.currentTimeMillis();
-            if (now - lastTitleClickTime > 500) titleClickCount = 0;
-            lastTitleClickTime = now;
-            titleClickCount++;
-            if (titleClickCount == 3) {
-                titleClickCount = 0;
-                Intent intent = new Intent(getContext(), AppPasswordActivity.class);
-                intent.putExtra("LOCK_ID", "clipboard_secret");
-                intent.putExtra("LOCK_TITLE", "Secret Clipboard");
-                intent.putExtra("VAULT_MODE", "secret");
-                appPasswordLauncher.launch(intent);
-            }
-        });
-
-        tvTitle.setOnLongClickListener(v -> {
-            if (!"normal".equals(vaultMode)) {
-                vaultMode = "normal";
-                isVaultUnlocked = false;
-                tvTitle.setText("Clipboard");
-                tvTitle.setTextColor(getResources().getColor(R.color.text_primary, null));
+                ivLock.setImageResource(R.drawable.ic_lock);
+                ivLock.setColorFilter(getResources().getColor(R.color.text_primary, null));
                 loadClips();
             } else {
                 Intent intent = new Intent(getContext(), AppPasswordActivity.class);
@@ -183,7 +169,6 @@ public class ClipboardFragment extends Fragment {
                 intent.putExtra("VAULT_MODE", "secret");
                 appPasswordLauncher.launch(intent);
             }
-            return true;
         });
 
         swipeRefresh.setOnRefreshListener(() -> {

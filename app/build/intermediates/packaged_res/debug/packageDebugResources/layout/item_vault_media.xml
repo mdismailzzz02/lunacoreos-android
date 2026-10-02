@@ -28,5 +28,30 @@
             app:tint="@color/text_primary"
             android:visibility="gone" />
 
+        <ImageView
+            android:id="@+id/ivDownload"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="4dp"
+            android:padding="6dp"
+            android:background="@drawable/bg_round_dark"
+            android:src="@android:drawable/stat_sys_download"
+            app:tint="@color/text_primary" />
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="#99000000"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="4dp"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium" />
+
     </androidx.cardview.widget.CardView>
 </FrameLayout>

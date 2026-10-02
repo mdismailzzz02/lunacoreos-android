@@ -8,6 +8,27 @@
         <item name="android:statusBarColor">@color/status_bar</item>
         <item name="android:navigationBarColor">@color/bg_dark</item>
         <item name="android:windowLightStatusBar">false</item>
+        
+        <item name="materialAlertDialogTheme">@style/LunaCoreDialogTheme</item>
+        <item name="alertDialogTheme">@style/LunaCoreDialogTheme</item>
+    </style>
+
+    <style name="LunaCoreDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorSurface">@color/bg_surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorAlertDialogListItem">@color/text_primary</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.LunaCore.Dialog</item>
+    </style>
+    
+    <style name="ShapeAppearanceOverlay.LunaCore.Dialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style name="NavigationViewTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="Theme.LunaCoreOS.Translucent" parent="Theme.LunaCoreOS">

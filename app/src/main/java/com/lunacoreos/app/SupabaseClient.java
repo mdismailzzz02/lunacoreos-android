@@ -15,6 +15,7 @@ public class SupabaseClient {
     private final String baseUrl;
     private final String apiKey;
     private String authToken;
+    private String trashPath = "lunasync/vault/trash/";
 
     private android.content.SharedPreferences prefs;
     private android.content.Context context;
@@ -30,6 +31,8 @@ public class SupabaseClient {
         this.baseUrl = prefs.getString("supabaseUrl", "");
         this.apiKey = prefs.getString("supabaseKey", "");
         this.authToken = prefs.getString("authToken", null);
+        this.trashPath = prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/");
+        if (!this.trashPath.endsWith("/")) this.trashPath += "/";
     }
 
     /**
@@ -93,32 +96,71 @@ public class SupabaseClient {
             throw new Exception("Login failed: " + err);
         }
     }
-    
-    public void refreshSession() throws Exception {
-        if (prefs == null) throw new Exception("No prefs");
-        String refreshToken = prefs.getString("refreshToken", "");
-        if (!refreshToken.isEmpty()) {
-            try {
-                refreshToken(refreshToken);
-                return;
-            } catch (Exception e) {
-                // refresh token failed, try credentials below
+
+    public JSONObject refreshToken(String refreshToken) throws Exception {
+        URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject payload = new JSONObject();
+        payload.put("refresh_token", refreshToken);
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(payload.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONObject json = new JSONObject(result);
+            this.authToken = json.getString("access_token");
+            if (prefs != null) {
+                prefs.edit()
+                        .putString("authToken", json.getString("access_token"))
+                        .putString("refreshToken", json.optString("refresh_token", refreshToken))
+                        .apply();
             }
+            return json;
+        } else {
+            InputStream es = conn.getErrorStream();
+            Scanner s = new Scanner(es != null ? es : conn.getInputStream()).useDelimiter("\\A");
+            String err = s.hasNext() ? s.next() : "";
+            throw new Exception("Token refresh failed " + conn.getResponseCode() + ": " + err);
         }
-        
-        String savedEmail = prefs.getString("savedEmail", "");
-        String savedPassword = prefs.getString("savedPassword", "");
-        if (!savedEmail.isEmpty() && !savedPassword.isEmpty()) {
-            JSONObject json = login(savedEmail, savedPassword);
-            prefs.edit()
-                 .putString("authToken", json.getString("access_token"))
-                 .putString("refreshToken", json.optString("refresh_token", ""))
-                 .apply();
-            return;
-        }
-        throw new Exception("No credentials to refresh session");
     }
 
+    /**
+     * Called on startup and after 401 errors.
+     * Tries silent refresh; if that fails, broadcasts FORCE_LOGOUT.
+     */
+    public void refreshSession() throws Exception {
+        if (prefs == null) throw new Exception("No prefs");
+        String rt = prefs.getString("refreshToken", "");
+        if (!rt.isEmpty()) {
+            try {
+                refreshToken(rt);
+                return; // success
+            } catch (Exception e) {
+                android.util.Log.w("SupabaseClient", "Refresh token expired: " + e.getMessage());
+            }
+        }
+        // Refresh failed — clear tokens and kick user back to login
+        if (prefs != null) {
+            prefs.edit().remove("authToken").remove("refreshToken").apply();
+        }
+        if (context != null) {
+            android.content.Intent intent = new android.content.Intent(ACTION_FORCE_LOGOUT);
+            androidx.localbroadcastmanager.content.LocalBroadcastManager
+                    .getInstance(context)
+                    .sendBroadcast(intent);
+        }
+        throw new Exception("Session expired — please log in again");
+    }
 
 
     public String getUserId() {
@@ -218,43 +260,7 @@ public class SupabaseClient {
             throw new Exception("Failed to set app password: " + postConn.getResponseCode());
         }
     }
-    public void refreshToken(String refreshToken) throws Exception {
-        URL url = new URL(baseUrl + "/auth/v1/token?grant_type=refresh_token");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("apikey", apiKey);
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setDoOutput(true);
 
-        JSONObject payload = new JSONObject();
-        payload.put("refresh_token", refreshToken);
-
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(payload.toString().getBytes("UTF-8"));
-        }
-
-        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
-            InputStream is = conn.getInputStream();
-            Scanner s = new Scanner(is).useDelimiter("\\A");
-            String result = s.hasNext() ? s.next() : "";
-            is.close();
-            JSONObject json = new JSONObject(result);
-            this.authToken = json.getString("access_token");
-            
-            if (prefs != null) {
-                prefs.edit()
-                     .putString("authToken", this.authToken)
-                     .putString("refreshToken", json.optString("refresh_token", ""))
-                     .apply();
-            }
-        } else {
-            InputStream es = conn.getErrorStream();
-            Scanner s = new Scanner(es).useDelimiter("\\A");
-            String err = s.hasNext() ? s.next() : "";
-            if (es != null) es.close();
-            throw new Exception("Refresh failed: " + err);
-        }
-    }
 
     public JSONArray getWritings(String mode) throws Exception {
         // filter by mode, order by updatedAt desc
@@ -448,11 +454,14 @@ public class SupabaseClient {
         String urlString = baseUrl + "/rest/v1/vault_collections?order=created_at.desc";
         
         if ("normal".equals(mode)) {
-            urlString += "&is_hidden=eq.false&or=%28is_secret.eq.false%2Cis_secret.is.null%29";
+            // Normal: not hidden, not secret
+            urlString += "&is_hidden=eq.false&or=(is_secret.eq.false,is_secret.is.null)";
         } else if ("hidden".equals(mode)) {
-            urlString += "&or=%28is_secret.eq.false%2Cis_secret.is.null%29";
+            // Hidden vault: only show hidden=true collections
+            urlString += "&is_hidden=eq.true";
         } else if ("secret".equals(mode)) {
-            urlString += "&is_hidden=eq.false";
+            // Secret: only show secret=true collections
+            urlString += "&is_secret=eq.true";
         }
 
         URL url = new URL(urlString);
@@ -541,6 +550,59 @@ public class SupabaseClient {
             throw new Exception("Failed to get presigned URL: " + conn.getResponseCode());
         }
     }
+    public org.json.JSONObject getR2PresignedBatch(java.util.List<String> keys) throws Exception {
+        if (keys == null || keys.isEmpty()) return new org.json.JSONObject();
+        URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=batch_get");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+
+        JSONObject body = new JSONObject();
+        body.put("keys", new org.json.JSONArray(keys));
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(body.toString().getBytes("UTF-8"));
+        }
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONObject obj = new JSONObject(result);
+            return obj.optJSONObject("urls") != null ? obj.getJSONObject("urls") : new JSONObject();
+        } else {
+            throw new Exception("Failed to get presigned batch URLs: " + conn.getResponseCode());
+        }
+    }
+
+    public String getR2PresignedGetUrl(String r2Key) throws Exception {
+        URL url = new URL(baseUrl + "/functions/v1/r2-presign?op=get&key=" + java.net.URLEncoder.encode(r2Key, "UTF-8"));
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+        conn.setRequestProperty("apikey", apiKey);
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            JSONObject obj = new JSONObject(result);
+            String signedUrl = obj.optString("url", "");
+            if (signedUrl.isEmpty()) signedUrl = obj.optString("signedUrl", "");
+            return signedUrl.isEmpty() ? null : signedUrl;
+        } else {
+            throw new Exception("Failed to get presigned GET URL: " + conn.getResponseCode());
+        }
+    }
 
     public void createVaultCollection(JSONObject collection) throws Exception {
         URL url = new URL(baseUrl + "/rest/v1/vault_collections");
@@ -577,6 +639,78 @@ public class SupabaseClient {
 
         if (conn.getResponseCode() >= 400) {
             throw new Exception("Failed to delete vault collection: " + conn.getResponseCode());
+        }
+    }
+    public String ensureTrashCollection() throws Exception {
+        URL url = new URL(baseUrl + "/rest/v1/vault_collections?name=eq.Trash&select=id");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            org.json.JSONArray arr = new org.json.JSONArray(result);
+            if (arr.length() > 0) return arr.getJSONObject(0).getString("id");
+        }
+        
+        URL createUrl = new URL(baseUrl + "/rest/v1/vault_collections");
+        HttpURLConnection createConn = (HttpURLConnection) createUrl.openConnection();
+        createConn.setRequestMethod("POST");
+        createConn.setRequestProperty("apikey", apiKey);
+        createConn.setRequestProperty("Prefer", "return=representation");
+        if (authToken != null) createConn.setRequestProperty("Authorization", "Bearer " + authToken);
+        createConn.setRequestProperty("Content-Type", "application/json");
+        createConn.setDoOutput(true);
+        
+        JSONObject trash = new JSONObject();
+        trash.put("name", "Trash");
+        trash.put("type", "system");
+        trash.put("is_hidden", true);
+        trash.put("key_prefix", trashPath);
+        
+        try (OutputStream os = createConn.getOutputStream()) {
+            os.write(trash.toString().getBytes("UTF-8"));
+        }
+        
+        if (createConn.getResponseCode() >= 200 && createConn.getResponseCode() < 300) {
+            InputStream is = createConn.getInputStream();
+            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            is.close();
+            org.json.JSONArray arr = new org.json.JSONArray(result);
+            if (arr.length() > 0) return arr.getJSONObject(0).getString("id");
+        }
+        throw new Exception("Could not create Trash collection");
+    }
+
+    public void trashCollectionFiles(String collectionId) throws Exception {
+        String trashId = ensureTrashCollection();
+        
+        URL url = new URL(baseUrl + "/rest/v1/vault_files?collection_id=eq." + collectionId);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("PATCH");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setDoOutput(true);
+        
+        JSONObject update = new JSONObject();
+        update.put("collection_id", trashId);
+        update.put("is_trashed", true);
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US);
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+        update.put("trashed_at", sdf.format(new java.util.Date()));
+        
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(update.toString().getBytes("UTF-8"));
+        }
+        
+        if (conn.getResponseCode() >= 400) {
+            throw new Exception("Failed to trash files: " + conn.getResponseCode());
         }
     }
 
@@ -731,12 +865,20 @@ public class SupabaseClient {
 
     public String getR2PublicUrl(String key) {
         String publicBase = prefs.getString("r2PublicUrl", "");
-        if (publicBase.isEmpty()) return null;
+        if (publicBase.isEmpty() || key == null || key.isEmpty()) return null;
         if (publicBase.endsWith("/")) publicBase = publicBase.substring(0, publicBase.length() - 1);
         try {
-            return publicBase + "/" + key.replace(" ", "%20"); // simple encode
+            // Encode each path segment individually (preserve slashes)
+            String[] parts = key.split("/");
+            StringBuilder encoded = new StringBuilder();
+            for (int i = 0; i < parts.length; i++) {
+                if (i > 0) encoded.append("/");
+                encoded.append(java.net.URLEncoder.encode(parts[i], "UTF-8").replace("+", "%20"));
+            }
+            return publicBase + "/" + encoded.toString();
         } catch (Exception e) {
-            return null;
+            android.util.Log.e("MediaVault", "URL encode failed for key: " + key, e);
+            return publicBase + "/" + key.replace(" ", "%20");
         }
     }
 
