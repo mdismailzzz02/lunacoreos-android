@@ -47,13 +47,15 @@ public class ShareActivity extends AppCompatActivity {
     private void showPicker(String sharedText) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle("Save to LunaCore");
-        builder.setItems(new String[]{"📦 Save to Linkbox", "📋 Save to Clipboard", "🔒 Save to Secret Clipboard"}, (dialog, which) -> {
+        builder.setItems(new String[]{"📦 Save to Linkbox", "📦 Save to Secret Linkbox", "📋 Save to Clipboard", "🔒 Save to Secret Clipboard"}, (dialog, which) -> {
             actionSelected = true;
             if (which == 0) {
-                showAddLinkDialog(sharedText);
+                showAddLinkDialog(sharedText, false);
             } else if (which == 1) {
-                saveToClipboard(sharedText, false);
+                showAddLinkDialog(sharedText, true);
             } else if (which == 2) {
+                saveToClipboard(sharedText, false);
+            } else if (which == 3) {
                 saveToClipboard(sharedText, true);
             }
         });
@@ -84,7 +86,7 @@ public class ShareActivity extends AppCompatActivity {
         }).start();
     }
 
-    private void showAddLinkDialog(String sharedText) {
+    private void showAddLinkDialog(String sharedText, boolean isSecret) {
         String extractedUrl = sharedText;
         String[] words = sharedText.split("\\s+");
         for (String word : words) {
@@ -123,7 +125,7 @@ public class ShareActivity extends AppCompatActivity {
                 finish();
                 return;
             }
-            saveLink(finalUrl, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim());
+            saveLink(finalUrl, etTitle.getText().toString().trim(), etDescription.getText().toString().trim(), etTags.getText().toString().trim(), isSecret);
             bottomSheetDialog.dismiss();
         });
 
@@ -131,7 +133,7 @@ public class ShareActivity extends AppCompatActivity {
         bottomSheetDialog.show();
     }
 
-    private void saveLink(String url, String title, String description, String tags) {
+    private void saveLink(String url, String title, String description, String tags, boolean isSecret) {
         Toast.makeText(this, "Saving...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
@@ -141,6 +143,7 @@ public class ShareActivity extends AppCompatActivity {
                 if (!title.isEmpty()) payload.put("title", title);
                 if (!description.isEmpty()) payload.put("description", description);
                 if (!tags.isEmpty()) payload.put("tags", tags);
+                if (isSecret) payload.put("mode", "secret");
 
                 SupabaseClient client = new SupabaseClient(this);
                 client.refreshSession();
