@@ -764,4 +764,38 @@ public class SupabaseClient {
             throw new Exception("Failed to toggle like: " + conn.getResponseCode());
         }
     }
+    public void saveClipboardText(String content, boolean isSecret) throws Exception {
+        if (authToken == null) throw new Exception("Not authenticated");
+
+        org.json.JSONObject payload = new org.json.JSONObject();
+        payload.put("content", content);
+        payload.put("is_secret", isSecret);
+
+        java.net.URL url = new java.net.URL(baseUrl + "/rest/v1/vault_clipboard");
+        java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("apikey", apiKey);
+        conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Prefer", "return=minimal");
+        conn.setDoOutput(true);
+
+        java.io.OutputStream os = conn.getOutputStream();
+        os.write(payload.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        os.close();
+
+        int code = conn.getResponseCode();
+        if (code >= 400) {
+            java.io.InputStream errStr = conn.getErrorStream();
+            if (errStr != null) {
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.InputStreamReader(errStr));
+                StringBuilder errBody = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) errBody.append(line);
+                br.close();
+                throw new Exception("HTTP " + code + ": " + errBody.toString());
+            }
+            throw new Exception("HTTP " + code);
+        }
+    }
 }
