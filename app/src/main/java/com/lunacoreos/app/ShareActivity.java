@@ -112,7 +112,7 @@ public class ShareActivity extends AppCompatActivity {
 
         com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(this);
         bottomSheetDialog.setContentView(dialogView);
-        bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        ((View) dialogView.getParent()).setBackgroundColor(android.graphics.Color.TRANSPARENT);
         bottomSheetDialog.setCancelable(true);
 
         dialogView.findViewById(R.id.btnSave).setOnClickListener(v -> {

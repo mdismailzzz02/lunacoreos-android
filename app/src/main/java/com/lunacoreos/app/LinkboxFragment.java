@@ -182,7 +182,7 @@ public class LinkboxFragment extends Fragment {
         com.google.android.material.bottomsheet.BottomSheetDialog bottomSheetDialog = new com.google.android.material.bottomsheet.BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(dialogView);
         // Ensure background is transparent so custom shape shows
-        bottomSheetDialog.getWindow().findViewById(com.google.android.material.R.id.design_bottom_sheet).setBackgroundResource(android.R.color.transparent);
+        ((View) dialogView.getParent()).setBackgroundColor(android.graphics.Color.TRANSPARENT);
         
         dialogView.findViewById(R.id.btnSave).setOnClickListener(v -> {
             String url = etUrl.getText().toString().trim();

@@ -69,7 +69,7 @@
         <activity
             android:name="com.lunacoreos.app.ShareActivity"
             android:exported="true"
-            android:theme="@style/Theme.Lunacore.Translucent" >
+            android:theme="@style/Theme.LunaCoreOS.Translucent" >
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 

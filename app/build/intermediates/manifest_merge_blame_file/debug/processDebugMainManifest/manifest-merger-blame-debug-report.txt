@@ -124,8 +124,8 @@
 70-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:58:13-42
 71            android:exported="true"
 71-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:59:13-36
-72            android:theme="@style/Theme.Lunacore.Translucent" >
-72-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:60:13-62
+72            android:theme="@style/Theme.LunaCoreOS.Translucent" >
+72-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:60:13-64
 73            <intent-filter>
 73-->D:\Projects\lunacoreos\lunacoreos-android\app\src\main\AndroidManifest.xml:61:13-65:29
 74                <action android:name="android.intent.action.SEND" />
