@@ -47,6 +47,10 @@ public class WritingEditorActivity extends AppCompatActivity {
     private Runnable saveRunnable;
     private final long AUTO_SAVE_DELAY = 750;
     
+    private boolean isBoldActive = false;
+    private boolean isItalicActive = false;
+    private boolean isUnderlineActive = false;
+    
     private boolean isSaving = false;
 
     @Override
@@ -109,18 +113,9 @@ public class WritingEditorActivity extends AppCompatActivity {
                 .show();
         });
         
-        btnFormatBold.setOnClickListener(v -> applyStyleToSelection(android.graphics.Typeface.BOLD));
-        btnFormatItalic.setOnClickListener(v -> applyStyleToSelection(android.graphics.Typeface.ITALIC));
-        btnFormatUnderline.setOnClickListener(v -> {
-            int start = etContent.getSelectionStart();
-            int end = etContent.getSelectionEnd();
-            if (start > end) { int t = start; start = end; end = t; }
-            if (start != end) {
-                android.text.Spannable str = etContent.getText();
-                str.setSpan(new UnderlineSpan(), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                triggerAutoSave();
-            }
-        });
+        btnFormatBold.setOnClickListener(v -> toggleStyle(android.graphics.Typeface.BOLD));
+        btnFormatItalic.setOnClickListener(v -> toggleStyle(android.graphics.Typeface.ITALIC));
+        btnFormatUnderline.setOnClickListener(v -> toggleStyle(-1)); // -1 represents underline
 
         TextWatcher autoSaveWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -135,6 +130,19 @@ public class WritingEditorActivity extends AppCompatActivity {
                 updateWordCount();
             }
         };
+        
+        etContent.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (count > 0 && (isBoldActive || isItalicActive || isUnderlineActive)) {
+                    android.text.Spannable str = etContent.getText();
+                    if (isBoldActive) str.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), start, start + count, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (isItalicActive) str.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), start, start + count, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (isUnderlineActive) str.setSpan(new UnderlineSpan(), start, start + count, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
 
         etTitle.addTextChangedListener(autoSaveWatcher);
         etTags.addTextChangedListener(autoSaveWatcher);
@@ -150,14 +158,35 @@ public class WritingEditorActivity extends AppCompatActivity {
         mainHandler.postDelayed(saveRunnable, AUTO_SAVE_DELAY);
     }
 
-    private void applyStyleToSelection(int style) {
+    private void toggleStyle(int style) {
         int start = etContent.getSelectionStart();
         int end = etContent.getSelectionEnd();
         if (start > end) { int t = start; start = end; end = t; }
+        
         if (start != end) {
+            // Apply to selection
             android.text.Spannable str = etContent.getText();
-            str.setSpan(new StyleSpan(style), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (style == -1) {
+                str.setSpan(new UnderlineSpan(), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            } else {
+                str.setSpan(new StyleSpan(style), start, end, android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
             triggerAutoSave();
+        } else {
+            // Toggle typing mode
+            if (style == android.graphics.Typeface.BOLD) {
+                isBoldActive = !isBoldActive;
+                Toast.makeText(this, "Bold " + (isBoldActive ? "ON" : "OFF"), Toast.LENGTH_SHORT).show();
+                findViewById(R.id.btnFormatBold).setAlpha(isBoldActive ? 1.0f : 0.4f);
+            } else if (style == android.graphics.Typeface.ITALIC) {
+                isItalicActive = !isItalicActive;
+                Toast.makeText(this, "Italic " + (isItalicActive ? "ON" : "OFF"), Toast.LENGTH_SHORT).show();
+                findViewById(R.id.btnFormatItalic).setAlpha(isItalicActive ? 1.0f : 0.4f);
+            } else if (style == -1) {
+                isUnderlineActive = !isUnderlineActive;
+                Toast.makeText(this, "Underline " + (isUnderlineActive ? "ON" : "OFF"), Toast.LENGTH_SHORT).show();
+                findViewById(R.id.btnFormatUnderline).setAlpha(isUnderlineActive ? 1.0f : 0.4f);
+            }
         }
     }
 

@@ -55,119 +55,137 @@
     </LinearLayout>
 
     <!-- Editor Area -->
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
-
-            <EditText
-                android:id="@+id/etTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="Title of your piece..."
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_muted"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:inputType="textCapSentences" />
-
-            <EditText
-                android:id="@+id/etTags"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:hint="Tags (e.g., Essay, Personal, Sci-Fi)"
-                android:textColor="@color/text_secondary"
-                android:textColorHint="@color/text_hint"
-                android:textSize="14sp"
-                android:layout_marginTop="8dp"
-                android:inputType="text" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/border_subtle"
-                android:layout_marginVertical="16dp" />
-
-            <EditText
-                android:id="@+id/etContent"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@null"
-                android:hint="Start writing..."
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_muted"
-                android:textSize="18sp"
-                android:lineSpacingExtra="8dp"
-                android:gravity="top"
-                android:inputType="textMultiLine|textCapSentences" />
-
-        </LinearLayout>
-    </ScrollView>
-
-    <!-- Word Count Footer -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/bg_surface"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:padding="12dp">
+        android:layout_weight="1">
         
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:clipToPadding="false"
+            android:paddingBottom="100dp">
+            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="24dp">
+
+                <EditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Title of your piece..."
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_muted"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:inputType="textCapSentences" />
+
+                <EditText
+                    android:id="@+id/etTags"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:hint="Tags (e.g., Essay, Personal, Sci-Fi)"
+                    android:textColor="@color/text_secondary"
+                    android:textColorHint="@color/text_hint"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"
+                    android:inputType="text" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_subtle"
+                    android:layout_marginVertical="16dp" />
+
+                <EditText
+                    android:id="@+id/etContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="Start writing..."
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_muted"
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="8dp"
+                    android:gravity="top"
+                    android:inputType="textMultiLine|textCapSentences" />
+
+            </LinearLayout>
+        </ScrollView>
+        
+        <!-- Word Count (Floating Bottom Left) -->
         <TextView
             android:id="@+id/tvWordCount"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="32dp"
             android:text="0 words"
             android:textColor="@color/text_muted"
             android:textSize="12sp" />
 
-        <ImageButton
-            android:id="@+id/btnFormatBold"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:scaleType="centerInside"
-            android:layout_marginEnd="4dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_edit"
-            app:tint="@color/text_primary" />
-            
-        <ImageButton
-            android:id="@+id/btnFormatItalic"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:scaleType="centerInside"
-            android:layout_marginEnd="4dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_sort_alphabetically"
-            app:tint="@color/text_primary" />
-            
-        <ImageButton
-            android:id="@+id/btnFormatUnderline"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="12dp"
-            android:scaleType="centerInside"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_manage"
-            app:tint="@color/text_primary" />
-    </LinearLayout>
+        <!-- Floating Pill Toolbar (Bottom Center) -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="24dp"
+            app:cardBackgroundColor="@color/bg_surface"
+            app:cardElevation="12dp">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp">
+
+                <ImageButton
+                    android:id="@+id/btnFormatBold"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="@color/text_primary" />
+                    
+                <ImageButton
+                    android:id="@+id/btnFormatItalic"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_sort_alphabetically"
+                    app:tint="@color/text_primary" />
+                    
+                <ImageButton
+                    android:id="@+id/btnFormatUnderline"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:padding="14dp"
+                    android:scaleType="centerInside"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:src="@android:drawable/ic_menu_manage"
+                    app:tint="@color/text_primary" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 </LinearLayout>
