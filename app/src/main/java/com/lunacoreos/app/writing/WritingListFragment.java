@@ -178,6 +178,9 @@ public class WritingListFragment extends Fragment {
     }
 
     private void loadDrafts() {
+        SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", Context.MODE_PRIVATE);
+        if (prefs.getString("supabaseUrl", "").isEmpty()) return;
+        
         swipeRefresh.setRefreshing(true);
         executor.execute(() -> {
             try {

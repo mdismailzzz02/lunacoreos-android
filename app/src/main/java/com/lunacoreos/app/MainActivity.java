@@ -130,7 +130,12 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                new SupabaseClient(this).refreshSession();
+                android.content.SharedPreferences prefs = getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+                String url = prefs.getString("supabaseUrl", "");
+                String key = prefs.getString("supabaseKey", "");
+                if (!url.isEmpty() && !key.isEmpty()) {
+                    new SupabaseClient(this).refreshSession();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

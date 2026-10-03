@@ -331,6 +331,11 @@ public class LinkboxFragment extends Fragment {
     }
 
     private void fetchLinks() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+        if (prefs.getString("supabaseUrl", "").isEmpty()) {
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
         swipeRefreshLayout.setRefreshing(true);
         new Thread(() -> {
             try {

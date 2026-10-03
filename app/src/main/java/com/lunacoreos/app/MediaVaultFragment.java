@@ -193,6 +193,11 @@ public class MediaVaultFragment extends Fragment {
     }
 
     private void loadCollections() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+        if (prefs.getString("supabaseUrl", "").isEmpty()) {
+            swipeRefresh.setRefreshing(false);
+            return;
+        }
         swipeRefresh.setRefreshing(true);
         new Thread(() -> {
             try {

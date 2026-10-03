@@ -240,6 +240,11 @@ public class ClipboardFragment extends Fragment {
     }
 
     private void loadClips() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+        if (prefs.getString("supabaseUrl", "").isEmpty()) {
+            swipeRefresh.setRefreshing(false);
+            return;
+        }
         swipeRefresh.setRefreshing(true);
         new Thread(() -> {
             try {

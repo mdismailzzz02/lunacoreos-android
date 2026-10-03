@@ -166,6 +166,9 @@ public class PasswordsFragment extends Fragment {
     }
 
     private void loadPasswords() {
+        android.content.SharedPreferences prefs = requireContext().getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
+        if (prefs.getString("supabaseUrl", "").isEmpty()) return;
+        
         new Thread(() -> {
             try {
                 SupabaseClient client = new SupabaseClient(getContext());
