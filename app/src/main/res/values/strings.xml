@@ -7,4 +7,7 @@
         <item>Documents</item>
         <item>Code</item>
     </string-array>
+    
+    <string name="default_supabase_url">https://llseujnjhjrwmzhwfmoq.supabase.co</string>
+    <string name="default_supabase_key">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxsc2V1am5qaGpyd216aHdmbW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2MTM1NzQsImV4cCI6MjA5MzE4OTU3NH0.sL45a5IZcMZWZSZS8FVNWbNZa7NiHMoVCcNeohV5ndc</string>
 </resources>
