@@ -172,6 +172,9 @@ menu drawer_menu
 mipmap ic_launcher
 mipmap ic_launcher_round
 string app_name
+string default_r2_url
+string default_supabase_key
+string default_supabase_url
 style LunaCoreDialogTheme
 style NavigationViewTextStyle
 style ShapeAppearanceOverlay.LunaCore.Dialog

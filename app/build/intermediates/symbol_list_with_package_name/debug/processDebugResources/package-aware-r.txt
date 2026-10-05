@@ -4011,6 +4011,9 @@ string character_counter_content_description
 string character_counter_overflowed_content_description
 string character_counter_pattern
 string clear_text_end_icon_content_description
+string default_r2_url
+string default_supabase_key
+string default_supabase_url
 string error_a11y_label
 string error_icon_content_description
 string exposed_dropdown_menu_content_description

@@ -1,14 +1,18 @@
 package com.lunacoreos.app;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.lunacoreos.app.writing.WritingListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private android.content.BroadcastReceiver logoutReceiver;
+    private BottomSheetDialog moreMenuDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceive(android.content.Context context, android.content.Intent intent) {
                 android.widget.Toast.makeText(context, "Session expired. Please sign in again.", android.widget.Toast.LENGTH_LONG).show();
-                // Clear tokens so LoginActivity shows the login form
                 getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE)
                         .edit().remove("authToken").remove("refreshToken").apply();
                 android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
@@ -33,42 +36,13 @@ public class MainActivity extends AppCompatActivity {
                 .getInstance(this)
                 .registerReceiver(logoutReceiver, new android.content.IntentFilter(SupabaseClient.ACTION_FORCE_LOGOUT));
 
-        androidx.drawerlayout.widget.DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
-        com.google.android.material.navigation.NavigationView navView = findViewById(R.id.navView);
-        
-        navView.setNavigationItemSelectedListener(item -> {
-            drawerLayout.close();
-            Fragment selectedFragment = null;
-            if (item.getItemId() == R.id.nav_settings) {
-                selectedFragment = new SettingsFragment();
-            } else if (item.getItemId() == R.id.nav_linkbox) {
-                selectedFragment = new LinkboxFragment();
-            } else if (item.getItemId() == R.id.nav_logout) {
-                // Clear tokens so next launch shows login screen
-                getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE)
-                        .edit().remove("authToken").remove("refreshToken").apply();
-                android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
-                loginIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(loginIntent);
-                finish();
-                return true;
-            }
-            
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragmentContainer, selectedFragment)
-                        .commit();
-            }
-            return true;
-        });
-
         BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
         bottomNav.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_more) {
-                drawerLayout.open();
-                return false; // Don't check the More icon
+                showMoreMenu();
+                return false; // Don't mark "More" as selected
             }
-            
+
             Fragment selectedFragment = null;
             if (item.getItemId() == R.id.nav_writing) {
                 selectedFragment = new WritingListFragment();
@@ -79,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.nav_clipboard) {
                 selectedFragment = new ClipboardFragment();
             }
-            
+
             if (selectedFragment != null) {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragmentContainer, selectedFragment)
@@ -95,16 +69,16 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void handleOnBackPressed() {
-                if (drawerLayout.isOpen()) {
-                    drawerLayout.close();
+                if (moreMenuDialog != null && moreMenuDialog.isShowing()) {
+                    moreMenuDialog.dismiss();
                     return;
                 }
-                
+
                 long currentTime = System.currentTimeMillis();
                 if (currentTime - lastBackPressTime > 2000) {
                     backPressCount = 0;
                 }
-                
+
                 backPressCount++;
                 lastBackPressTime = currentTime;
 
@@ -130,16 +104,49 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                android.content.SharedPreferences prefs = getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
-                String url = prefs.getString("supabaseUrl", "");
-                String key = prefs.getString("supabaseKey", "");
-                if (!url.isEmpty() && !key.isEmpty()) {
-                    new SupabaseClient(this).refreshSession();
-                }
+                new SupabaseClient(this).refreshSession();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    private void showMoreMenu() {
+        moreMenuDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+        View sheetView = LayoutInflater.from(this).inflate(R.layout.dialog_more_menu, null);
+        moreMenuDialog.setContentView(sheetView);
+
+        // Make background transparent so our custom shape shows
+        View parent = (View) sheetView.getParent();
+        if (parent != null) {
+            parent.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+        }
+
+        sheetView.findViewById(R.id.menuLinkbox).setOnClickListener(v -> {
+            moreMenuDialog.dismiss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new LinkboxFragment())
+                    .commit();
+        });
+
+        sheetView.findViewById(R.id.menuSettings).setOnClickListener(v -> {
+            moreMenuDialog.dismiss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new SettingsFragment())
+                    .commit();
+        });
+
+        sheetView.findViewById(R.id.menuLogout).setOnClickListener(v -> {
+            moreMenuDialog.dismiss();
+            getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE)
+                    .edit().remove("authToken").remove("refreshToken").apply();
+            android.content.Intent loginIntent = new android.content.Intent(MainActivity.this, LoginActivity.class);
+            loginIntent.setFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK | android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(loginIntent);
+            finish();
+        });
+
+        moreMenuDialog.show();
     }
 
     @Override
