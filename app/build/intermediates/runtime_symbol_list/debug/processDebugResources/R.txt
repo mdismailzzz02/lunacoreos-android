@@ -3738,6 +3738,7 @@ int id unlabeled 0x7f09024d
 int id up 0x7f09024e
 int id useLogo 0x7f09024f
 int id vertical_only 0x7f090250
+int id videoView 0x7f090270
 int id viewPager 0x7f090251
 int id view_offset_helper 0x7f090252
 int id view_transition 0x7f090253

@@ -158,6 +158,7 @@ id tvUsername
 id tvVaultDesc
 id tvVaultTitle
 id tvWordCount
+id videoView
 id viewPager
 layout activity_login
 layout activity_main

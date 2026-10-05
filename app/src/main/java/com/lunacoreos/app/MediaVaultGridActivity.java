@@ -25,6 +25,45 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     
     // Cache for known broken thumbnail URLs to prevent 404 network delays on scroll
     private final java.util.Set<String> brokenThumbUrls = new java.util.HashSet<>();
+    
+    private final java.util.concurrent.atomic.AtomicInteger uploadsPending = new java.util.concurrent.atomic.AtomicInteger(0);
+    private final java.util.concurrent.atomic.AtomicInteger uploadsCompleted = new java.util.concurrent.atomic.AtomicInteger(0);
+    private final java.util.concurrent.atomic.AtomicLong totalBytesToUpload = new java.util.concurrent.atomic.AtomicLong(0);
+    private final java.util.concurrent.atomic.AtomicLong totalBytesUploaded = new java.util.concurrent.atomic.AtomicLong(0);
+
+    private void updateUploadUI() {
+        int pending = uploadsPending.get();
+        int completed = uploadsCompleted.get();
+        int totalFiles = pending + completed;
+        long bytesTotal = totalBytesToUpload.get();
+        long bytesDone = totalBytesUploaded.get();
+        
+        android.widget.LinearLayout container = findViewById(R.id.uploadProgressContainer);
+        android.widget.TextView tvProgress = findViewById(R.id.tvUploadProgress);
+        android.widget.ProgressBar pb = findViewById(R.id.pbUpload);
+        
+        if (pending == 0) {
+            container.setVisibility(android.view.View.GONE);
+            uploadsCompleted.set(0);
+            totalBytesToUpload.set(0);
+            totalBytesUploaded.set(0);
+            loadFiles();
+        } else {
+            container.setVisibility(android.view.View.VISIBLE);
+            if (totalFiles > 1) {
+                tvProgress.setText("Uploading " + completed + " of " + totalFiles + " files...");
+            } else {
+                tvProgress.setText("Uploading...");
+            }
+            pb.setIndeterminate(false);
+            if (bytesTotal > 0) {
+                pb.setMax(100);
+                pb.setProgress((int) ((bytesDone * 100) / bytesTotal));
+            } else {
+                pb.setIndeterminate(true);
+            }
+        }
+    }
 
     private final ActivityResultLauncher<Intent> filePicker = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -34,12 +73,18 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     if (clipData != null) {
                         // Multiple files selected
                         for (int i = 0; i < clipData.getItemCount(); i++) {
+                            uploadsPending.incrementAndGet();
                             uploadFile(clipData.getItemAt(i).getUri());
                         }
+                        updateUploadUI();
                     } else {
                         // Single file selected
                         Uri uri = result.getData().getData();
-                        if (uri != null) uploadFile(uri);
+                        if (uri != null) {
+                            uploadsPending.incrementAndGet();
+                            uploadFile(uri);
+                            updateUploadUI();
+                        }
                     }
                 }
             }
@@ -698,19 +743,23 @@ public class MediaVaultGridActivity extends AppCompatActivity {
     }
 
     private void uploadFile(Uri uri) {
-        Toast.makeText(this, "Uploading...", Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
                 String filename = "upload";
                 String mimeType = getContentResolver().getType(uri);
                 if (mimeType == null) mimeType = "application/octet-stream";
 
+                long size = 0;
                 android.database.Cursor cursor = getContentResolver().query(uri, null, null, null, null);
                 if (cursor != null && cursor.moveToFirst()) {
                     int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                    int sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE);
                     if (nameIndex != -1) filename = cursor.getString(nameIndex);
+                    if (sizeIndex != -1) size = cursor.getLong(sizeIndex);
                     cursor.close();
                 }
+                if (size > 0) totalBytesToUpload.addAndGet(size);
+                runOnUiThread(this::updateUploadUI);
 
                 String r2Key = collectionPrefix + System.currentTimeMillis() + "-" + filename.replaceAll("[^a-zA-Z0-9._-]", "_");
                 String putUrlStr = client.getR2PresignedPutUrl(r2Key, mimeType);
@@ -723,12 +772,20 @@ public class MediaVaultGridActivity extends AppCompatActivity {
 
                 InputStream is = getContentResolver().openInputStream(uri);
                 OutputStream os = conn.getOutputStream();
-                byte[] buffer = new byte[8192];
+                byte[] buffer = new byte[16384];
                 int bytesRead;
                 long totalSize = 0;
+                long lastUpdate = System.currentTimeMillis();
+                
                 while ((bytesRead = is.read(buffer)) != -1) {
                     os.write(buffer, 0, bytesRead);
                     totalSize += bytesRead;
+                    totalBytesUploaded.addAndGet(bytesRead);
+                    
+                    if (System.currentTimeMillis() - lastUpdate > 150) {
+                        lastUpdate = System.currentTimeMillis();
+                        runOnUiThread(this::updateUploadUI);
+                    }
                 }
                 is.close();
                 os.close();
@@ -742,11 +799,6 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                     fileObj.put("mime_type", mimeType);
                     
                     client.saveVaultFile(fileObj);
-                    
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Upload complete", Toast.LENGTH_SHORT).show();
-                        loadFiles();
-                    });
                 } else {
                     throw new Exception("Upload failed: " + conn.getResponseCode());
                 }
@@ -754,6 +806,10 @@ public class MediaVaultGridActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() -> Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+            } finally {
+                uploadsPending.decrementAndGet();
+                uploadsCompleted.incrementAndGet();
+                runOnUiThread(this::updateUploadUI);
             }
         }).start();
     }
