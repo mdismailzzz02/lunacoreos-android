@@ -568,25 +568,32 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                         String loadUrl = thumbSigned.isEmpty() ? publicUrl : thumbSigned;
 
                         if (loadUrl != null && !loadUrl.isEmpty()) {
-                            com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> fallbackRequest = null;
-                            if (!thumbSigned.isEmpty() && publicUrl != null && !publicUrl.isEmpty() && !thumbSigned.equals(publicUrl)) {
-                                fallbackRequest = com.bumptech.glide.Glide.with(fh.itemView.getContext())
-                                        .load(publicUrl)
-                                        .override(400, 400)
-                                        .centerCrop()
-                                        .error(android.R.drawable.ic_menu_gallery);
-                            }
-
-                            // If we already know this thumbnail URL is broken, skip straight to fallback
-                            if (brokenThumbUrls.contains(loadUrl) && fallbackRequest != null) {
-                                fallbackRequest.into(fh.ivThumbnail);
+                            if (mime.startsWith("video/") && thumbSigned.isEmpty()) {
+                                // Skip HTTP video frame decoding as it hangs the Glide queue
+                                com.bumptech.glide.Glide.with(fh.itemView.getContext()).clear(fh.ivThumbnail);
+                                fh.ivThumbnail.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+                                fh.ivThumbnail.setBackgroundColor(android.graphics.Color.DKGRAY);
+                                fh.ivThumbnail.setImageResource(android.R.drawable.ic_menu_gallery);
                             } else {
-                                com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> request = com.bumptech.glide.Glide.with(fh.itemView.getContext())
-                                        .load(loadUrl)
-                                        .override(400, 400)
-                                        .placeholder(android.R.color.darker_gray)
-                                        .centerCrop()
-                                        .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                                com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> fallbackRequest = null;
+                                if (!thumbSigned.isEmpty() && publicUrl != null && !publicUrl.isEmpty() && !thumbSigned.equals(publicUrl)) {
+                                    fallbackRequest = com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                            .load(publicUrl)
+                                            .override(400, 400)
+                                            .centerCrop()
+                                            .error(android.R.drawable.ic_menu_gallery);
+                                }
+    
+                                // If we already know this thumbnail URL is broken, skip straight to fallback
+                                if (brokenThumbUrls.contains(loadUrl) && fallbackRequest != null) {
+                                    fallbackRequest.into(fh.ivThumbnail);
+                                } else {
+                                    com.bumptech.glide.RequestBuilder<android.graphics.drawable.Drawable> request = com.bumptech.glide.Glide.with(fh.itemView.getContext())
+                                            .load(loadUrl)
+                                            .override(400, 400)
+                                            .placeholder(android.R.color.darker_gray)
+                                            .centerCrop()
+                                            .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
                                             @Override
                                             public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e,
                                                                         Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
@@ -609,6 +616,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                                 }
                                 
                                 request.into(fh.ivThumbnail);
+                                }
                             }
                         } else {
                             android.util.Log.w("MediaVault", "publicUrl is null/empty for r2Key: " + r2Key + " — r2PublicUrl pref may not be set");
