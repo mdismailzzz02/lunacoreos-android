@@ -3010,6 +3010,7 @@ drawable avd_show_password
 drawable bg_pill_pink_alpha
 drawable bg_round_dark
 drawable bottom_sheet_bg
+drawable bottom_sheet_handle
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -3038,7 +3039,9 @@ drawable ic_clear
 drawable ic_clear_black_24
 drawable ic_clock_black_24dp
 drawable ic_keyboard_black_24dp
+drawable ic_linkbox
 drawable ic_lock
+drawable ic_logout
 drawable ic_m3_chip_check
 drawable ic_m3_chip_checked_circle
 drawable ic_m3_chip_close
@@ -3046,7 +3049,9 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_phone_sync
 drawable ic_search_black_24
+drawable ic_settings
 drawable ic_unlock
 drawable icon_background
 drawable indeterminate_static
@@ -3072,6 +3077,8 @@ drawable material_ic_keyboard_arrow_previous_black_24dp
 drawable material_ic_keyboard_arrow_right_black_24dp
 drawable material_ic_menu_arrow_down_black_24dp
 drawable material_ic_menu_arrow_up_black_24dp
+drawable menu_item_bg
+drawable menu_item_bg_danger
 drawable mtrl_bottomsheet_drag_handle
 drawable mtrl_checkbox_button
 drawable mtrl_checkbox_button_checked_unchecked
@@ -3283,6 +3290,7 @@ id currentState
 id custom
 id customPanel
 id cut
+id dateFilterSpinner
 id date_picker_actions
 id decelerate
 id decelerateAndComplete
@@ -3311,7 +3319,6 @@ id dragLeft
 id dragRight
 id dragStart
 id dragUp
-id drawerLayout
 id dropdown_menu
 id easeIn
 id easeInOut
@@ -3425,6 +3432,7 @@ id legacy
 id line1
 id line3
 id linear
+id listContainer
 id listMode
 id list_item
 id llHeader
@@ -3454,6 +3462,10 @@ id material_timepicker_ok_button
 id material_timepicker_view
 id material_value_index
 id matrix
+id menuLinkbox
+id menuLogout
+id menuPhoneSync
+id menuSettings
 id message
 id middle
 id mini
@@ -3488,7 +3500,6 @@ id mtrl_picker_text_input_range_start
 id mtrl_picker_title_text
 id mtrl_view_tag_bottom_padding
 id multiply
-id navView
 id nav_clipboard
 id nav_linkbox
 id nav_logout
@@ -3581,6 +3592,7 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
+id searchInput
 id search_badge
 id search_bar
 id search_button
@@ -3638,7 +3650,10 @@ id swipeLayout
 id swipeRefresh
 id swipeRefreshLayout
 id switchPrivate
+id tabCalls
+id tabContacts
 id tabMode
+id tabSms
 id tag_accessibility_actions
 id tag_accessibility_clickable_spans
 id tag_accessibility_heading
@@ -3882,10 +3897,12 @@ layout design_text_input_start_icon
 layout dialog_add_link
 layout dialog_add_vault_collection
 layout dialog_config
+layout dialog_more_menu
 layout fragment_clipboard
 layout fragment_linkbox
 layout fragment_media_vault
 layout fragment_passwords
+layout fragment_phone_sync
 layout fragment_settings
 layout fragment_writing_list
 layout ime_base_split_test_activity
@@ -4421,9 +4438,11 @@ style Base_Widget_MaterialComponents_Snackbar
 style Base_Widget_MaterialComponents_TextInputEditText
 style Base_Widget_MaterialComponents_TextInputLayout
 style Base_Widget_MaterialComponents_TextView
+style BottomSheetDialogTheme
 style CardView
 style CardView_Dark
 style CardView_Light
+style LunaCoreBottomSheet
 style LunaCoreDialogTheme
 style MaterialAlertDialog_Material3
 style MaterialAlertDialog_Material3_Animation

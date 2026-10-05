@@ -129,6 +129,13 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         });
 
+        sheetView.findViewById(R.id.menuPhoneSync).setOnClickListener(v -> {
+            moreMenuDialog.dismiss();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, new PhoneSyncFragment())
+                    .commit();
+        });
+
         sheetView.findViewById(R.id.menuSettings).setOnClickListener(v -> {
             moreMenuDialog.dismiss();
             getSupportFragmentManager().beginTransaction()

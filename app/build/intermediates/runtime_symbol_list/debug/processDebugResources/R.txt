@@ -3009,6 +3009,7 @@ int drawable avd_show_password 0x7f080078
 int drawable bg_pill_pink_alpha 0x7f080079
 int drawable bg_round_dark 0x7f08007a
 int drawable bottom_sheet_bg 0x7f08007b
+int drawable bottom_sheet_handle 0x7f0800f3
 int drawable btn_checkbox_checked_mtrl 0x7f08007c
 int drawable btn_checkbox_checked_to_unchecked_mtrl_animation 0x7f08007d
 int drawable btn_checkbox_unchecked_mtrl 0x7f08007e
@@ -3037,7 +3038,9 @@ int drawable ic_clear 0x7f080094
 int drawable ic_clear_black_24 0x7f080095
 int drawable ic_clock_black_24dp 0x7f080096
 int drawable ic_keyboard_black_24dp 0x7f080097
+int drawable ic_linkbox 0x7f0800f4
 int drawable ic_lock 0x7f080098
+int drawable ic_logout 0x7f0800f5
 int drawable ic_m3_chip_check 0x7f080099
 int drawable ic_m3_chip_checked_circle 0x7f08009a
 int drawable ic_m3_chip_close 0x7f08009b
@@ -3045,7 +3048,9 @@ int drawable ic_mtrl_checked_circle 0x7f08009c
 int drawable ic_mtrl_chip_checked_black 0x7f08009d
 int drawable ic_mtrl_chip_checked_circle 0x7f08009e
 int drawable ic_mtrl_chip_close_circle 0x7f08009f
+int drawable ic_phone_sync 0x7f0800f9
 int drawable ic_search_black_24 0x7f0800a0
+int drawable ic_settings 0x7f0800f6
 int drawable ic_unlock 0x7f0800a1
 int drawable icon_background 0x7f0800a2
 int drawable indeterminate_static 0x7f0800a3
@@ -3071,6 +3076,8 @@ int drawable material_ic_keyboard_arrow_previous_black_24dp 0x7f0800b6
 int drawable material_ic_keyboard_arrow_right_black_24dp 0x7f0800b7
 int drawable material_ic_menu_arrow_down_black_24dp 0x7f0800b8
 int drawable material_ic_menu_arrow_up_black_24dp 0x7f0800b9
+int drawable menu_item_bg 0x7f0800f7
+int drawable menu_item_bg_danger 0x7f0800f8
 int drawable mtrl_bottomsheet_drag_handle 0x7f0800ba
 int drawable mtrl_checkbox_button 0x7f0800bb
 int drawable mtrl_checkbox_button_checked_unchecked 0x7f0800bc
@@ -3282,6 +3289,7 @@ int id currentState 0x7f090096
 int id custom 0x7f090097
 int id customPanel 0x7f090098
 int id cut 0x7f090099
+int id dateFilterSpinner 0x7f09026d
 int id date_picker_actions 0x7f09009a
 int id decelerate 0x7f09009b
 int id decelerateAndComplete 0x7f09009c
@@ -3310,7 +3318,6 @@ int id dragLeft 0x7f0900b2
 int id dragRight 0x7f0900b3
 int id dragStart 0x7f0900b4
 int id dragUp 0x7f0900b5
-int id drawerLayout 0x7f0900b6
 int id dropdown_menu 0x7f0900b7
 int id easeIn 0x7f0900b8
 int id easeInOut 0x7f0900b9
@@ -3424,6 +3431,7 @@ int id legacy 0x7f090124
 int id line1 0x7f090125
 int id line3 0x7f090126
 int id linear 0x7f090127
+int id listContainer 0x7f090267
 int id listMode 0x7f090128
 int id list_item 0x7f090129
 int id llHeader 0x7f09012a
@@ -3453,6 +3461,10 @@ int id material_timepicker_ok_button 0x7f090141
 int id material_timepicker_view 0x7f090142
 int id material_value_index 0x7f090143
 int id matrix 0x7f090144
+int id menuLinkbox 0x7f090264
+int id menuLogout 0x7f090265
+int id menuPhoneSync 0x7f090268
+int id menuSettings 0x7f090266
 int id message 0x7f090145
 int id middle 0x7f090146
 int id mini 0x7f090147
@@ -3487,7 +3499,6 @@ int id mtrl_picker_text_input_range_start 0x7f090163
 int id mtrl_picker_title_text 0x7f090164
 int id mtrl_view_tag_bottom_padding 0x7f090165
 int id multiply 0x7f090166
-int id navView 0x7f090167
 int id nav_clipboard 0x7f090168
 int id nav_linkbox 0x7f090169
 int id nav_logout 0x7f09016a
@@ -3580,6 +3591,7 @@ int id scrollIndicatorDown 0x7f0901c0
 int id scrollIndicatorUp 0x7f0901c1
 int id scrollView 0x7f0901c2
 int id scrollable 0x7f0901c3
+int id searchInput 0x7f090269
 int id search_badge 0x7f0901c4
 int id search_bar 0x7f0901c5
 int id search_button 0x7f0901c6
@@ -3637,7 +3649,10 @@ int id swipeLayout 0x7f0901f9
 int id swipeRefresh 0x7f0901fa
 int id swipeRefreshLayout 0x7f0901fb
 int id switchPrivate 0x7f0901fc
+int id tabCalls 0x7f09026a
+int id tabContacts 0x7f09026b
 int id tabMode 0x7f0901fd
+int id tabSms 0x7f09026c
 int id tag_accessibility_actions 0x7f0901fe
 int id tag_accessibility_clickable_spans 0x7f0901ff
 int id tag_accessibility_heading 0x7f090200
@@ -3881,10 +3896,12 @@ int layout design_text_input_start_icon 0x7f0c0033
 int layout dialog_add_link 0x7f0c0034
 int layout dialog_add_vault_collection 0x7f0c0035
 int layout dialog_config 0x7f0c0036
+int layout dialog_more_menu 0x7f0c0084
 int layout fragment_clipboard 0x7f0c0037
 int layout fragment_linkbox 0x7f0c0038
 int layout fragment_media_vault 0x7f0c0039
 int layout fragment_passwords 0x7f0c003a
+int layout fragment_phone_sync 0x7f0c0085
 int layout fragment_settings 0x7f0c003b
 int layout fragment_writing_list 0x7f0c003c
 int layout ime_base_split_test_activity 0x7f0c003d
@@ -4420,9 +4437,11 @@ int style Base_Widget_MaterialComponents_Snackbar 0x7f12011b
 int style Base_Widget_MaterialComponents_TextInputEditText 0x7f12011c
 int style Base_Widget_MaterialComponents_TextInputLayout 0x7f12011d
 int style Base_Widget_MaterialComponents_TextView 0x7f12011e
+int style BottomSheetDialogTheme 0x7f12046c
 int style CardView 0x7f12011f
 int style CardView_Dark 0x7f120120
 int style CardView_Light 0x7f120121
+int style LunaCoreBottomSheet 0x7f12046d
 int style LunaCoreDialogTheme 0x7f120122
 int style MaterialAlertDialog_Material3 0x7f120123
 int style MaterialAlertDialog_Material3_Animation 0x7f120124

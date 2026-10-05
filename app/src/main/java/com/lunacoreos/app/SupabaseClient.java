@@ -643,7 +643,34 @@ public class SupabaseClient {
             throw new Exception("Failed to delete vault collection: " + conn.getResponseCode());
         }
     }
-    public String ensureTrashCollection() throws Exception {
+    public JSONArray fetchTable(String table, String select, String order, int limit) throws Exception {
+        String urlStr = baseUrl + "/rest/v1/" + table + "?select=" + java.net.URLEncoder.encode(select, "UTF-8");
+        if (order != null) urlStr += "&order=" + java.net.URLEncoder.encode(order, "UTF-8");
+        if (limit > 0) urlStr += "&limit=" + limit;
+
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setRequestProperty("apikey", apiKey);
+        if (authToken != null) {
+            conn.setRequestProperty("Authorization", "Bearer " + authToken);
+        }
+
+        if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "[]";
+            is.close();
+            return new JSONArray(result);
+        } else {
+            if (conn.getResponseCode() == 401 && handleUnauthorized()) {
+                return fetchTable(table, select, order, limit);
+            }
+            throw new Exception("Fetch failed: " + conn.getResponseCode());
+        }
+    }
+
+    public String ensureTrashCollection() throws Exception {
         URL url = new URL(baseUrl + "/rest/v1/vault_collections?name=eq.Trash&select=id");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
