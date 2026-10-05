@@ -207,6 +207,7 @@ public class MediaViewerActivity extends AppCompatActivity {
                 mediaController.setAnchorView(holder.videoView);
                 holder.videoView.setMediaController(mediaController);
                 holder.videoView.setOnPreparedListener(mp -> {
+                    mp.setVolume(0.05f, 0.05f);
                     mp.setLooping(true);
                     holder.videoView.start();
                 });
