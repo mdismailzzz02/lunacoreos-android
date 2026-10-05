@@ -42,7 +42,9 @@ public class SettingsFragment extends Fragment {
         if (savedR2.isEmpty()) savedR2 = getString(R.string.default_r2_url);
         etR2.setText(savedR2);
         
-        etTrash.setText(prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/"));
+        String savedTrash = prefs.getString("trashPath", "");
+        if (savedTrash.isEmpty()) savedTrash = "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/";
+        etTrash.setText(savedTrash);
 
         view.findViewById(R.id.btnSaveCredentials).setOnClickListener(v -> {
             String url = etUrl.getText().toString().trim();
