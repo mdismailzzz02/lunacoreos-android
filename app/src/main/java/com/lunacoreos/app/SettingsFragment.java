@@ -30,8 +30,13 @@ public class SettingsFragment extends Fragment {
         EditText etR2 = view.findViewById(R.id.etR2PublicUrl);
         EditText etTrash = view.findViewById(R.id.etTrashPath);
         
-        etUrl.setText(prefs.getString("supabaseUrl", getString(R.string.default_supabase_url)));
-        etKey.setText(prefs.getString("supabaseKey", getString(R.string.default_supabase_key)));
+        String savedUrl = prefs.getString("supabaseUrl", "");
+        if (savedUrl.isEmpty()) savedUrl = getString(R.string.default_supabase_url);
+        etUrl.setText(savedUrl);
+        
+        String savedKey = prefs.getString("supabaseKey", "");
+        if (savedKey.isEmpty()) savedKey = getString(R.string.default_supabase_key);
+        etKey.setText(savedKey);
         etR2.setText(prefs.getString("r2PublicUrl", ""));
         etTrash.setText(prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/"));
 
