@@ -3556,6 +3556,7 @@ id parent_matrix
 id password_toggle
 id path
 id pathRelative
+id pbUpload
 id pdfWebView
 id peekHeight
 id percent
@@ -3728,6 +3729,7 @@ id tvTagCount
 id tvTagName
 id tvTitle
 id tvType
+id tvUploadProgress
 id tvUrl
 id tvUsername
 id tvVaultDesc
@@ -3737,6 +3739,7 @@ id unchecked
 id uniform
 id unlabeled
 id up
+id uploadProgressContainer
 id useLogo
 id vertical_only
 id videoView

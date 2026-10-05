@@ -113,6 +113,7 @@ id nav_passwords
 id nav_settings
 id nav_vault
 id nav_writing
+id pbUpload
 id pdfWebView
 id photoView
 id recyclerView
@@ -153,11 +154,13 @@ id tvTagCount
 id tvTagName
 id tvTitle
 id tvType
+id tvUploadProgress
 id tvUrl
 id tvUsername
 id tvVaultDesc
 id tvVaultTitle
 id tvWordCount
+id uploadProgressContainer
 id videoView
 id viewPager
 layout activity_login

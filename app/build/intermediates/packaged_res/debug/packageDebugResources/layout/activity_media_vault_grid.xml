@@ -70,6 +70,31 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/uploadProgressContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="16dp"
+            android:visibility="gone">
+            <TextView
+                android:id="@+id/tvUploadProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Uploading..."
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+            <ProgressBar
+                android:id="@+id/pbUpload"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progressTint="@color/accent_primary"
+                android:max="100" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvMedia"
             android:layout_width="match_parent"

@@ -799,12 +799,74 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                 os.close();
 
                 if (conn.getResponseCode() >= 200 && conn.getResponseCode() < 300) {
+                    String thumbR2Key = null;
+                    if (mimeType.startsWith("image/") || mimeType.startsWith("video/")) {
+                        android.graphics.Bitmap thumbBitmap = null;
+                        try {
+                            if (mimeType.startsWith("video/")) {
+                                android.media.MediaMetadataRetriever retriever = new android.media.MediaMetadataRetriever();
+                                retriever.setDataSource(MediaVaultGridActivity.this, uri);
+                                thumbBitmap = retriever.getFrameAtTime(1000000); // 1 second in
+                                retriever.release();
+                            } else if (mimeType.startsWith("image/")) {
+                                InputStream is2 = getContentResolver().openInputStream(uri);
+                                android.graphics.BitmapFactory.Options options = new android.graphics.BitmapFactory.Options();
+                                options.inJustDecodeBounds = true;
+                                android.graphics.BitmapFactory.decodeStream(is2, null, options);
+                                is2.close();
+                                
+                                int width = options.outWidth;
+                                int height = options.outHeight;
+                                int inSampleSize = 1;
+                                if (height > 400 || width > 400) {
+                                    final int halfHeight = height / 2;
+                                    final int halfWidth = width / 2;
+                                    while ((halfHeight / inSampleSize) >= 400 && (halfWidth / inSampleSize) >= 400) {
+                                        inSampleSize *= 2;
+                                    }
+                                }
+                                options.inJustDecodeBounds = false;
+                                options.inSampleSize = inSampleSize;
+                                
+                                InputStream is3 = getContentResolver().openInputStream(uri);
+                                thumbBitmap = android.graphics.BitmapFactory.decodeStream(is3, null, options);
+                                is3.close();
+                            }
+                        } catch (Exception e) {}
+                        
+                        if (thumbBitmap != null) {
+                            try {
+                                java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+                                thumbBitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 70, bos);
+                                byte[] thumbData = bos.toByteArray();
+                                thumbBitmap.recycle();
+                                
+                                thumbR2Key = collectionPrefix + "thumbs/" + System.currentTimeMillis() + "-" + filename.replaceAll("[^a-zA-Z0-9._-]", "_") + ".jpg";
+                                String thumbPutUrlStr = client.getR2PresignedPutUrl(thumbR2Key, "image/jpeg");
+                                java.net.HttpURLConnection thumbConn = (java.net.HttpURLConnection) new java.net.URL(thumbPutUrlStr).openConnection();
+                                thumbConn.setRequestMethod("PUT");
+                                thumbConn.setRequestProperty("Content-Type", "image/jpeg");
+                                thumbConn.setDoOutput(true);
+                                thumbConn.getOutputStream().write(thumbData);
+                                thumbConn.getOutputStream().close();
+                                if (thumbConn.getResponseCode() < 200 || thumbConn.getResponseCode() >= 300) {
+                                    thumbR2Key = null; // Failed
+                                }
+                            } catch (Exception e) {
+                                thumbR2Key = null;
+                            }
+                        }
+                    }
+
                     org.json.JSONObject fileObj = new org.json.JSONObject();
                     fileObj.put("collection_id", collectionId);
                     fileObj.put("r2_key", r2Key);
                     fileObj.put("filename", filename);
                     fileObj.put("size_bytes", totalSize);
                     fileObj.put("mime_type", mimeType);
+                    if (thumbR2Key != null) {
+                        fileObj.put("thumbnail_key", thumbR2Key);
+                    }
                     
                     client.saveVaultFile(fileObj);
                 } else {
