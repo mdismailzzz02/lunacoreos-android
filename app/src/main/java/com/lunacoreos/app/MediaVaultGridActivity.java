@@ -574,7 +574,7 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             
                 if (publicUrl != null) {
                     fh.itemView.setOnClickListener(v -> {
-                        if (!mime.startsWith("image/")) {
+                        if (!mime.startsWith("image/") && !mime.startsWith("video/")) {
                             Intent intent = new Intent(Intent.ACTION_VIEW);
                             String mimeToUse = mime.isEmpty() ? "*/*" : mime;
                             intent.setDataAndType(android.net.Uri.parse(publicUrl), mimeToUse);
@@ -586,16 +586,16 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             }
                             return;
                         }
-                        if (!mime.startsWith("video/")) {
-                            java.util.List<String> urls = new java.util.ArrayList<>();
-                            java.util.List<String> ids = new java.util.ArrayList<>();
-                            java.util.List<String> r2Keys = new java.util.ArrayList<>();
-                            java.util.List<Boolean> likes = new java.util.ArrayList<>();
-                            int selectedIndex = 0;
-                            for (int i = 0; i < mediaList.size(); i++) {
-                                org.json.JSONObject obj = mediaList.get(i);
-                                if ("file".equals(obj.optString("item_type")) && !obj.optString("mime_type", "").startsWith("video/")) {
-                                    String r2KeyInner = obj.optString("r2_key", "");
+                        
+                        java.util.List<String> urls = new java.util.ArrayList<>();
+                        java.util.List<String> ids = new java.util.ArrayList<>();
+                        java.util.List<String> r2Keys = new java.util.ArrayList<>();
+                        java.util.List<Boolean> likes = new java.util.ArrayList<>();
+                        int selectedIndex = 0;
+                        for (int i = 0; i < mediaList.size(); i++) {
+                            org.json.JSONObject obj = mediaList.get(i);
+                            if ("file".equals(obj.optString("item_type")) && (obj.optString("mime_type", "").startsWith("image/") || obj.optString("mime_type", "").startsWith("video/"))) {
+                                String r2KeyInner = obj.optString("r2_key", "");
                                     // Prefer signed URL, fall back to public URL
                                     String innerSigned = obj.optString("signed_url", "");
                                     String u = innerSigned.isEmpty() ? client.getR2PublicUrl(r2KeyInner) : innerSigned;
@@ -630,10 +630,6 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             
                             Intent intent = new Intent(MediaVaultGridActivity.this, MediaViewerActivity.class);
                             startActivity(intent);
-                        } else {
-                            // Can add video player logic here later
-                            android.widget.Toast.makeText(MediaVaultGridActivity.this, "Video player not implemented yet", android.widget.Toast.LENGTH_SHORT).show();
-                        }
                     });
                     
                     fh.ivDownload.setOnClickListener(v -> {

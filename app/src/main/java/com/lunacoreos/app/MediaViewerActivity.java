@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.VideoView;
+import android.widget.MediaController;
 
 import java.util.List;
 
@@ -182,9 +184,13 @@ public class MediaViewerActivity extends AppCompatActivity {
             String url = urls.get(position);
             String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > position ? currentViewerR2Keys.get(position) : "";
             boolean isPdf = r2Key.toLowerCase().endsWith(".pdf") || url.toLowerCase().contains(".pdf");
+            boolean isVideo = r2Key.toLowerCase().endsWith(".mp4") || r2Key.toLowerCase().endsWith(".mov") || url.toLowerCase().contains(".mp4");
             
+            holder.photoView.setVisibility(View.GONE);
+            holder.pdfWebView.setVisibility(View.GONE);
+            holder.videoView.setVisibility(View.GONE);
+
             if (isPdf) {
-                holder.photoView.setVisibility(View.GONE);
                 holder.pdfWebView.setVisibility(View.VISIBLE);
                 holder.pdfWebView.getSettings().setJavaScriptEnabled(true);
                 holder.pdfWebView.getSettings().setSupportZoom(true);
@@ -194,8 +200,17 @@ public class MediaViewerActivity extends AppCompatActivity {
                 try {
                     holder.pdfWebView.loadUrl("https://docs.google.com/viewer?url=" + java.net.URLEncoder.encode(url, "UTF-8") + "&embedded=true");
                 } catch (Exception e) {}
+            } else if (isVideo) {
+                holder.videoView.setVisibility(View.VISIBLE);
+                holder.videoView.setVideoPath(url);
+                MediaController mediaController = new MediaController(holder.itemView.getContext());
+                mediaController.setAnchorView(holder.videoView);
+                holder.videoView.setMediaController(mediaController);
+                holder.videoView.setOnPreparedListener(mp -> {
+                    mp.setLooping(true);
+                    holder.videoView.start();
+                });
             } else {
-                holder.pdfWebView.setVisibility(View.GONE);
                 holder.photoView.setVisibility(View.VISIBLE);
                 Glide.with(holder.itemView.getContext())
                     .load(url)
@@ -211,10 +226,12 @@ public class MediaViewerActivity extends AppCompatActivity {
         class PhotoViewHolder extends RecyclerView.ViewHolder {
             PhotoView photoView;
             WebView pdfWebView;
+            VideoView videoView;
             public PhotoViewHolder(@NonNull View itemView) {
                 super(itemView);
                 photoView = itemView.findViewById(R.id.photoView);
                 pdfWebView = itemView.findViewById(R.id.pdfWebView);
+                videoView = itemView.findViewById(R.id.videoView);
             }
         }
     }
