@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.util.List;
 
@@ -178,9 +180,27 @@ public class MediaViewerActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
             String url = urls.get(position);
-            Glide.with(holder.itemView.getContext())
-                .load(url)
-                .into(holder.photoView);
+            String r2Key = currentViewerR2Keys != null && currentViewerR2Keys.size() > position ? currentViewerR2Keys.get(position) : "";
+            boolean isPdf = r2Key.toLowerCase().endsWith(".pdf") || url.toLowerCase().contains(".pdf");
+            
+            if (isPdf) {
+                holder.photoView.setVisibility(View.GONE);
+                holder.pdfWebView.setVisibility(View.VISIBLE);
+                holder.pdfWebView.getSettings().setJavaScriptEnabled(true);
+                holder.pdfWebView.getSettings().setSupportZoom(true);
+                holder.pdfWebView.getSettings().setBuiltInZoomControls(true);
+                holder.pdfWebView.getSettings().setDisplayZoomControls(false);
+                holder.pdfWebView.setWebViewClient(new WebViewClient());
+                try {
+                    holder.pdfWebView.loadUrl("https://docs.google.com/viewer?url=" + java.net.URLEncoder.encode(url, "UTF-8") + "&embedded=true");
+                } catch (Exception e) {}
+            } else {
+                holder.pdfWebView.setVisibility(View.GONE);
+                holder.photoView.setVisibility(View.VISIBLE);
+                Glide.with(holder.itemView.getContext())
+                    .load(url)
+                    .into(holder.photoView);
+            }
         }
 
         @Override
@@ -190,9 +210,11 @@ public class MediaViewerActivity extends AppCompatActivity {
 
         class PhotoViewHolder extends RecyclerView.ViewHolder {
             PhotoView photoView;
+            WebView pdfWebView;
             public PhotoViewHolder(@NonNull View itemView) {
                 super(itemView);
                 photoView = itemView.findViewById(R.id.photoView);
+                pdfWebView = itemView.findViewById(R.id.pdfWebView);
             }
         }
     }

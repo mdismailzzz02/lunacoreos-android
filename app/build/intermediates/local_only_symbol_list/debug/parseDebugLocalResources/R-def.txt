@@ -59,6 +59,7 @@ id btnSaveClose
 id btnSaveCredentials
 id btnUnlock
 id cbIsSecret
+id clearSearchBtn
 id container
 id dateFilterSpinner
 id etCollectionName
