@@ -37,7 +37,11 @@ public class SettingsFragment extends Fragment {
         String savedKey = prefs.getString("supabaseKey", "");
         if (savedKey.isEmpty()) savedKey = getString(R.string.default_supabase_key);
         etKey.setText(savedKey);
-        etR2.setText(prefs.getString("r2PublicUrl", ""));
+        
+        String savedR2 = prefs.getString("r2PublicUrl", "");
+        if (savedR2.isEmpty()) savedR2 = getString(R.string.default_r2_url);
+        etR2.setText(savedR2);
+        
         etTrash.setText(prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/"));
 
         view.findViewById(R.id.btnSaveCredentials).setOnClickListener(v -> {
