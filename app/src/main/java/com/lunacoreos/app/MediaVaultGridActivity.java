@@ -574,6 +574,14 @@ public class MediaVaultGridActivity extends AppCompatActivity {
                             
                 if (publicUrl != null) {
                     fh.itemView.setOnClickListener(v -> {
+                        if (mime.toLowerCase().contains("pdf") || item.optString("filename", "").toLowerCase().endsWith(".pdf")) {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(android.net.Uri.parse(publicUrl), "application/pdf");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            startActivity(Intent.createChooser(intent, "Open PDF with"));
+                            return;
+                        }
+                        
                         if (!mime.startsWith("video/")) {
                             java.util.List<String> urls = new java.util.ArrayList<>();
                             java.util.List<String> ids = new java.util.ArrayList<>();

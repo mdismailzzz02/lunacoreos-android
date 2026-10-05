@@ -113,6 +113,7 @@ id nav_passwords
 id nav_settings
 id nav_vault
 id nav_writing
+id pdfWebView
 id photoView
 id recyclerView
 id rvClips
