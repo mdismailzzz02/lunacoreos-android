@@ -28,10 +28,10 @@ public class SupabaseClient {
     public SupabaseClient(android.content.Context context) {
         this.context = context.getApplicationContext();
         this.prefs = context.getSharedPreferences("LunaCorePrefs", android.content.Context.MODE_PRIVATE);
-        this.baseUrl = prefs.getString("supabaseUrl", "");
-        if (this.baseUrl.isEmpty()) this.baseUrl = "https://llseujnjhjrwmzhwfmoq.supabase.co";
-        this.apiKey = prefs.getString("supabaseKey", "");
-        if (this.apiKey.isEmpty()) this.apiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxsc2V1am5qaGpyd216aHdmbW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2MTM1NzQsImV4cCI6MjA5MzE4OTU3NH0.sL45a5IZcMZWZSZS8FVNWbNZa7NiHMoVCcNeohV5ndc";
+        String _url = prefs.getString("supabaseUrl", "");
+        this.baseUrl = _url.isEmpty() ? "https://llseujnjhjrwmzhwfmoq.supabase.co" : _url;
+        String _key = prefs.getString("supabaseKey", "");
+        this.apiKey = _key.isEmpty() ? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imxsc2V1am5qaGpyd216aHdmbW9xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc2MTM1NzQsImV4cCI6MjA5MzE4OTU3NH0.sL45a5IZcMZWZSZS8FVNWbNZa7NiHMoVCcNeohV5ndc" : _key;
         this.authToken = prefs.getString("authToken", null);
         this.trashPath = prefs.getString("trashPath", "vault/67539ee2-a1b0-405d-bbc1-c33dcbd198e6/documents-trash/");
         if (!this.trashPath.endsWith("/")) this.trashPath += "/";
