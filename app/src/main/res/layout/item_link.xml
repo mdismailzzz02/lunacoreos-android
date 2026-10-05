@@ -54,10 +54,19 @@
     </LinearLayout>
 
     <ImageView
+        android:id="@+id/ivCopy"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
+        android:src="@android:drawable/ic_menu_share"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Copy Link" />
+
+    <ImageView
         android:id="@+id/ivEdit"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:src="@android:drawable/ic_menu_edit"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="Edit Link" />

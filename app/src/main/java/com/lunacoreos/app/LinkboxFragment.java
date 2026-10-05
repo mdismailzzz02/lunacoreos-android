@@ -518,6 +518,15 @@ public class LinkboxFragment extends Fragment {
                     .show();
             });
             
+            holder.ivCopy.setOnClickListener(v -> {
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getContext().getSystemService(android.content.Context.CLIPBOARD_SERVICE);
+                if (clipboard != null) {
+                    android.content.ClipData clip = android.content.ClipData.newPlainText("URL", url);
+                    clipboard.setPrimaryClip(clip);
+                    android.widget.Toast.makeText(getContext(), "Link copied to clipboard", android.widget.Toast.LENGTH_SHORT).show();
+                }
+            });
+            
             holder.ivEdit.setOnClickListener(v -> {
                 showEditLinkDialog(item);
             });
@@ -535,7 +544,7 @@ public class LinkboxFragment extends Fragment {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView tvUrl, tvDesc, tvDate;
-            android.widget.ImageView ivDelete, ivEdit, ivPreview;
+            android.widget.ImageView ivDelete, ivEdit, ivCopy, ivPreview;
             
             ViewHolder(View itemView) {
                 super(itemView);
@@ -544,6 +553,7 @@ public class LinkboxFragment extends Fragment {
                 tvDate = itemView.findViewById(R.id.tvDate);
                 ivDelete = itemView.findViewById(R.id.ivDelete);
                 ivEdit = itemView.findViewById(R.id.ivEdit);
+                ivCopy = itemView.findViewById(R.id.ivCopy);
                 ivPreview = itemView.findViewById(R.id.ivPreview);
             }
         }
